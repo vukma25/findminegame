@@ -1,0 +1,155 @@
+body {
+    background-color: hsl(0, 0%, 15%);
+    height: 90vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#form {
+    display: flex;
+    background: hsl(0, 0%, 15%);
+    flex-wrap: wrap;
+    gap: 100px;
+    width: 30%;
+    aspect-ratio: 1.5;
+    min-width: 440px;
+    border-radius:20px;
+    overflow-y: hidden;
+    box-shadow: 0 0 10px hsl(184, 100%, 60%);
+    scroll-behavior: smooth;
+}
+
+h2 {
+    text-align: center;
+}
+
+#login, #signup, #forget_pass {
+    background-color: hsl(0, 0%, 15%);
+    color: hsl(184, 100%, 60%);
+    display: block;
+    width: 99%;
+    aspect-ratio: 1.5;
+    margin: auto;
+}
+
+
+.label {
+    width: 90%;
+    position: relative;
+    margin: auto;
+    margin-bottom: 10px;
+    padding: 10px;
+}
+
+.linked {
+    position: absolute;
+    background-color: hsl(0, 0%, 15%);
+    width: 100%;
+    transform: translateY(-30%);
+    top: 30%;
+    transition: top 0.5s;
+}
+
+.input {
+    width: 100%;
+    border: none;
+    outline: none;
+    background-color: transparent;
+    color: hsl(184, 100%, 50%);
+    border-bottom: 2px solid black;
+}
+
+.label input:focus~label, .label input:valid~label {
+    top: -5px;
+}
+
+.notice {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 90%;
+    margin: auto;
+}
+
+p a {
+    text-decoration: none;
+    color: hsl(184, 100%, 50%);
+}
+
+#save {
+    accent-color: palegreen;
+    vertical-align: top;
+}
+
+p a:hover {
+    color: hsl(184, 100%, 40%);
+    text-decoration: underline;
+    cursor: default;
+}
+.submit {
+    display: flex;
+    width: 80%;
+    margin: auto;
+    padding: 30px;
+    justify-content: center;
+}
+
+.submit .button , .notice .button {
+    background: transparent;
+    color: hsl(184, 100%, 50%);
+    font-weight: bold;
+    font-size: large;
+    border: none;
+    border-radius: 5px;
+}
+
+.submit .button:active, .notice .button:active {
+    background: hsl(0, 0%, 20%);
+}
+
+#capcha {
+    display: flex;
+    height: 18px;
+    width: 20%;
+    background-color: hsl(0, 0%, 15%);
+    justify-content: center;
+    align-items: center;
+    font-family: monospace;
+    font-weight: bold;
+    font-size: 18px;
+    position: absolute;
+    left: 79%;
+    top: 30%;
+    transform: translateY(-1px);
+    border: none;
+    outline: none;
+}
+
+.console {
+    display: flex;
+    position: absolute;
+    width: 30%;
+    min-width: 440px;
+    height: 20px;
+    margin: auto;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    font-family: monospace;
+    font-weight: bold;
+    color: hsl(184, 100%, 50%);
+    background-color: hsl(0, 0%, 25%);
+    border-radius: 15px;
+    border: 1px solid hsl(184, 100%, 50%);
+    box-shadow: 0 0 5px hsl(184, 100%, 40%);
+    padding: 5px;
+    top: 17%;
+}
+
+@media screen and (max-width: 600px) {
+    #form {
+        min-width: 300px;
+        aspect-ratio: 1;
+    }
+}

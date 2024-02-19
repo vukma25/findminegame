@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Form</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <div id="form">
+    <div id="login">
+      <h2>Đăng nhập</h2>
+      <div class="label">
+        <input value="" type="text" id="name_user" class="input" required>
+        <label for="name_user" class="linked">Tên đăng nhập</label>
+      </div>
+      <div class="label">
+        <input value="" type="password" id="password_user" class="input" required>
+        <label for="password_user" class="linked">Mật khẩu</label>
+      </div>
+      <div class="notice">
+        <label for="save"><input value="yes" type="checkbox" id="save">Lưu thông tin đăng nhập</label>
+        <p><a href="#forget_pass">Quên mật khẩu?</a> <a href="#signup">Đăng kí</a></p>
+      </div>
+      <div class="submit">
+        <button class="button" id="click_login">Đăng nhập ngay</button>
+      </div>
+    </div>
+    <div id="signup">
+      <h2>Đăng kí</h2>
+      <div class="label">
+        <input value="" type="text" id="name_user_sign" class="input" maxlength="30" minlength="8" required>
+        <label for="name_user_sign" class="linked">Tên đăng nhập</label>
+      </div>
+      <div class="label">
+        <input value="" type="password" id="password_user_sign" class="input" maxlength="10" minlength="6" required>
+        <label for="password_user_sign" class="linked">Mật khẩu</label>
+      </div>
+      <div class="label">
+        <input value="" type="password" id="password_confirm_user" class="input" maxlength="10" minlength="6"required>
+        <label for="password_confirm_user" class="linked">Xác nhận mật khẩu</label>
+      </div>
+      <div class="notice">
+        <button class="button" id="sign">Đăng kí ngay</button>
+        <p>Đã có tài khoản? <a href="#login">Đăng nhập</a></p>
+      </div>
+    </div>
+    <div id="forget_pass">
+      <h2>Khôi phục mật khẩu</h2>
+      <div class="label">
+        <input value="" type="email" id="email" class="input" required>
+        <label for="email" class="linked">Nhập email</label>
+      </div>
+      <div class="label">
+        <input type="number" id="number" class="input" min="1000" max="9999" required>
+        <label for="number" class="linked">Mã xác nhận</label>
+        <div id="capcha"></div>
+      </div>
+      <div class="notice">
+        <p><a href="#login">Trở lại</a></p>
+      </div>
+      <div class="submit">
+        <button class="button" id="give">Gửi</button>
+      </div>
+    </div>
+  </div>
+</body>
+<script src="index.js"></script>
+</html>

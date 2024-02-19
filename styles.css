@@ -1,0 +1,95 @@
+  @keyframes animate_1 {
+    0% {transform: translateY(-10px)};
+    100% {transform: translateY(10px);}
+  }
+
+  body {
+    background-color: #2e4f40;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+  }
+
+  #father{
+    display: block;
+  }
+
+  #menu {
+    display: block;
+    width: 200px;
+    margin: auto;
+  }
+
+  #pointer {
+    display: block;
+    width: 25px;
+    margin: auto;
+    animation: animate_1 0.4s infinite;
+  }
+
+  @keyframes animate {
+    0% {box-shadow: 0 0 40px #0ef}
+    50% {box-shadow: 0 0 40px rgb(12, 205, 219);}
+    100% {box-shadow: 0 0 40px #14a9ab;}
+  }
+
+  #menu button {
+    color: hsl(184, 100%, 50%);
+    animation: animate 0.6s infinite;
+  }
+
+  #select {
+    display: none;
+    flex-wrap: wrap;
+    width: 200px;
+    margin: auto;
+    margin-top: 10px;
+  }
+  #section1, #section2 {
+    display: flex; 
+    width: 100%;
+  }
+  #section1 p, #section1 select, #section2 button{
+    font-family: sans-serif;
+    width: 50%;
+    height: 20px;
+    margin: auto;
+    margin-top: 10px;
+    text-align: center;
+    color: hsl(184, 100%, 50%);
+  }
+
+  #section1 select, #section2 button {
+    background-color: hsl(0, 0%, 20%);
+    border: none;
+    border-radius: 10px;;
+  }
+
+  .gif1 {
+    height: 10px;
+    width: 10px;
+    border-radius: 50%;
+    position: fixed;
+  }
+
+  #menu #fight {
+    background: hsl(0, 0%, 20%);
+    height: 100px;
+    width: 100%;
+    border: none;
+    border-radius: 20%;
+    font-family: sans-serif;
+    font-size: larger;
+  }
+
+  #name {
+    display: flex;
+    width: 55%;
+    margin: auto;
+    justify-content: center;
+  }
+
+  img {
+    margin: auto;
+  }
