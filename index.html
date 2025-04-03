@@ -1,69 +1,87 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Form</title>
-    <link rel="stylesheet" href="index.css">
+    <title>Game Dò Mìn</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+        integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Fira+Code&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Press+Start+2P&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
-  <div id="form">
-    <div id="login">
-      <h2>Đăng nhập</h2>
-      <div class="label">
-        <input value="" type="text" id="name_user" class="input" required>
-        <label for="name_user" class="linked">Tên đăng nhập</label>
-      </div>
-      <div class="label">
-        <input value="" type="password" id="password_user" class="input" required>
-        <label for="password_user" class="linked">Mật khẩu</label>
-      </div>
-      <div class="notice">
-        <label for="save"><input value="yes" type="checkbox" id="save">Lưu thông tin đăng nhập</label>
-        <p><a href="#forget_pass">Quên mật khẩu?</a> <a href="#signup">Đăng kí</a></p>
-      </div>
-      <div class="submit">
-        <button class="button" id="click_login">Đăng nhập ngay</button>
-      </div>
+
+    <h1>Game Dò Mìn</h1>
+    <div class="settings">
+        <div class="settings-frame">
+            <i class="fa-solid fa-gear setting-icon" title="Cài đặt"></i>
+            <div class="settings-content">
+                <div class="settings-content__row">
+                    <label for="rows">Số hàng</label>
+                    <input type="number" min="5" max="30" id="rows" value="10">
+                </div>
+                <div class="settings-content__row">
+                    <label for="columns">Số cột</label>
+                    <input type="number" min="5" max="30" id="columns" value="10">
+                </div>
+                <div class="settings-content__row">
+                    <label for="proportion">Tỷ lệ mìn</label>
+                    <input type="number" id="proportion" min="1.5" max="4.5" step="0.5" value="1.5" maxlength="5">
+                </div>
+                <div class="settings-content__row">
+                    <label for="mines">Số mìn dự kiến</label>
+                    <input type="number" id="mines" class="disable" value="15" disabled="true">
+                </div>
+                <div class="settings-content__row">
+                    <label for="flag">Cờ cần đặt</label>
+                    <input type="number" id="flag" class="disable" value="15" disabled="true">
+                </div>
+                <div class="settings-content__row">
+                    <span class="time-switch">
+                        <label for="time-switch">Tính giờ</label>
+                        <input type="checkbox" id="time-switch">
+                    </span>
+                    <input type="number" id="time" value="120" min="60" max="600" step="10" disabled="true">
+                </div>
+            </div>
+        </div>
+        <div class="settings-mode">
+            <i class="fa-solid fa-sun mode-icon" title="Chế độ sáng"></i>
+        </div>
+        <div class="tutorial">
+            <i class="fa-solid fa-book-open tutor-icon" title="Hướng dẫn chơi"></i>
+            <div class="tutorial-content">
+                <p>Click vào ô vuông bạn muốn</p>
+                <p>Click chuột trái để đào</p>
+                <p>Click chuột phải để đánh dấu vị trí mìn</p>
+                <p>Bạn hoàn toàn có thể hủy cờ khi chuột phải một lần nữa</p>
+                <p>Nếu bạn click vào ô mìn, bạn thua</p>
+                <p>Nếu bạn mở tất cả các ô không phải mìn, bạn thắng</p>
+                <p>Nếu bạn đánh giấu tất cả các ô mìn bằng cờ, bạn thắng</p>
+                <p>Chúc bạn chơi vui vẻ</p>
+            </div>
+        </div>
+        <div class="limit-flag">
+            <i class="fa-solid fa-flag red-flag"></i>
+            <span class="flag-limit">15</span>
+        </div>
+        <div class="clock">
+            <span class="minutes size"></span>
+            <span class="seconds size"></span>
+        </div>
+        <button class="btn">Start</button>
     </div>
-    <div id="signup">
-      <h2>Đăng kí</h2>
-      <div class="label">
-        <input value="" type="text" id="name_user_sign" class="input" maxlength="30" minlength="8" required>
-        <label for="name_user_sign" class="linked">Tên đăng nhập</label>
-      </div>
-      <div class="label">
-        <input value="" type="password" id="password_user_sign" class="input" maxlength="10" minlength="6" required>
-        <label for="password_user_sign" class="linked">Mật khẩu</label>
-      </div>
-      <div class="label">
-        <input value="" type="password" id="password_confirm_user" class="input" maxlength="10" minlength="6"required>
-        <label for="password_confirm_user" class="linked">Xác nhận mật khẩu</label>
-      </div>
-      <div class="notice">
-        <button class="button" id="sign">Đăng kí ngay</button>
-        <p>Đã có tài khoản? <a href="#login">Đăng nhập</a></p>
-      </div>
+    <div id="game-board">
+        <div class="protect"></div>
     </div>
-    <div id="forget_pass">
-      <h2>Khôi phục mật khẩu</h2>
-      <div class="label">
-        <input value="" type="email" id="email" class="input" required>
-        <label for="email" class="linked">Nhập email</label>
-      </div>
-      <div class="label">
-        <input type="number" id="number" class="input" min="1000" max="9999" required>
-        <label for="number" class="linked">Mã xác nhận</label>
-        <div id="capcha"></div>
-      </div>
-      <div class="notice">
-        <p><a href="#login">Trở lại</a></p>
-      </div>
-      <div class="submit">
-        <button class="button" id="give">Gửi</button>
-      </div>
-    </div>
-  </div>
 </body>
-<script src="index.js"></script>
+<script src="script.js"></script>
+
 </html>
