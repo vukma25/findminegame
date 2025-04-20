@@ -173,6 +173,10 @@ let flags = flag.value;
 const numberOfFlag = document.querySelector('.flag-limit')
 
 
+const isMobileDevice = () => {
+    return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+}
+
 const clear = () => {
     isBegin = false;
     winOrLose = false;
@@ -222,10 +226,15 @@ const generateBoard = (rows, cols, mines) => {
         let col = i % cols;
 
         cell.dataset.position = `${row},${col}`;
-        cell.addEventListener('click', () => {handleCellClick(cell, rows, cols, mines, cells)});
-        cell.addEventListener('contextmenu', (event) => {
-            event.preventDefault();
-            toggleFlag(cell, cells);
+        
+        cell.addEventListener('click', (event) => {
+            if (isMobileDevice()) {
+                const x = event.pageX;
+                const y = event.pageY;
+                handleCellClickMobile(cell, rows, cols, mines, cells, x, y);
+            } else {
+                handleCellClick(cell, rows, cols, mines, cells);
+            }
         });
         cells.push(cell);
         boardGame.appendChild(cell);
@@ -258,6 +267,7 @@ const generateMines = (rows, cols, mines, cell, cells) => {
     return minePosition;
 }
 
+// USE DIRECTLY THIS FUNCTION FOR DESKTOP ONLY
 const handleCellClick = (cell, rows, cols, mines, cells) => {
     if (winOrLose || cell.dataset.flag) {
         return;
@@ -287,6 +297,57 @@ const handleCellClick = (cell, rows, cols, mines, cells) => {
         checkWin(cells);
     }
 }
+//==================================================================================================================
+
+//USE THIS FUNCTION FOR MOBILE ONLY
+const renderOptions = () => {
+    return `
+        <button class="bindFlag" id="bindFlag">
+            <i class="fa-solid fa-flag red-flag"></i>
+        </button>
+        <button class="cancel" id="cancel" onclick="removeOptions()">
+            <i class="fa-solid fa-xmark close"></i>
+        </button>
+        <button class="open" id="open">
+            <i class="fa-solid fa-hammer hammer"></i>
+        </button>
+    `;
+}
+
+const removeOptions = () => {
+    const options = document.querySelector('.options');
+    const open = document.getElementById('open');
+    const bindFlag = document.getElementById('bindFlag');
+    if (options) {
+        open.removeEventListener('click', handleCellClick);
+        bindFlag.removeEventListener('click', toggleFlag);
+        options.remove();
+    }
+}
+
+const handleCellClickMobile = (cell, rows, cols, mines, cells, x, y) => {
+    if (winOrLose || cell.dataset.visited) {
+        return;
+    }
+    removeOptions();
+    const options = document.createElement('div');
+    options.className = 'options';
+    options.innerHTML = renderOptions();
+    options.style.left = `${x}px`;
+    options.style.top = `${y - 50}px`;
+    document.getElementById('game-board').appendChild(options);
+    document.getElementById('open').addEventListener('click', () => {
+        handleCellClick(cell, rows, cols, mines, cells)
+        removeOptions();
+    });
+    document.getElementById('bindFlag').addEventListener('click', () => {
+        toggleFlag(cell, cells)
+        removeOptions();
+    });
+}
+
+//==================================================================================================================
+
 
 const countMines = (row, col, rows, cols, mineLocations) => {
     let count = 0;

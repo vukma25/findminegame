@@ -82,6 +82,7 @@ body .settings {
   margin: 20px auto;
   padding: 0 20px;
   gap: 30px;
+  z-index: 10;
 }
 body .settings .settings-frame {
   position: relative;
@@ -96,6 +97,7 @@ body .settings .settings-frame .settings-content {
   margin-top: 10px;
   display: none;
   animation: floatIn 0.5s;
+  z-index: 1;
 }
 body .settings .settings-frame .settings-content .settings-content__row {
   display: flex;
@@ -144,6 +146,7 @@ body .settings .tutorial .tutorial-content {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   display: none;
   animation: floatIn 0.5s;
+  z-index: 1;
 }
 body .settings .tutorial .tutorial-content p {
   width: 100%;
@@ -286,6 +289,37 @@ body .error {
   color: var(--flat-color);
   animation: error 0.2s ease-in-out;
 }
+body .options {
+  position: fixed;
+  width: 55px;
+  height: 55px;
+  background: transparent;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-template-rows: repeat(2, 1fr);
+  gap: 2px;
+}
+body .options button {
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--text-color);
+}
+body .options button:hover {
+  background-color: var(--active-color);
+}
+body .options .open {
+  grid-column: 2/span 1;
+}
+body .options .close {
+  color: var(--background-color);
+}
+body .options .hammer {
+  color: var(--background-color);
+  font-size: 1rem;
+}
 
 @media screen and (max-width: 680px) {
   body .settings {
@@ -323,6 +357,7 @@ body .error {
   }
   body #game-board {
     width: 90%;
+    position: relative;
   }
 }
 @media screen and (max-width: 400px) {
