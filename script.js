@@ -236,6 +236,11 @@ const generateBoard = (rows, cols, mines) => {
                 handleCellClick(cell, rows, cols, mines, cells);
             }
         });
+        cell.addEventListener('contextmenu', (event) => {
+            event.preventDefault();
+            toggleFlag(cell);
+        });
+
         cells.push(cell);
         boardGame.appendChild(cell);
     }
