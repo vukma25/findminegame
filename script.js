@@ -83,7 +83,8 @@ const restrictValue = (start, end, value, element) => {
 }
 
 rows.addEventListener('input', () => {
-    if (restrictValue(5, 30, rows.value, rows)) {
+    let end = isMobileDevice() ? 17 : 30;
+    if (restrictValue(10, end, rows.value, rows)) {
         isUpdate[0] = false;
         return;
     }
@@ -95,7 +96,8 @@ rows.addEventListener('input', () => {
     
 })
 cols.addEventListener('input', () => {
-    if (restrictValue(5, 30, cols.value, cols)) {
+    let end = isMobileDevice() ? 11 : 30;
+    if (restrictValue(10, end, cols.value, cols)) {
         isUpdate[1] = false;
         return;
     }
@@ -207,6 +209,10 @@ document.querySelector('.btn').addEventListener('click', () => {
         renderNotification('Have something wrong in your setting!!!')
     }
 })
+
+document.getElementById('game-board').addEventListener('contextmenu', (event) => {
+    event.preventDefault();
+});
 
 const generateBoard = (rows, cols, mines) => {
     const boardGame = document.getElementById('game-board');
@@ -442,7 +448,7 @@ const gameOver = (cells) => {
             cell.innerHTML = `<i class="fa-solid fa-bomb bomb"></i>`;
         }
     })
-    document.querySelector('.btn').textContent = 'Play Again';
+    document.querySelector('.btn').textContent = 'Play again';
     winOrLose = true;
     isRender = false;
 }
@@ -451,7 +457,7 @@ const renderNotification = (message, delay) => {
     const notification = document.createElement('div');
     notification.className = 'notification';
     notification.textContent = message;
-    document.body.appendChild(notification);
+    document.getElementById("main").appendChild(notification);
     setTimeout(() => {
         notification.remove();
     }, delay || 3000);

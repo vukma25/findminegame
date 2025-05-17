@@ -34,6 +34,7 @@
   --border-color: #bbb;
   --active-color: #ccc;
   --blue-color: #6001d2;
+  --opacity-gray: #E5E5E5;
 }
 
 .dark-mode {
@@ -42,6 +43,7 @@
   --flat-color: #e11212;
   --border-color: #444;
   --active-color: #555;
+  --opacity-gray: #999999;
 }
 
 *,
@@ -63,31 +65,42 @@
 }
 
 body {
-  width: 100%;
-  height: 100%;
+  width: 100vw;
+  height: 100vh;
   font-family: Be VietNam Pro, Arial, Helvetica, sans-serif;
   position: relative;
   background-color: var(--background-color);
   color: var(--text-color);
   transition: background 0.3s, color 0.3s;
 }
-body h1 {
-  text-align: center;
+body #main {
+  width: 100%;
+  height: 100%;
+  position: relative;
 }
-body .settings {
+body #main h1 {
+  text-align: center;
+  text-shadow: 2px 2px 5px var(--text-color);
+}
+body #main .settings {
   display: flex;
   width: 80%;
   justify-content: flex-start;
   align-items: center;
   margin: 20px auto;
-  padding: 0 20px;
+  padding: 10px 20px;
   gap: 30px;
   z-index: 10;
+  position: sticky;
+  top: 10px;
+  background-color: var(--opacity-gray);
+  border-radius: 10px;
+  box-shadow: 5px 5px 10px var(--opacity-gray);
 }
-body .settings .settings-frame {
+body #main .settings .settings-frame {
   position: relative;
 }
-body .settings .settings-frame .settings-content {
+body #main .settings .settings-frame .settings-content {
   position: absolute;
   background-color: var(--border-color);
   width: 300px;
@@ -99,17 +112,17 @@ body .settings .settings-frame .settings-content {
   animation: floatIn 0.5s;
   z-index: 1;
 }
-body .settings .settings-frame .settings-content .settings-content__row {
+body #main .settings .settings-frame .settings-content .settings-content__row {
   display: flex;
   width: 100%;
   justify-content: space-between;
   align-items: center;
   margin: 5px 0;
 }
-body .settings .settings-frame .settings-content .settings-content__row label {
+body #main .settings .settings-frame .settings-content .settings-content__row label {
   width: 50%;
 }
-body .settings .settings-frame .settings-content .settings-content__row input {
+body #main .settings .settings-frame .settings-content .settings-content__row input {
   width: 50%;
   padding: 5px;
   border: 1px solid var(--border-color);
@@ -117,26 +130,26 @@ body .settings .settings-frame .settings-content .settings-content__row input {
   outline: none;
   font-weight: 600;
 }
-body .settings .settings-frame .settings-content .settings-content__row .disable {
+body #main .settings .settings-frame .settings-content .settings-content__row .disable {
   background-color: #fff;
 }
-body .settings .settings-frame .settings-content .settings-content__row .time-switch {
+body #main .settings .settings-frame .settings-content .settings-content__row .time-switch {
   display: flex;
   justify-content: center;
   align-items: center;
   width: 40%;
 }
-body .settings .settings-frame .settings-content .settings-content__row .time-switch label {
+body #main .settings .settings-frame .settings-content .settings-content__row .time-switch label {
   width: 65%;
 }
-body .settings .settings-frame .settings-content .settings-content__row .time-switch input {
+body #main .settings .settings-frame .settings-content .settings-content__row .time-switch input {
   accent-color: var(--blue-color);
   height: 16px;
 }
-body .settings .tutorial {
+body #main .settings .tutorial {
   position: relative;
 }
-body .settings .tutorial .tutorial-content {
+body #main .settings .tutorial .tutorial-content {
   position: absolute;
   width: 470px;
   background-color: var(--border-color);
@@ -148,18 +161,22 @@ body .settings .tutorial .tutorial-content {
   animation: floatIn 0.5s;
   z-index: 1;
 }
-body .settings .tutorial .tutorial-content p {
+body #main .settings .tutorial .tutorial-content p {
   width: 100%;
   text-align: start;
   margin-bottom: 5px;
 }
-body .settings .tutorial .tutorial-content p::before {
+body #main .settings .tutorial .tutorial-content p::before {
   content: "- ";
 }
-body .settings .limit-flag {
+body #main .settings .tutorial .tutorial-content p.notice {
+  color: var(--flat-color);
+  font-weight: 600;
+}
+body #main .settings .limit-flag {
   width: 50px;
 }
-body .settings .clock {
+body #main .settings .clock {
   border: 1px solid var(--border-color);
   width: 80px;
   height: 40px;
@@ -169,7 +186,7 @@ body .settings .clock {
   align-items: center;
   border-radius: 5px;
 }
-body .settings .clock .size {
+body #main .settings .clock .size {
   font-size: 1.2rem;
   background-color: var(--border-color);
   padding: 5px;
@@ -179,7 +196,7 @@ body .settings .clock .size {
   font-family: monospace;
   height: 80%;
 }
-body .settings .btn {
+body #main .settings .btn {
   padding: 5px 10px;
   width: 120px;
   height: 40px;
@@ -189,22 +206,22 @@ body .settings .btn {
   background-color: var(--blue-color);
   color: #fff;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 0.8rem;
   font-family: Be VietNam Pro, Arial, Helvetica, sans-serif;
   cursor: pointer;
   transition: background 0.3s, color 0.3s;
 }
-body .settings .btn:hover {
+body #main .settings .btn:hover {
   background-color: var(--active-color);
 }
-body #game-board {
+body #main #game-board {
   display: grid;
   justify-content: center;
   margin: 20px auto;
   width: 70%;
   height: auto;
 }
-body #game-board .cell {
+body #main #game-board .cell {
   border: 1px solid var(--border-color);
   background-color: var(--background-color);
   display: flex;
@@ -215,63 +232,63 @@ body #game-board .cell {
   cursor: pointer;
   transition: background 0.3s, color 0.3s;
 }
-body #game-board .cell:hover {
+body #main #game-board .cell:hover {
   background-color: var(--active-color);
 }
-body #game-board .cell.flag {
+body #main #game-board .cell.flag {
   background-color: var(--flat-color);
   color: var(--text-color);
 }
-body #game-board .cell.bomb {
+body #main #game-board .cell.bomb {
   background-color: var(--flat-color);
   color: var(--text-color);
 }
-body #game-board .cell.open {
+body #main #game-board .cell.open {
   background-color: var(--active-color);
   color: var(--text-color);
 }
-body #game-board .cell.open0 {
+body #main #game-board .cell.open0 {
   background-color: var(--active-color);
   color: var(--background-color);
 }
-body #game-board .cell.open1 {
+body #main #game-board .cell.open1 {
   color: #1976D2;
 }
-body #game-board .cell.open2 {
+body #main #game-board .cell.open2 {
   color: #388E3C;
 }
-body #game-board .cell.open3 {
+body #main #game-board .cell.open3 {
   color: #D32F2F;
 }
-body #game-board .cell.open4 {
+body #main #game-board .cell.open4 {
   color: #7B1FA2;
 }
-body #game-board .cell.open5 {
+body #main #game-board .cell.open5 {
   color: #1976D2;
 }
-body #game-board .cell.open6 {
+body #main #game-board .cell.open6 {
   color: #388E3C;
 }
-body #game-board .cell.open7 {
+body #main #game-board .cell.open7 {
   color: #D32F2F;
 }
-body #game-board .cell.open8 {
+body #main #game-board .cell.open8 {
   color: #7B1FA2;
 }
-body .display {
+body #main .display {
   display: block;
 }
-body i {
+body #main i {
   font-size: 1.5rem;
 }
-body .bomb {
+body #main .bomb {
   font-size: 1rem;
 }
-body .red-flag {
+body #main .red-flag {
   color: var(--flat-color);
   font-size: 1rem;
 }
-body .notification {
+body #main .notification {
   background-color: var(--flat-color);
   position: absolute;
   width: 300px;
@@ -284,12 +301,12 @@ body .notification {
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
   animation: appear 1s;
 }
-body .error {
+body #main .error {
   border: 1px solid var(--flat-color);
   color: var(--flat-color);
   animation: error 0.2s ease-in-out;
 }
-body .options {
+body #main .options {
   position: fixed;
   width: 55px;
   height: 55px;
@@ -299,7 +316,7 @@ body .options {
   grid-template-rows: repeat(2, 1fr);
   gap: 2px;
 }
-body .options button {
+body #main .options button {
   border: none;
   border-radius: 50%;
   display: flex;
@@ -307,61 +324,87 @@ body .options button {
   align-items: center;
   background-color: var(--text-color);
 }
-body .options button:hover {
+body #main .options button:hover {
   background-color: var(--active-color);
 }
-body .options .open {
+body #main .options .open {
   grid-column: 2/span 1;
 }
-body .options .close {
+body #main .options .close {
   color: var(--background-color);
 }
-body .options .hammer {
+body #main .options .hammer {
   color: var(--background-color);
   font-size: 1rem;
 }
+body footer .footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 40px;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  border-top: 1px solid var(--border-color);
+}
+body footer .footer a {
+  color: var(--text-color);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+body footer .footer a:hover {
+  color: var(--flat-color);
+}
 
 @media screen and (max-width: 680px) {
-  body .settings {
-    padding: 0 10px;
+  body #main .settings {
+    padding: 10px;
     display: grid;
     width: 100%;
     height: auto;
     grid-template-columns: repeat(12, 1fr);
-    grid-template-rows: repeat(2, 40px);
+    grid-template-rows: repeat(2, 30px);
   }
-  body .settings .settings-frame {
+  body #main .settings .settings-frame {
     grid-column: 1/span 2;
   }
-  body .settings .settings-mode {
+  body #main .settings .settings-mode {
     grid-column: 3/span 2;
   }
-  body .settings .tutorial {
+  body #main .settings .tutorial {
     grid-column: 5/span 2;
   }
-  body .settings .tutorial .tutorial-content {
+  body #main .settings .tutorial .tutorial-content {
     width: 270px;
   }
-  body .settings .limit-flag {
+  body #main .settings .limit-flag {
     grid-column: 7/span 2;
   }
-  body .settings .clock {
+  body #main .settings .clock {
     grid-column: 10/span 3;
   }
-  body .settings .btn {
+  body #main .settings .btn {
     grid-column: 1/-1;
     width: unset;
     margin-left: unset;
     font-size: 0.8rem;
     flex-wrap: wrap;
   }
-  body #game-board {
+  body #main #game-board {
     width: 90%;
     position: relative;
   }
 }
 @media screen and (max-width: 400px) {
-  body .settings {
+  body #main .settings {
     padding: 0;
+    background-color: transparent;
+    border-radius: unset;
+    box-shadow: unset;
   }
 }/*# sourceMappingURL=styles.css.map */
