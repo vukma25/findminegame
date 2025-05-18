@@ -319,10 +319,13 @@ body {
 
         .options {
             position: fixed;
-            width: 72px;
-            height: 72px;
+            width: 70px;
+            height: 70px;
             background: transparent;
             display: grid;
+            grid-template-areas: 
+                "bindFlag cancel"
+                ". open";
             grid-template-columns: repeat(2, 1fr);
             grid-template-rows: repeat(2, 1fr);
             gap: 2px;
@@ -341,17 +344,27 @@ body {
             }
 
             .open {
-                grid-column: 2 / span 1;
+                grid-area: open;
+
+                .hammer {
+                    color: var(--background-color);
+                    font-size: 1rem;
+                }
             }
 
-            .close {
-                color: var(--background-color);
+            .bindFlag {
+                grid-area: bindFlag;
             }
 
-            .hammer {
-                color: var(--background-color);
-                font-size: 1rem;
+
+            .cancel {
+                grid-area: cancel;
+
+                .close {
+                    color: var(--background-color);
+                }
             }
+
 
         }
     }

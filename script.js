@@ -26,7 +26,7 @@ const enableDarkTheme = () => {
 }
 const disableDarkTheme = () => {
     document.body.classList.remove('dark-mode');
-    localStorage.setItem('theme', null);
+    localStorage.setItem('theme', 'light')
     document.querySelector('.settings-mode').innerHTML = `<i class="fa-solid fa-sun mode-icon" title="Chế độ sáng"></i>`
 }
 
@@ -83,8 +83,7 @@ const restrictValue = (start, end, value, element) => {
 }
 
 rows.addEventListener('input', () => {
-    let end = isMobileDevice() ? 17 : 30;
-    if (restrictValue(10, end, rows.value, rows)) {
+    if (restrictValue(10, 30, rows.value, rows)) {
         isUpdate[0] = false;
         return;
     }
@@ -235,9 +234,8 @@ const generateBoard = (rows, cols, mines) => {
         
         cell.addEventListener('click', (event) => {
             if (isMobileDevice()) {
-                const x = event.pageX;
-                const y = event.pageY;
-                handleCellClickMobile(cell, rows, cols, mines, cells, x, y);
+                const rect = event.target.getBoundingClientRect();
+                handleCellClickMobile(cell, rows, cols, mines, cells, rect.left, rect.top);
             } else {
                 handleCellClick(cell, rows, cols, mines, cells);
             }
@@ -311,8 +309,8 @@ const handleCellClick = (cell, rows, cols, mines, cells) => {
 //==================================================================================================================
 
 //USE THIS FUNCTION FOR MOBILE ONLY
-const renderOptions = () => {
-    return `
+const renderOptions = (cell, cols, x, y) => {
+    const modelOptions = `
         <button class="bindFlag" id="bindFlag">
             <i class="fa-solid fa-flag red-flag"></i>
         </button>
@@ -323,6 +321,52 @@ const renderOptions = () => {
             <i class="fa-solid fa-hammer hammer"></i>
         </button>
     `;
+
+    let template = '';
+    let [row, col] = cell.dataset.position.split(',');
+    let coordX = 0;
+    let coordY = 0;
+    row = parseInt(row);
+    col = parseInt(col);
+    console.log(col, cols);
+
+    if (row === 0 && col === cols - 1){
+        template = `
+            "bindFlag ."
+            "cancel open"
+        `
+        coordX = x - 36;
+        coordY = y;
+    } else if (row === 0){
+        template = `
+            ". bindFlag"
+            "open cancel"
+        `
+        coordX = x;
+        coordY = y;
+    } else if (col === cols - 1){
+        template = `
+            "bindFlag cancel"
+            "open ."
+        `
+        coordX = x - 36;
+        coordY = y - 36;
+    } else {
+        template = `
+            "bindFlag cancel"
+            ". open"
+        `
+        coordX = x;
+        coordY = y - 36;
+    }
+
+    const options = document.createElement('div');
+    options.className = 'options';
+    options.innerHTML = modelOptions;
+    options.style.left = `${coordX}px`;
+    options.style.top = `${coordY}px`;
+    options.style.gridTemplateAreas = template;
+    document.getElementById('game-board').appendChild(options);
 }
 
 const removeOptions = () => {
@@ -341,12 +385,8 @@ const handleCellClickMobile = (cell, rows, cols, mines, cells, x, y) => {
         return;
     }
     removeOptions();
-    const options = document.createElement('div');
-    options.className = 'options';
-    options.innerHTML = renderOptions();
-    options.style.left = `${x}px`;
-    options.style.top = `${y - 50}px`;
-    document.getElementById('game-board').appendChild(options);
+
+    renderOptions(cell, cols, x, y);
     document.getElementById('open').addEventListener('click', () => {
         handleCellClick(cell, rows, cols, mines, cells)
         removeOptions();
@@ -467,7 +507,11 @@ const renderNotification = (message, delay) => {
 window.addEventListener('scroll', () => {
     if (window.scrollY > 0) {
         document.querySelector('.footer').style.display = 'none';
+        removeOptions();
     } else {
         document.querySelector('.footer').style.display = 'flex';
     }
+});
+window.addEventListener('resize', () => {
+    removeOptions();
 });

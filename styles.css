@@ -308,10 +308,11 @@ body #main .error {
 }
 body #main .options {
   position: fixed;
-  width: 72px;
-  height: 72px;
+  width: 70px;
+  height: 70px;
   background: transparent;
   display: grid;
+  grid-template-areas: "bindFlag cancel" ". open";
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(2, 1fr);
   gap: 2px;
@@ -328,14 +329,20 @@ body #main .options button:hover {
   background-color: var(--active-color);
 }
 body #main .options .open {
-  grid-column: 2/span 1;
+  grid-area: open;
 }
-body #main .options .close {
-  color: var(--background-color);
-}
-body #main .options .hammer {
+body #main .options .open .hammer {
   color: var(--background-color);
   font-size: 1rem;
+}
+body #main .options .bindFlag {
+  grid-area: bindFlag;
+}
+body #main .options .cancel {
+  grid-area: cancel;
+}
+body #main .options .cancel .close {
+  color: var(--background-color);
 }
 body footer .footer {
   position: fixed;
