@@ -308,8 +308,8 @@ body #main .error {
 }
 body #main .options {
   position: fixed;
-  width: 55px;
-  height: 55px;
+  width: 72px;
+  height: 72px;
   background: transparent;
   display: grid;
   grid-template-columns: repeat(2, 1fr);

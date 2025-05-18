@@ -462,3 +462,12 @@ const renderNotification = (message, delay) => {
         notification.remove();
     }, delay || 3000);
 }
+
+//===============handle display ==================================================================
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 0) {
+        document.querySelector('.footer').style.display = 'none';
+    } else {
+        document.querySelector('.footer').style.display = 'flex';
+    }
+});
