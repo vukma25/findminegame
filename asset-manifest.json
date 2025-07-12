@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/findminegame/static/css/main.cebf0f90.css",
+    "main.js": "/findminegame/static/js/main.58f2a776.js",
+    "static/js/453.2ad1b043.chunk.js": "/findminegame/static/js/453.2ad1b043.chunk.js",
+    "static/media/logo.png": "/findminegame/static/media/logo.f9d59cee5f6fcb92a5e0.png",
+    "index.html": "/findminegame/index.html",
+    "main.cebf0f90.css.map": "/findminegame/static/css/main.cebf0f90.css.map",
+    "main.58f2a776.js.map": "/findminegame/static/js/main.58f2a776.js.map",
+    "453.2ad1b043.chunk.js.map": "/findminegame/static/js/453.2ad1b043.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.cebf0f90.css",
+    "static/js/main.58f2a776.js"
+  ]
+}
