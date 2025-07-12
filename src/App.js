@@ -1,24 +1,23 @@
-import logo from './logo.svg';
+import { Route, Routes } from 'react-router-dom'
+import { useState } from 'react';
 import './App.css';
+import Navbar from './Components/Navbar/Navbar';
+import FormLogin from './Components/FormLogin/FormLogin';
+import Home from './Pages/HomePage/Home'
+import Minesweeper from './Pages/MinesweeperPage/Minesweeper';
 
 function App() {
+  const [open, setOpen] = useState(false);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <FormLogin setOpen={setOpen} open={ open }/>
+      <Navbar setOpen={setOpen}/>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/games/minesweeper" element={<Minesweeper />} />
+      </Routes>
+    </>
   );
 }
 
