@@ -27,9 +27,6 @@
   text-decoration: none;
   color: var(--cl-primary-purple);
 }
-.navigation .nav-middle .nav-middle-references .references:hover .references-1 {
-  display: flex;
-}
 .navigation .nav-middle .nav-middle-references .references .references-1 {
   position: absolute;
   right: 50%;
@@ -70,6 +67,9 @@
 .navigation .nav-middle .nav-middle-references .references .references-1 .child-1:hover {
   color: var(--cl-black);
   background: var(--cl-primary-yellow);
+}
+.navigation .nav-middle .nav-middle-references .references .references-1__display {
+  display: flex;
 }
 .navigation .nav-middle .search-box {
   border: 1px solid var(--cl-black);

@@ -170,7 +170,8 @@
                 .game-over {
                     background: var(--cl-primary-purple);
                     color: var(--cl-white-pure);
-                    width: 50%;
+                    width: 100%;
+                    max-width: 40rem;
                     height: auto;
                     text-align: center;
                     padding: 1.5rem;
@@ -316,4 +317,30 @@
         grid-area: flag;
     }
 
+}
+
+@media screen and (max-width: 45rem){
+    .minesweeper {
+        .minesweeper-settings {
+            display: grid;
+            grid-template-rows: repeat(2, 3.5rem);
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-areas: 
+                "flag clock"
+                "level level"
+            ;
+            gap: 2rem 0;
+
+            .minesweeper-settings-level {
+                grid-area: level;
+                width: 100%;
+            }
+            .minesweeper-settings-flag {
+                grid-area: flag;
+            }
+            .minesweeper-settings-clock {
+                grid-area: clock;
+            }
+        }
+    }
 }

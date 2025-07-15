@@ -1,9 +1,16 @@
+import { useState } from 'react';
 import Icon from '@mui/material/Icon';
 import { Link } from 'react-router-dom';
 import logo from '../../assets/image/logo.png';
 import './Navbar.css';
 
 function Navbar({ setOpen }) {
+
+    const [displayList, setDisplayList] = useState(false)
+
+    function toggleDisplayList(){
+        setDisplayList(prevState => !prevState)
+    }
 
     return (
         <nav className="flex-div navigation">
@@ -13,9 +20,12 @@ function Navbar({ setOpen }) {
             <div className="nav-middle flex-div">
                 <div className="nav-middle-references flex-div">
                     <Link to="/" className="references">Home</Link>
-                    <div className="references">
+                    <div 
+                        className="references"
+                        onClick={() => toggleDisplayList()}
+                    >
                         Game
-                        <div className="references-1">
+                        <div className={`references-1 ${displayList ? "references-1__display" : ""}`}>
                             <Link to="/games/minesweeper" className="child-1">Minesweeper</Link>
                             <Link to="/games/chess" className="child-1">Chess</Link>
                             <Link to="/games/tic-tac-toe" className="child-1">Tic tac toe</Link>

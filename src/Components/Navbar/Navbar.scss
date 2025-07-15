@@ -32,10 +32,6 @@
                 text-decoration: none;
                 color: var(--cl-primary-purple);
 
-                &:hover .references-1 {
-                    display: flex;
-                }
-
                 .references-1 {
                     position: absolute;
                     right: 50%;
@@ -79,6 +75,9 @@
                             background: var(--cl-primary-yellow);
                         }
                     }
+                }
+                .references-1__display {
+                    display: flex;
                 }
             }
         }

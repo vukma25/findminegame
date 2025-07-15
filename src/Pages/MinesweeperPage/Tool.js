@@ -45,8 +45,8 @@ function Tool({
         <div 
             className="tool"
             style={{
-                ...style,
-                ...copySettings.tool.style
+                ...copySettings.tool.style,
+                ...style
             }}
         >
             <div className="tool-cell refer"></div>

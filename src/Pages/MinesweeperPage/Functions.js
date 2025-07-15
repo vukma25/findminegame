@@ -341,8 +341,8 @@ export function gridTemplateColumns(index, rows, cols, top, left) {
                 "close open"
                 "flag ."
             `,
-            top: `${top - 40}px`,
-            left: `${left - 40}px`
+            top: `${top - 30}px`,
+            left: `${left - 30}px`
         }
     }
 
@@ -353,17 +353,17 @@ export function gridTemplateColumns(index, rows, cols, top, left) {
                 "close open"
             `,
             top: `${top}px`,
-            left: `${left - 40}px`
+            left: `${left - 30}px`
         }
     }
 
-    if (row == rows - 1) {
+    if (row === rows - 1) {
         return {
             gridTemplateAreas: `
                 "open close"
                 ". flag"
             `,
-            top: `${top - 40}px`,
+            top: `${top - 30}px`,
             left: `${left}px`
         }
     }
