@@ -1,1 +1,6 @@
-/*# sourceMappingURL=Home.css.map */
+.homepage {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(36rem, 1fr));
+  gap: 2rem;
+  padding: 1.5rem;
+}/*# sourceMappingURL=Home.css.map */

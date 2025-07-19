@@ -59,7 +59,7 @@ function OptionsBar({ settings, dispatch }) {
                 }}>Custom</MenuItem>
             </Select>
             {
-                settings.level === 4 &&
+                (settings.level === 4 && settings.setTime.isTime) &&
                 <Icon
                     sx={{
                         fontSize: '3rem',
@@ -74,12 +74,24 @@ function OptionsBar({ settings, dispatch }) {
                     fontSize: '3rem',
                     color: 'var(--cl-red-flag)'
                 }}>flag</Icon>
-                <p>{settings.mine}</p>
+                <p>{settings.flag}</p>
             </div>
-            <Clock 
-                dispatch={dispatch}
-                settings={settings}
-            />
+            {
+                settings.setTime.isTime ?
+                    <Clock
+                        dispatch={dispatch}
+                        settings={settings}
+                    /> :
+                    <Icon
+                        sx={{
+                            fontSize: '3rem',
+                            color: 'var(--cl-primary-purple)',
+                            marginLeft: 'auto'
+                        }}
+                        title="Modify settings"
+                        onClick={() => dispatch(setToggleSetting())}
+                    >tune</Icon>
+            }
         </div>
     )
 }

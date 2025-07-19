@@ -28,7 +28,7 @@ function Clock({ dispatch, settings }) {
         const endTime = Date.now() + (settings.setTime.duration + 1) * 1000;
         let interval = null
 
-        if (!settings.gameOver) {
+        if (!settings.gameOver && settings.setTime.isTime) {
 
             if (
                 (settings.level < 4 && settings.level > 0) ||

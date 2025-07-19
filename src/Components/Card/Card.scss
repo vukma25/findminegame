@@ -1,0 +1,71 @@
+@import '../../mixins';
+
+.card {
+    height: 32rem;
+    border: .1rem solid var(--cl-gray);
+    border-radius: 1rem;
+    overflow: hidden;
+    transition: transform .2s;
+
+    &:hover {
+        transform: translateY(-.5rem);
+    }
+
+    .card-image {
+        width: 100%;
+        height: 10rem;
+    }
+
+    .card-detail {
+        width: 100%;
+        height: 2rem;
+        position: relative;
+        padding: 0 1rem;
+        padding-top: 6rem;
+
+        .card-detail-logo {
+            width: 10rem;
+            aspect-ratio: 1;
+            background-color: gray;
+            border-radius: 50%;
+            position: absolute;
+            top: -5rem;
+            left: 1rem;
+        }
+
+        .card-detail-title {
+            font-size: 2.2rem;
+            color: var(--cl-primary-purple);
+            margin: .5rem 0;
+        }
+
+        .card-detail-description {
+            font-size: 1.2rem;
+            height: 5rem;
+        }
+
+        .card-detail-btn {
+            @include btnForm(10rem, 4rem, .1rem solid var(--cl-primary-purple), .5rem, 1.6rem, 500);
+            justify-content: center;
+            margin: 1rem 0;
+            color: var(--cl-primary-purple);
+            transition: color .2s, background .2s;
+            cursor: pointer;
+
+
+            &:hover {
+                background: var(--cl-primary-purple);
+                color: var(--cl-white-pure);
+            }
+
+            .card-detail-btn-arrow {
+                display: none;
+            }
+
+            &:hover .card-detail-btn-arrow {
+                transform: translateX(.3rem);
+                display: inline;
+            }
+        }
+    }
+}

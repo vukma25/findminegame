@@ -14,12 +14,16 @@ function Navbar({ setOpen }) {
 
     return (
         <nav className="flex-div navigation">
-            <Link to="/" className="nav-left flex-div">
+            <Link to="/" className="nav-left flex-div"
+                onClick={() => setDisplayList(false)}
+            >
                 <img src={logo} alt="website's logo" />
             </Link>
             <div className="nav-middle flex-div">
                 <div className="nav-middle-references flex-div">
-                    <Link to="/" className="references">Home</Link>
+                    <Link to="/" className="references"
+                        onClick={() => setDisplayList(false)}
+                    >Home</Link>
                     <div 
                         className="references"
                         onClick={() => toggleDisplayList()}
@@ -36,9 +40,13 @@ function Navbar({ setOpen }) {
                             <Link to="/games/snake-game" className="child-1">Snake Game</Link>
                         </div>
                     </div>
-                    <Link to="/statistics" className="references">Statistics</Link>
+                    <Link to="/statistics" className="references"
+                        onClick={() => setDisplayList(false)}
+                    >Statistics</Link>
                 </div>
-                <div className="search-box flex-div">
+                <div className="search-box flex-div"
+                    onClick={() => setDisplayList(false)}
+                >
                     <input
                         type="input"
                         placeholder="Search"
@@ -47,7 +55,9 @@ function Navbar({ setOpen }) {
                     <Icon className="search-box-icon">search</Icon>
                 </div>
             </div>
-            <div className="nav-right flex-div">
+            <div className="nav-right flex-div"
+                onClick={() => setDisplayList(false)}
+            >
                 <div 
                     className="nav-right-login flex-div"
                     onClick={() => setOpen(prevState => !prevState)}

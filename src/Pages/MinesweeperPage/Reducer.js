@@ -51,6 +51,7 @@ export const initialState = {
 
 export const reducer = (state, action) => {
 
+    console.log(action)
     switch (action.type) {
         case SET_ROW_ACTION:
             return {
@@ -147,7 +148,11 @@ export const reducer = (state, action) => {
                     },
                     'index': null
                 },
+                'isInGame': false,
                 'firstClick': true,
+                'gameOver': false,
+                'message': '',
+                'logError': '',
                 ...levels[action.payload]
             }
         case TOGGLE_SETTING_ACTION:
@@ -179,6 +184,7 @@ export const reducer = (state, action) => {
             return {
                 ...state,
                 ...levels[4],
+                'firstClick': true,
                 'isInGame': false,
                 'tool': {
                     ...state.tool,
@@ -186,7 +192,10 @@ export const reducer = (state, action) => {
                         ...state.tool.style,
                         display: 'none'
                     }
-                }
+                },
+                'gameOver': false,
+                'message': '',
+                'logError': ''
             }
         case LEFT_CLICK_CELL_ACTION:
             return {

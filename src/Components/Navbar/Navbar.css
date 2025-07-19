@@ -147,8 +147,12 @@
   .navigation .nav-middle .search-box {
     display: none;
   }
+  .navigation .nav-right {
+    width: 35%;
+  }
   .navigation .nav-right .nav-right-login, .navigation .nav-right .nav-right-register {
     font-size: 1.2rem;
+    font-weight: 500;
     height: 3rem;
   }
 }/*# sourceMappingURL=Navbar.css.map */

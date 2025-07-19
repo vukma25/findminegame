@@ -13,7 +13,14 @@ function Logger({ log }) {
         return () => clearTimeout(timeout);
     }, [log]);
 
-    return <div className="logger">{message}</div>;
+    return (
+        <div 
+            className={`logger ${message === "" ? 
+                "" : "logger-display"
+        }`}>
+            {message}
+        </div>
+    )
 }
 
 export default Logger

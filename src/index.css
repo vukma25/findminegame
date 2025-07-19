@@ -27,6 +27,16 @@
     opacity: 1;
   }
 }
+@keyframes floatInForLog {
+  0% {
+    transform: translate(-50%, 5rem);
+    opacity: 0;
+  }
+  100% {
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+}
 *,
 *::before,
 *::after {

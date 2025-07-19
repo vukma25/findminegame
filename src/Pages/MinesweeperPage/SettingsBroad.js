@@ -102,6 +102,7 @@ function SettingsBroad({
                     id="setTime"
                     checked={settings.setTime.isTime}
                     onChange={() => dispatch(setTime())}
+                    disabled={settings.isInGame}
                 />
                 <label htmlFor="setTime">set time</label>
             </div>

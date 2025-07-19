@@ -9,7 +9,8 @@ import { initialState, reducer } from './Reducer'
 import {
     marks,
     convertToMinute,
-    isMobileDevice
+    isMobileDevice,
+    isWin
 } from './Functions';
 import "./Minesweeper.css";
 
@@ -38,8 +39,6 @@ function Minesweeper() {
                         marks={marks}
                         convertToMinute={convertToMinute}
                     />
-
-                    <Logger log={settings.logError} />
                        
                     {/* Bang game chinh */}
                     <div
@@ -65,6 +64,7 @@ function Minesweeper() {
                             <GameOver
                                 dispatch={dispatch}
                                 message={settings.message}
+                                isWin={isWin(settings)}
                             />
                         }
                         {
@@ -81,6 +81,7 @@ function Minesweeper() {
                     </div>
                 </div>
             </div>
+            <Logger log={settings.logError} />
         </>
     )
 }

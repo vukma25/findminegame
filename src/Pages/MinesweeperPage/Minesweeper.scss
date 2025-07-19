@@ -145,17 +145,6 @@
             display: none;
         }
 
-        .logger {
-            width: 100%;
-            height: 4rem;
-            text-wrap: wrap;
-            background: transparent;
-            padding: 1rem;
-            font-size: 1.4rem;
-            text-align: center;
-            color: var(--cl-red-flag)
-        }
-
         .game-broad {
             gap: .1rem;
             justify-content: center;
@@ -189,6 +178,11 @@
                         height: auto;
                         text-align: center;
                         text-wrap: wrap;
+                    }
+
+                    .game-over-gif {
+                        width: 90%;
+                        height: auto;
                     }
 
                     .game-over-option {
@@ -317,6 +311,31 @@
         grid-area: flag;
     }
 
+}
+
+.logger {
+    position: fixed;
+    width: 100%;
+    max-width: 35rem;
+    height: 4rem;
+    text-wrap: wrap;
+    background: var(--cl-white-pure);
+    padding: 1rem;
+    font-size: 1.4rem;
+    color: var(--cl-red-flag);
+    border: .1rem solid var(--cl-primary-purple);
+    border-radius: .5rem;
+    z-index: 1;
+    left: 50%;
+    bottom: 1rem;
+    display: none;
+    transform: translateX(-50%);
+    transition: transform .3s;
+    animation: floatInForLog .3s;
+}
+.logger-display {
+    display: flex;
+    justify-content: center;
 }
 
 @media screen and (max-width: 45rem){

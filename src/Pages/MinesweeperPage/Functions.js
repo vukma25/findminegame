@@ -116,11 +116,6 @@ export const isMobileDevice = () => {
     return /Mobi|Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
 }
 
-export const countDownClock = (clock) => {
-
-    return true
-}
-
 //Construction of cells
 // 'cells': new Array(size).fill({
 //     opened: false,
@@ -209,14 +204,24 @@ function revealEmptyCells(row, col, rows, cols, cells) {
 
 }
 
-function checkWin(copyCells) {
+export function isWin(copyCells){
     let isWin = (copyCells.cells.filter(cell => {
         return cell.isMine && cell.flag
-    }).length === copyCells.flag) ||
+    }).length === copyCells.mine) ||
         (copyCells.cells.filter(cell => {
             return cell.opened || cell.isMine
         }).length === copyCells.cells.length)
 
+    return isWin
+}
+
+function checkWin(copyCells) {
+    let isWin = (copyCells.cells.filter(cell => {
+        return cell.isMine && cell.flag
+    }).length === copyCells.mine) ||
+        (copyCells.cells.filter(cell => {
+            return cell.opened || cell.isMine
+        }).length === copyCells.cells.length) 
 
     if (isWin) {
         copyCells.gameOver = true
@@ -224,6 +229,15 @@ function checkWin(copyCells) {
     }
 
     return copyCells
+}
+
+function clearFlag(cells) {
+    return cells.map(e => {
+        return {
+            ...e,
+            'flag': false
+        }
+    })
 }
 
 //Click cell for desktop
@@ -274,9 +288,10 @@ export function handleClickCell(index, copySettings) {
                 copySettings.row,
                 copySettings.col,
                 copySettings.mine,
-                copySettings.cells
+                clearFlag(copySettings.cells)
             )
         )
+        copySettings.flag = copySettings.mine
 
         return copySettings
 
@@ -300,14 +315,14 @@ export function handleToggleFlag(index, copySettings) {
 
     if (
         ((copySettings.cells[index].opened ||
-            copySettings.mine === 0) &&
+            copySettings.flag === 0) &&
             !copySettings.cells[index].flag) ||
         copySettings.gameOver
     ) {
         if (copySettings.cells[index].opened) {
             copySettings.logError = 'This cell was opened! You can not active it'
         }
-        else if (copySettings.mine === 0) {
+        else if (copySettings.flag === 0) {
             copySettings.logError = 'You have reached the limit of flags'
         }
 
@@ -318,9 +333,9 @@ export function handleToggleFlag(index, copySettings) {
 
     //Upgrade flag
     if (copySettings.cells[index].flag) {
-        copySettings.mine -= 1
+        copySettings.flag -= 1
     } else {
-        copySettings.mine += 1
+        copySettings.flag += 1
     }
     copySettings = checkWin(copySettings)
     return copySettings
