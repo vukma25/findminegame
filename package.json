@@ -2,7 +2,7 @@
   "name": "gameworld",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://vukma25.github.io/theworldgame",
+  "homepage": "https://vukma25.github.io/findminegame",
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
