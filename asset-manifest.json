@@ -1,16 +1,18 @@
 {
   "files": {
-    "main.css": "/findminegame/static/css/main.913df7de.css",
-    "main.js": "/findminegame/static/js/main.fdf11cae.js",
-    "static/js/453.2ad1b043.chunk.js": "/findminegame/static/js/453.2ad1b043.chunk.js",
-    "static/media/logo.png": "/findminegame/static/media/logo.f9d59cee5f6fcb92a5e0.png",
-    "index.html": "/findminegame/index.html",
-    "main.913df7de.css.map": "/findminegame/static/css/main.913df7de.css.map",
-    "main.fdf11cae.js.map": "/findminegame/static/js/main.fdf11cae.js.map",
-    "453.2ad1b043.chunk.js.map": "/findminegame/static/js/453.2ad1b043.chunk.js.map"
+    "main.css": "/theworldgame/static/css/main.50709eb3.css",
+    "main.js": "/theworldgame/static/js/main.2b39d70b.js",
+    "static/js/453.2ad1b043.chunk.js": "/theworldgame/static/js/453.2ad1b043.chunk.js",
+    "static/media/win.gif": "/theworldgame/static/media/win.1c59890545bf798f2b04.gif",
+    "static/media/lose.gif": "/theworldgame/static/media/lose.62b5c36fe54e307c2fa7.gif",
+    "static/media/logo.png": "/theworldgame/static/media/logo.f9d59cee5f6fcb92a5e0.png",
+    "index.html": "/theworldgame/index.html",
+    "main.50709eb3.css.map": "/theworldgame/static/css/main.50709eb3.css.map",
+    "main.2b39d70b.js.map": "/theworldgame/static/js/main.2b39d70b.js.map",
+    "453.2ad1b043.chunk.js.map": "/theworldgame/static/js/453.2ad1b043.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.913df7de.css",
-    "static/js/main.fdf11cae.js"
+    "static/css/main.50709eb3.css",
+    "static/js/main.2b39d70b.js"
   ]
 }
