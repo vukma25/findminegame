@@ -1,0 +1,306 @@
+
+.chess {
+    position: relative;
+    width: 100vw;
+    height: auto;
+
+    .chess-board-area {
+        width: 95%;
+        height: auto;
+        max-width: 60rem;
+        min-width: 35rem;
+        position: relative;
+        margin: 3rem auto;
+
+        .chess-board {
+            width: 100%;
+            border: .1rem solid var(--cl-black);
+            border-radius: .5rem;
+    
+            .chess-board-coordinate {
+                font-size: .3rem;
+                user-select: none;
+            }
+    
+        }
+
+        .piece {
+            position:absolute;
+            top: 0;
+            left: 0;
+            width: 12.5%;
+            height: 12.5%;
+            cursor: grab;
+            background-position: center;
+            background-size: contain;
+            background-repeat: no-repeat;
+            z-index: 1;
+        }
+
+        .square-1 {
+            transform: translate(0, 695%);
+        }
+        .square-2 {
+            transform: translate(100%, 695%);
+        }
+        .square-3 {
+            transform: translate(200%, 695%);
+        }
+        .square-4 {
+            transform: translate(300%, 695%);
+        }
+        .square-5 {
+            transform: translate(400%, 695%);
+        }
+        .square-6 {
+            transform: translate(500%, 695%);
+        }
+        .square-7 {
+            transform: translate(600%, 695%);
+        }
+        .square-8 {
+            transform: translate(700%, 695%);
+        }
+        .square-9 {
+            transform: translate(0, 595%);
+        }
+        .square-10 {
+            transform: translate(100%, 595%);
+        }
+        .square-11 {
+            transform: translate(200%, 595%);
+        }
+        .square-12 {
+            transform: translate(300%, 595%);
+        }
+        .square-13 {
+            transform: translate(400%, 595%);
+        }
+        .square-14 {
+            transform: translate(500%, 595%);
+        }
+        .square-15 {
+            transform: translate(600%, 595%);
+        }
+        .square-16 {
+            transform: translate(700%, 595%);
+        }
+        .square-17 {
+            transform: translate(0, 496%);
+        }
+        .square-18 {
+            transform: translate(100%, 496%);
+        }
+        .square-19 {
+            transform: translate(200%, 496%);
+        }
+        .square-20{
+            transform: translate(300%, 496%);
+        }
+        .square-21 {
+            transform: translate(400%, 496%);
+        }
+        .square-22 {
+            transform: translate(500%, 496%);
+        }
+        .square-23 {
+            transform: translate(600%, 496%);
+        }
+        .square-24 {
+            transform: translate(700%, 496%);
+        }
+        .square-25 {
+            transform: translate(0, 398%);
+        }
+        .square-26 {
+            transform: translate(100%, 398%);
+        }
+        .square-27 {
+            transform: translate(200%, 398%);
+        }
+        .square-28 {
+            transform: translate(300%, 398%);
+        }
+        .square-29 {
+            transform: translate(400%, 398%);
+        }
+        .square-30 {
+            transform: translate(500%, 398%);
+        }
+        .square-31 {
+            transform: translate(600%, 398%);
+        }
+        .square-32 {
+            transform: translate(700%, 398%);
+        }
+        .square-33 {
+            transform: translate(0, 300%);
+        }
+        .square-34 {
+            transform: translate(100%, 300%);
+        }
+        .square-35 {
+            transform: translate(200%, 300%);
+        }
+        .square-36 {
+            transform: translate(300%, 300%);
+        }
+        .square-37 {
+            transform: translate(400%, 300%);
+        }
+        .square-38 {
+            transform: translate(500%, 300%);
+        }
+        .square-39 {
+            transform: translate(600%, 300%);
+        }
+        .square-40 {
+            transform: translate(700%, 300%);
+        }
+        .square-41 {
+            transform: translate(0, 200%);
+        }
+        .square-42 {
+            transform: translate(100%, 200%);
+        }
+        .square-43 {
+            transform: translate(200%, 200%);
+        }
+        .square-44 {
+            transform: translate(300%, 200%);
+        }
+        .square-45 {
+            transform: translate(400%, 200%);
+        }
+        .square-46 {
+            transform: translate(500%, 200%);
+        }
+        .square-47 {
+            transform: translate(600%, 200%);
+        }
+        .square-48 {
+            transform: translate(700%, 200%);
+        }
+        .square-49 {
+            transform: translate(0, 100%);
+        }
+        .square-50 {
+            transform: translate(100%, 100%);
+        }
+        .square-51 {
+            transform: translate(200%, 100%);
+        }
+        .square-52 {
+            transform: translate(300%, 100%);
+        }
+        .square-53 {
+            transform: translate(400%, 100%);
+        }
+        .square-54 {
+            transform: translate(500%, 100%);
+        }
+        .square-55 {
+            transform: translate(600%, 100%);
+        }
+        .square-56 {
+            transform: translate(700%, 100%);
+        }
+        .square-57 {
+            transform: translate(0, 0);
+        }
+        .square-58 {
+            transform: translate(100%, 0);
+        }
+        .square-59 {
+            transform: translate(200%, 0);
+        }
+        .square-60 {
+            transform: translate(300%, 0);
+        }
+        .square-61 {
+            transform: translate(400%, 0);
+        }
+        .square-62 {
+            transform: translate(500%, 0);
+        }
+        .square-63 {
+            transform: translate(600%, 0);
+        }
+        .square-64 {
+            transform: translate(700%, 0);
+        }
+
+        .bp {
+            background-image: url(../../assets/image/bp.png);
+        }
+        .br {
+            background-image: url(../../assets/image/br.png);
+        }
+        .bb {
+            background-image: url(../../assets/image/bb.png);
+        }
+        .bn {
+            background-image: url(../../assets/image/bn.png);
+        }
+        .bq {
+            background-image: url(../../assets/image/bq.png);
+        }
+        .bk {
+            background-image: url(../../assets/image/bk.png);
+        }
+        .wp {
+            background-image: url(../../assets/image/wp.png);
+        }
+        .wr {
+            background-image: url(../../assets/image/wr.png);
+        }
+        .wb {
+            background-image: url(../../assets/image/wb.png);
+        }
+        .wn {
+            background-image: url(../../assets/image/wn.png);
+        }
+        .wq {
+            background-image: url(../../assets/image/wq.png);
+        }
+        .wk {
+            background-image: url(../../assets/image/wk.png);
+        }
+
+        //when piece dragging
+        .dragging {
+            z-index: 2;
+        }
+
+
+        //effect square hovering
+        .chess-effect {
+            position: absolute;
+            width: 12.5%;
+            height: 12.5%;
+            background-color: aqua;
+            top: 0;
+            left: 0;
+            border: .4rem solid var(--cl-primary-yellow);
+            background: transparent;
+            z-index: 0;
+        }
+
+        .suggest-div {
+            position: absolute;
+            width: 12.5%;
+            height: 12.5%;
+            top: 0;
+            left: 0;
+            background-color: transparent;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 0;
+        }
+        .taken-div {
+            @extend .suggest-div;
+            z-index: 2;
+        }
+    }
+}

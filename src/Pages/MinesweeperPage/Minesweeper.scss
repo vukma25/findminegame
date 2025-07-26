@@ -270,8 +270,8 @@
 
 .tool {
     display: grid;
-    grid-template-columns: repeat(2, 4rem);
-    grid-template-rows: repeat(2, 4rem);
+    grid-template-columns: repeat(2, 3rem);
+    grid-template-rows: repeat(2, 3rem);
     gap: .1rem;
     position: absolute;
     z-index: 2;
@@ -282,7 +282,7 @@
         background: var(--cl-gray);
 
         .tool-btn {
-            font-size: 3rem;
+            font-size: 2.5rem;
         }
 
         .open {
@@ -297,6 +297,7 @@
 
     .refer {
         background: transparent;
+        border: .1rem solid var(--cl-primary-purple);
     }
 
     .tool-cell-open {

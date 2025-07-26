@@ -1,4 +1,3 @@
-import Minesweeper from '../../Pages/MinesweeperPage/Minesweeper'
 import { Link } from 'react-router-dom'
 import './Card.css'
 
@@ -15,7 +14,6 @@ function Card({ title, description, logo, sourceBg}) {
                 <p className="card-detail-description">{description}</p>
                 <Link 
                     to={`/games/${title.toLowerCase()}`} 
-                    element={<Minesweeper />}
                     className="card-detail-btn flex-div"
                 >
                     Play now

@@ -49,7 +49,8 @@ function Tool({
                 ...style
             }}
         >
-            <div className="tool-cell refer"></div>
+            <div className="tool-cell refer">
+            </div>
             <div 
                 className="tool-cell tool-cell-open flex-div"
                 onClick={() => {
@@ -58,7 +59,7 @@ function Tool({
                     ))
                 }}
             >
-                <Icon className="tool-btn open">fullscreen</Icon>
+                <Icon className="tool-btn open">my_location</Icon>
             </div>
             <div 
                 className="tool-cell tool-cell-close flex-div"

@@ -1,0 +1,293 @@
+.chess {
+  position: relative;
+  width: 100vw;
+  height: auto;
+}
+.chess .chess-board-area {
+  width: 95%;
+  height: auto;
+  max-width: 60rem;
+  min-width: 35rem;
+  position: relative;
+  margin: 3rem auto;
+}
+.chess .chess-board-area .chess-board {
+  width: 100%;
+  border: 0.1rem solid var(--cl-black);
+  border-radius: 0.5rem;
+}
+.chess .chess-board-area .chess-board .chess-board-coordinate {
+  font-size: 0.3rem;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
+}
+.chess .chess-board-area .piece {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 12.5%;
+  height: 12.5%;
+  cursor: grab;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  z-index: 1;
+}
+.chess .chess-board-area .square-1 {
+  transform: translate(0, 695%);
+}
+.chess .chess-board-area .square-2 {
+  transform: translate(100%, 695%);
+}
+.chess .chess-board-area .square-3 {
+  transform: translate(200%, 695%);
+}
+.chess .chess-board-area .square-4 {
+  transform: translate(300%, 695%);
+}
+.chess .chess-board-area .square-5 {
+  transform: translate(400%, 695%);
+}
+.chess .chess-board-area .square-6 {
+  transform: translate(500%, 695%);
+}
+.chess .chess-board-area .square-7 {
+  transform: translate(600%, 695%);
+}
+.chess .chess-board-area .square-8 {
+  transform: translate(700%, 695%);
+}
+.chess .chess-board-area .square-9 {
+  transform: translate(0, 595%);
+}
+.chess .chess-board-area .square-10 {
+  transform: translate(100%, 595%);
+}
+.chess .chess-board-area .square-11 {
+  transform: translate(200%, 595%);
+}
+.chess .chess-board-area .square-12 {
+  transform: translate(300%, 595%);
+}
+.chess .chess-board-area .square-13 {
+  transform: translate(400%, 595%);
+}
+.chess .chess-board-area .square-14 {
+  transform: translate(500%, 595%);
+}
+.chess .chess-board-area .square-15 {
+  transform: translate(600%, 595%);
+}
+.chess .chess-board-area .square-16 {
+  transform: translate(700%, 595%);
+}
+.chess .chess-board-area .square-17 {
+  transform: translate(0, 496%);
+}
+.chess .chess-board-area .square-18 {
+  transform: translate(100%, 496%);
+}
+.chess .chess-board-area .square-19 {
+  transform: translate(200%, 496%);
+}
+.chess .chess-board-area .square-20 {
+  transform: translate(300%, 496%);
+}
+.chess .chess-board-area .square-21 {
+  transform: translate(400%, 496%);
+}
+.chess .chess-board-area .square-22 {
+  transform: translate(500%, 496%);
+}
+.chess .chess-board-area .square-23 {
+  transform: translate(600%, 496%);
+}
+.chess .chess-board-area .square-24 {
+  transform: translate(700%, 496%);
+}
+.chess .chess-board-area .square-25 {
+  transform: translate(0, 398%);
+}
+.chess .chess-board-area .square-26 {
+  transform: translate(100%, 398%);
+}
+.chess .chess-board-area .square-27 {
+  transform: translate(200%, 398%);
+}
+.chess .chess-board-area .square-28 {
+  transform: translate(300%, 398%);
+}
+.chess .chess-board-area .square-29 {
+  transform: translate(400%, 398%);
+}
+.chess .chess-board-area .square-30 {
+  transform: translate(500%, 398%);
+}
+.chess .chess-board-area .square-31 {
+  transform: translate(600%, 398%);
+}
+.chess .chess-board-area .square-32 {
+  transform: translate(700%, 398%);
+}
+.chess .chess-board-area .square-33 {
+  transform: translate(0, 300%);
+}
+.chess .chess-board-area .square-34 {
+  transform: translate(100%, 300%);
+}
+.chess .chess-board-area .square-35 {
+  transform: translate(200%, 300%);
+}
+.chess .chess-board-area .square-36 {
+  transform: translate(300%, 300%);
+}
+.chess .chess-board-area .square-37 {
+  transform: translate(400%, 300%);
+}
+.chess .chess-board-area .square-38 {
+  transform: translate(500%, 300%);
+}
+.chess .chess-board-area .square-39 {
+  transform: translate(600%, 300%);
+}
+.chess .chess-board-area .square-40 {
+  transform: translate(700%, 300%);
+}
+.chess .chess-board-area .square-41 {
+  transform: translate(0, 200%);
+}
+.chess .chess-board-area .square-42 {
+  transform: translate(100%, 200%);
+}
+.chess .chess-board-area .square-43 {
+  transform: translate(200%, 200%);
+}
+.chess .chess-board-area .square-44 {
+  transform: translate(300%, 200%);
+}
+.chess .chess-board-area .square-45 {
+  transform: translate(400%, 200%);
+}
+.chess .chess-board-area .square-46 {
+  transform: translate(500%, 200%);
+}
+.chess .chess-board-area .square-47 {
+  transform: translate(600%, 200%);
+}
+.chess .chess-board-area .square-48 {
+  transform: translate(700%, 200%);
+}
+.chess .chess-board-area .square-49 {
+  transform: translate(0, 100%);
+}
+.chess .chess-board-area .square-50 {
+  transform: translate(100%, 100%);
+}
+.chess .chess-board-area .square-51 {
+  transform: translate(200%, 100%);
+}
+.chess .chess-board-area .square-52 {
+  transform: translate(300%, 100%);
+}
+.chess .chess-board-area .square-53 {
+  transform: translate(400%, 100%);
+}
+.chess .chess-board-area .square-54 {
+  transform: translate(500%, 100%);
+}
+.chess .chess-board-area .square-55 {
+  transform: translate(600%, 100%);
+}
+.chess .chess-board-area .square-56 {
+  transform: translate(700%, 100%);
+}
+.chess .chess-board-area .square-57 {
+  transform: translate(0, 0);
+}
+.chess .chess-board-area .square-58 {
+  transform: translate(100%, 0);
+}
+.chess .chess-board-area .square-59 {
+  transform: translate(200%, 0);
+}
+.chess .chess-board-area .square-60 {
+  transform: translate(300%, 0);
+}
+.chess .chess-board-area .square-61 {
+  transform: translate(400%, 0);
+}
+.chess .chess-board-area .square-62 {
+  transform: translate(500%, 0);
+}
+.chess .chess-board-area .square-63 {
+  transform: translate(600%, 0);
+}
+.chess .chess-board-area .square-64 {
+  transform: translate(700%, 0);
+}
+.chess .chess-board-area .bp {
+  background-image: url(../../assets/image/bp.png);
+}
+.chess .chess-board-area .br {
+  background-image: url(../../assets/image/br.png);
+}
+.chess .chess-board-area .bb {
+  background-image: url(../../assets/image/bb.png);
+}
+.chess .chess-board-area .bn {
+  background-image: url(../../assets/image/bn.png);
+}
+.chess .chess-board-area .bq {
+  background-image: url(../../assets/image/bq.png);
+}
+.chess .chess-board-area .bk {
+  background-image: url(../../assets/image/bk.png);
+}
+.chess .chess-board-area .wp {
+  background-image: url(../../assets/image/wp.png);
+}
+.chess .chess-board-area .wr {
+  background-image: url(../../assets/image/wr.png);
+}
+.chess .chess-board-area .wb {
+  background-image: url(../../assets/image/wb.png);
+}
+.chess .chess-board-area .wn {
+  background-image: url(../../assets/image/wn.png);
+}
+.chess .chess-board-area .wq {
+  background-image: url(../../assets/image/wq.png);
+}
+.chess .chess-board-area .wk {
+  background-image: url(../../assets/image/wk.png);
+}
+.chess .chess-board-area .dragging {
+  z-index: 2;
+}
+.chess .chess-board-area .chess-effect {
+  position: absolute;
+  width: 12.5%;
+  height: 12.5%;
+  background-color: aqua;
+  top: 0;
+  left: 0;
+  border: 0.4rem solid var(--cl-primary-yellow);
+  background: transparent;
+  z-index: 0;
+}
+.chess .chess-board-area .suggest-div, .chess .chess-board-area .taken-div {
+  position: absolute;
+  width: 12.5%;
+  height: 12.5%;
+  top: 0;
+  left: 0;
+  background-color: transparent;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 0;
+}
+.chess .chess-board-area .taken-div {
+  z-index: 2;
+}/*# sourceMappingURL=Chess.css.map */
