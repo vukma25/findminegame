@@ -10,7 +10,8 @@ function Cell({
     mine,
     dispatch,
     index,
-    settings
+    settings,
+    setLog
 }) {
 
 
@@ -30,6 +31,10 @@ function Cell({
 
     function leftClickForDesktop() {
         const updatedCells = handleClickCell(index, copySettings);
+        if (updatedCells?.logError){
+            setLog(updatedCells.logError)
+        }
+
         if (updatedCells) {
             dispatch(setCells(updatedCells));
         }
@@ -37,6 +42,10 @@ function Cell({
 
     function rightClickForDesktop() {
         const updatedCells = handleToggleFlag(index, copySettings);
+        if (updatedCells?.logError) {
+            setLog(updatedCells.logError)
+        }
+        
         if (updatedCells) {
             dispatch(setFlag(updatedCells));
         }

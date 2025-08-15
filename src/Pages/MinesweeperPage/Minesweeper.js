@@ -1,10 +1,11 @@
-import { useReducer } from 'react'
+import { useState, useEffect, useReducer } from 'react'
 import OptionsBar from './OptionBar';
 import SettingsBroad from './SettingsBroad';
 import GameOver from './GameOver'
 import Cell from './Cell';
-import Logger from './Logger';
-import Tool from './Tool'
+import Tool from './Tool';
+import Logger from '../../Components/Logger/Logger'
+import GoTopBtn from '../../Components/GoTopBtn/GoTopBtn';
 import { initialState, reducer } from './Reducer'
 import {
     marks,
@@ -18,6 +19,7 @@ import "./Minesweeper.css";
 function Minesweeper() {
 
     const [settings, dispatch] = useReducer(reducer, initialState)
+    const [log, setLog] = useState(settings.logError)
 
     return (
         <>
@@ -75,13 +77,15 @@ function Minesweeper() {
                                     dispatch={dispatch}
                                     index={index}
                                     settings={settings}
+                                    setLog={setLog}
                                 />
                             })
                         }
                     </div>
                 </div>
             </div>
-            <Logger log={settings.logError} />
+            <Logger log={log} setLog={setLog} />
+            <GoTopBtn />
         </>
     )
 }

@@ -2,7 +2,8 @@ import { useRef, useEffect, useState } from 'react'
 import Icon from '@mui/material/Icon'
 import Piece from './Piece'
 import {
-    setReplacePiece
+    setReplacePiece,
+    setPawnPromotion
 } from './Action'
 import {
     coordinates,
@@ -11,10 +12,17 @@ import {
     copyPiecesChess,
     hiddenInvalidMoveAndTake,
     replacePiece,
-    capturePiece
+    capturePiece,
+    modifyMaterial,
+    fillColor,
+    isPawnPromotion,
+    pawnPromotionByReplaceOrCapture,
+    listPawnCanBecome,
+    copyMoves,
+    modifyBoard
 } from './Function'
 
-function Board({ chess, dispatch }) {
+function Board({ chess, dispatch, board, setBoard}) {
 
     const [bounding, setBounding] = useState({
         'top': 0,
@@ -22,6 +30,12 @@ function Board({ chess, dispatch }) {
         'bottom': 0,
         'right': 0
     })
+
+    const [squareEffect, setSquareEffect] = useState({
+        'square': 0,
+        'display': 'none'
+    })
+
     const ref = useRef(null)
 
     useEffect(() => {
@@ -48,6 +62,8 @@ function Board({ chess, dispatch }) {
 
     }, [])
 
+    //console.log(chess.pieces)
+
     return (
         <div className="chess-board-area" ref={ref}>
             <svg
@@ -55,7 +71,7 @@ function Board({ chess, dispatch }) {
                 viewBox="0 0 100 100"
             >
                 {
-                    convertToArray(chess.board).map((_, index) => {
+                    convertToArray(board).map((_, index) => {
                         const [i, j] = [
                             Math.floor(index / 8),
                             index % 8
@@ -96,16 +112,19 @@ function Board({ chess, dispatch }) {
                 }
             </svg>
             {
-                chess.pieces.map(({ piece, square, coordinate }, index) => {
+                chess.pieces.map(({ id, piece, square, coordinate }) => {
                     return (
                         <Piece
-                            key={`div-${index}`}
+                            key={`div-${id}`}
                             piece={piece}
                             square={square}
                             coordinate={coordinate}
                             bounding={bounding}
                             dispatch={dispatch}
                             chess={chess}
+                            setSquareEffect={setSquareEffect}
+                            board={board}
+                            setBoard={setBoard}
                         >
                         </Piece>
                     )
@@ -114,24 +133,54 @@ function Board({ chess, dispatch }) {
 
             {/* Effect div */}
             <div
-                className={`chess-effect square-${chess.effectSquare.square}`}
-                style={{ 'display': chess.effectSquare.display }}
+                className={`chess-effect square-${squareEffect.square}`}
+                style={{ 'display': squareEffect.display }}
             ></div>
 
 
             {
-                convertToArray(chess.board).map((square, index) => {
-                    if (square.action === 'suggest') {
+                convertToArray(board).map((sq, index) => {
+                    const turn = chess.turn
+
+                    if (sq.action === 'suggest') {
+                        const { square, moveToSquare, forPiece } = sq
+
                         return (
                             <div
                                 key={`suggest-${index}`}
-                                className={`suggest-div square-${square.square}`}
-                                onClick={() => {dispatch(setReplacePiece(replacePiece(
-                                    square.moveToSquare,
-                                    square.square,
-                                    hiddenInvalidMoveAndTake(copyBoardChess(chess.board)),
-                                    copyPiecesChess(chess.pieces)
-                                )))}}
+                                className={`suggest-div square-${square}`}
+                                onClick={() => {
+
+                                    const [row, sq, type] = pawnPromotionByReplaceOrCapture(
+                                        square,
+                                        0,
+                                    )
+                                    if (isPawnPromotion(
+                                        forPiece,
+                                        row,
+                                        chess.direction
+                                    )) {
+                                        dispatch(setPawnPromotion(listPawnCanBecome(forPiece, moveToSquare, sq, type.action, row)))
+                                        return
+                                    }
+
+                                    const newState = replacePiece(
+                                        moveToSquare,
+                                        square,
+                                        hiddenInvalidMoveAndTake(copyBoardChess(chess.board)),
+                                        copyPiecesChess(chess.pieces),
+                                        forPiece,
+                                        turn,
+                                        chess.direction,
+                                        chess.canCastle,
+                                        chess.squaresEP,
+                                        copyMoves(chess.moves),
+                                        chess.bout
+                                    )
+
+                                    setBoard(newState.board)
+                                    dispatch(setReplacePiece(newState))
+                                }}
                             >
                                 <Icon sx={{
                                     'color': 'var(--cl-gray)',
@@ -139,18 +188,44 @@ function Board({ chess, dispatch }) {
                                 }}>mode_standby</Icon>
                             </div>
                         )
-                    } else if (square.action === 'canBeTaken'){
+                    } else if (sq.action === 'canBeTaken' || sq.action === 'ep') {
+                        const { square, takeSquare, byPiece } = sq
+
                         return (
                             <div
                                 key={`taken-${index}`}
-                                className={`taken-div square-${square.square}`}
+                                className={`taken-div square-${square}`}
                                 onClick={() => {
-                                    dispatch(setReplacePiece(capturePiece(
-                                        square.takeSquare,
-                                        square.square,
+
+                                    const [row, sq, type] = pawnPromotionByReplaceOrCapture(
+                                        0,
+                                        square,
+                                    )
+                                    if (isPawnPromotion(
+                                        byPiece,
+                                        row,
+                                        chess.direction
+                                    )) {
+                                        dispatch(setPawnPromotion(listPawnCanBecome(byPiece, takeSquare, sq, type.action, row)))
+                                        return
+                                    }
+
+                                    const newState = capturePiece(
+                                        takeSquare,
+                                        square,
                                         hiddenInvalidMoveAndTake(copyBoardChess(chess.board)),
-                                        copyPiecesChess(chess.pieces)
-                                    )))
+                                        copyPiecesChess(chess.pieces),
+                                        byPiece,
+                                        turn,
+                                        chess.direction,
+                                        chess.canCastle,
+                                        chess.squaresEP,
+                                        copyMoves(chess.moves),
+                                        chess.bout
+                                    )
+
+                                    setBoard(newState.board)
+                                    dispatch(setReplacePiece(newState))
                                 }}
                             >
                                 <Icon sx={{
@@ -159,7 +234,158 @@ function Board({ chess, dispatch }) {
                                 }}>location_searching</Icon>
                             </div>
                         )
+                    } else if (sq.action === 'castle') {
+                        const { curRook, reRook, square, squareKing, forPiece } = sq
+
+                        return (
+                            <div
+                                key={`castle-${index}`}
+                                className={`suggest-div square-${square}`}
+                                onClick={() => {
+                                    const copyBoard = copyBoardChess(chess.board)
+                                    const copyPieces = copyPiecesChess(chess.pieces)
+
+                                    let newChess = replacePiece(
+                                        curRook,
+                                        reRook,
+                                        hiddenInvalidMoveAndTake(copyBoard),
+                                        copyPieces,
+                                        forPiece[0] + 'r',
+                                        turn,
+                                        chess.direction,
+                                        chess.canCastle,
+                                        chess.squaresEP,
+                                        copyMoves(chess.moves),
+                                        chess.bout,
+                                        true
+                                    )
+                                    newChess = replacePiece(
+                                        squareKing,
+                                        square,
+                                        copyBoard,
+                                        copyPieces,
+                                        forPiece,
+                                        turn,
+                                        chess.direction,
+                                        newChess.canCastle,
+                                        chess.squaresEP,
+                                        copyMoves(chess.moves),
+                                        chess.bout,
+                                        true
+                                    )
+
+                                    setBoard(newChess.board)
+                                    dispatch(setReplacePiece(newChess))
+                                }}
+                            >
+                                <Icon sx={{
+                                    'color': 'var(--cl-primary-yellow)',
+                                    'fontSize': '3rem'
+                                }}>mode_standby</Icon>
+                            </div>
+                        )
                     } return null
+                })
+            }
+
+            {
+                chess.listPawnCanBecome.map((p, index) => {
+                    const { type, action, curSquare, reSquare, location } = p
+                    if (type !== 'cancelPromotion') {
+                        return (
+                            <div
+                                key={index}
+                                className={`
+                                    piece promotion-div ${type} square-${location} ${fillColor(location)}
+                                `}
+                                onClick={
+                                    () => {
+                                        const turn = chess.turn
+                                        if (turn !== type[0]) {
+                                            dispatch(setReplacePiece({
+                                                'effectSquare': {
+                                                    'square': 0,
+                                                    'display': 'none'
+                                                },
+                                                'hasPawnPromotion': false,
+                                                'listPawnCanBecome': []
+                                            }))
+                                            return
+                                        }
+
+                                        const copyBoard = copyBoardChess(chess.board)
+                                        const copyPieces = copyPiecesChess(chess.pieces)
+                                        modifyMaterial(copyPieces, curSquare, type)
+                                        modifyBoard(copyBoard, curSquare, type)
+
+                                        let state = {
+                                            'hasPawnPromotion': false,
+                                            'listPawnCanBecome': []
+                                        }
+                                        let newState
+
+                                        if (action === 'capture') {
+                                            newState = capturePiece(
+                                                curSquare,
+                                                reSquare,
+                                                hiddenInvalidMoveAndTake(copyBoard),
+                                                copyPieces,
+                                                type,
+                                                turn,
+                                                chess.direction,
+                                                chess.canCastle,
+                                                chess.squaresEP,
+                                                copyMoves(chess.moves),
+                                                chess.bout
+                                            )
+
+                                        } else {
+                                            newState = replacePiece(
+                                                curSquare,
+                                                reSquare,
+                                                hiddenInvalidMoveAndTake(copyBoard),
+                                                copyPieces,
+                                                type,
+                                                turn,
+                                                chess.direction,
+                                                chess.canCastle,
+                                                chess.squaresEP,
+                                                copyMoves(chess.moves),
+                                                chess.bout
+                                            )
+                                        }
+
+                                        dispatch(setReplacePiece({
+                                            ...state,
+                                            ...newState
+                                        }))
+                                    }
+                                }
+                            ></div>
+                        )
+                    } else {
+                        return (
+                            <div
+                                key={index}
+                                className={`promotion-div square-${location} ${fillColor(location)}`}
+                                onClick={() => dispatch(setReplacePiece({
+                                    'effectSquare': {
+                                        'square': 0,
+                                        'display': 'none'
+                                    },
+                                    'hasPawnPromotion': false,
+                                    'listPawnCanBecome': []
+                                }))}
+                            >
+                                <Icon
+                                    sx={{
+                                        'color': 'var(--cl-red-flag)',
+                                        'fontSize': '5rem'
+                                    }}
+                                >close</Icon>
+                            </div>
+                        )
+                    }
                 })
             }
         </div>

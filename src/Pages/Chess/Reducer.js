@@ -1,8 +1,6 @@
 
 import { 
-    CREATE_EFFECT_ACTION,
-    DISPLAY_MOVE_ACTION, 
-    HIDDEN_MOVE_ACTION, 
+    PAWN_PROMOTION, 
     REPLACE_PIECE_ACTION 
 } from "./Action"
 
@@ -151,193 +149,369 @@ export const initialState = {
             'id': 1,
             'piece': 'bp',
             'square': 49,
-            'coordinate': [1, 0]
+            'coordinate': [1, 0],
+            'allowMove': {
+                'move': [],
+                'take': []
+            },
+            'ban': false,
+            'deploy': false
         },
         {
             'id': 2,
             'piece': 'bp',
             'square': 50,
-            'coordinate': [1, 1]
+            'coordinate': [1, 1],
+            'allowMove': {
+                'move': [],
+                'take': []
+            },
+            'ban': false,
+            'deploy': false
         },
         {
             'id': 3,
             'piece': 'bp',
             'square': 51,
-            'coordinate': [1, 2]
+            'coordinate': [1, 2],
+            'allowMove': {
+                'move': [],
+                'take': []
+            },
+            'ban': false,
+            'deploy': false
         },
         {
             'id': 4,
             'piece': 'bp',
             'square': 52,
-            'coordinate': [1, 3]
+            'coordinate': [1, 3],
+            'allowMove': {
+                'move': [],
+                'take': []
+            },
+            'ban': false,
+            'deploy': false
         },
         {
             'id': 5,
             'piece': 'bp',
             'square': 53,
-            'coordinate': [1, 4]
+            'coordinate': [1, 4],
+            'allowMove': {
+                'move': [],
+                'take': []
+            },
+            'ban': false,
+            'deploy': false
         },
         {
             'id': 6,
             'piece': 'bp',
             'square': 54,
-            'coordinate': [1, 5]
+            'coordinate': [1, 5],
+            'allowMove': {
+                'move': [],
+                'take': []
+            },
+            'ban': false,
+            'deploy': false
         },
         {
             'id': 7,
             'piece': 'bp',
             'square': 55,
-            'coordinate': [1, 6]
+            'coordinate': [1, 6],
+            'allowMove': {
+                'move': [],
+                'take': []
+            },
+            'ban': false,
+            'deploy': false
         },
         {
             'id': 8,
             'piece': 'bp',
             'square': 56,
-            'coordinate': [1, 7]
+            'coordinate': [1, 7],
+            'allowMove': {
+                'move': [],
+                'take': []
+            },
+            'ban': false,
+            'deploy': false
         },
         {
             'id': 9,
             'piece': 'br',
             'square': 57,
-            'coordinate': [0, 0]
+            'coordinate': [0, 0],
+            'allowMove': {
+                'move': [],
+                'take': []
+            },
+            'ban': false,
         },
         {
             'id': 10,
             'piece': 'bn',
             'square': 58,
-            'coordinate': [0, 1]
+            'coordinate': [0, 1],
+            'allowMove': {
+                'move': [],
+                'take': []
+            },
+            'ban': false,
         },
         {
             'id': 11,
             'piece': 'bb',
             'square': 59,
-            'coordinate': [0, 2]
+            'coordinate': [0, 2],
+            'allowMove': {
+                'move': [],
+                'take': []
+            },
+            'ban': false,
         },
         {
             'id': 12,
             'piece': 'bq',
             'square': 60,
-            'coordinate': [0, 3]
+            'coordinate': [0, 3],
+            'allowMove': {
+                'move': [],
+                'take': []
+            },
+            'ban': false,
         },
         {
             'id': 13,
             'piece': 'bk',
             'square': 61,
-            'coordinate': [0, 4]
+            'coordinate': [0, 4],
+            'allowMove': {
+                'move': [],
+                'take': []
+            },
+            'ban': false,
         },
         {
             'id': 14,
             'piece': 'bb',
             'square': 62,
-            'coordinate': [0, 5]
+            'coordinate': [0, 5],
+            'allowMove': {
+                'move': [],
+                'take': []
+            },
+            'ban': false,
         },
         {
             'id': 15,
             'piece': 'bn',
             'square': 63,
-            'coordinate': [0, 6]
+            'coordinate': [0, 6],
+            'allowMove': {
+                'move': [],
+                'take': []
+            },
+            'ban': false,
         },
         {
             'id': 16,
             'piece': 'br',
             'square': 64,
-            'coordinate': [0, 7]
+            'coordinate': [0, 7],
+            'allowMove': {
+                'move': [],
+                'take': []
+            },
+            'ban': false,
         },
         {
             'id': 17,
             'piece': 'wp',
             'square': 9,
-            'coordinate': [6, 0]
+            'coordinate': [6, 0],
+            'allowMove': {
+                'move': [],
+                'take': []
+            },
+            'ban': false,
+            'deploy': false
         },
         {
             'id': 18,
             'piece': 'wp',
             'square': 10,
-            'coordinate': [6, 1]
+            'coordinate': [6, 1],
+            'allowMove': {
+                'move': [],
+                'take': []
+            },
+            'ban': false,
+            'deploy': false
         },
         {
             'id': 19,
             'piece': 'wp',
             'square': 11,
-            'coordinate': [6, 2]
+            'coordinate': [6, 2],
+            'allowMove': {
+                'move': [],
+                'take': []
+            },
+            'ban': false,
+            'deploy': false
         },
         {
             'id': 20,
             'piece': 'wp',
             'square': 12,
-            'coordinate': [6, 3]
+            'coordinate': [6, 3],
+            'allowMove': {
+                'move': [],
+                'take': []
+            },
+            'ban': false,
+            'deploy': false
         },
         {
             'id': 21,
             'piece': 'wp',
             'square': 13,
-            'coordinate': [6, 4]
+            'coordinate': [6, 4],
+            'allowMove': {
+                'move': [],
+                'take': []
+            },
+            'ban': false,
+            'deploy': false
         },
         {
             'id': 22,
             'piece': 'wp',
             'square': 14,
-            'coordinate': [6, 5]
+            'coordinate': [6, 5],
+            'allowMove': {
+                'move': [],
+                'take': []
+            },
+            'ban': false,
+            'deploy': false
         },
         {
             'id': 23,
             'piece': 'wp',
             'square': 15,
-            'coordinate': [6, 6]
+            'coordinate': [6, 6],
+            'allowMove': {
+                'move': [],
+                'take': []
+            },
+            'ban': false,
+            'deploy': false
         },
         {
             'id': 24,
             'piece': 'wp',
             'square': 16,
-            'coordinate': [6, 7]
+            'coordinate': [6, 7],
+            'allowMove': {
+                'move': [],
+                'take': []
+            },
+            'ban': false,
+            'deploy': false
         },
         {
             'id': 25,
             'piece': 'wr',
             'square': 1,
-            'coordinate': [7, 0]
+            'coordinate': [7, 0],
+            'allowMove': {
+                'move': [],
+                'take': []
+            },
+            'ban': false,
         },
         {
             'id': 26,
             'piece': 'wn',
             'square': 2,
-            'coordinate': [7, 1]
+            'coordinate': [7, 1],
+            'allowMove': {
+                'move': [],
+                'take': []
+            },
+            'ban': false,
         },
         {
             'id': 27,
             'piece': 'wb',
             'square': 3,
-            'coordinate': [7, 2]
+            'coordinate': [7, 2],
+            'allowMove': {
+                'move': [],
+                'take': []
+            },
+            'ban': false,
         },
         {
             'id': 28,
             'piece': 'wq',
             'square': 4,
-            'coordinate': [7, 3]
+            'coordinate': [7, 3],
+            'allowMove': {
+                'move': [],
+                'take': []
+            },
+            'ban': false,
         },
         {
             'id': 29,
             'piece': 'wk',
             'square': 5,
-            'coordinate': [7, 4]
+            'coordinate': [7, 4],
+            'allowMove': {
+                'move': [],
+                'take': []
+            },
+            'ban': false,
         },
         {
             'id': 30,
             'piece': 'wb',
             'square': 6,
-            'coordinate': [7, 5]
+            'coordinate': [7, 5],
+            'allowMove': {
+                'move': [],
+                'take': []
+            },
+            'ban': false,
         },
         {
             'id': 31,
             'piece': 'wn',
             'square': 7,
-            'coordinate': [7, 6]
+            'coordinate': [7, 6],
+            'allowMove': {
+                'move': [],
+                'take': []
+            },
+            'ban': false,
         },
         {
             'id': 32,
             'piece': 'wr',
             'square': 8,
-            'coordinate': [7, 7]
+            'coordinate': [7, 7],
+            'allowMove': {
+                'move': [],
+                'take': []
+            },
+            'ban': false,
         }
     ],
     'squares': {
@@ -413,10 +587,38 @@ export const initialState = {
         '63': [600, 0],
         '64': [700, 0],
     },
-    'effectSquare': {
-        'square': 0,
-        'display': 'none'
-    }
+    'turn': 'w',
+    'attacks': {
+        'w': [17, 18, 19, 20, 21, 22, 23, 24],
+        'b': [41, 42, 43, 44, 45, 46, 47, 48]
+    },
+    'protects': {
+        'w': [2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15, 16],
+        'b': [49, 50, 51, 52, 53, 54, 55, 56, 58, 59, 60, 61, 62, 63]
+    },
+    'canCastle': {
+        'w': {
+            'k': true,
+            'q': true
+        },
+        'b': {
+            'k': true,
+            'q': true
+        }
+    },
+    'sound': '',
+    'direction': 1,
+    'squaresEP': [],
+    'pins': [],
+    'hasPawnPromotion': false,
+    'listPawnCanBecome': [],
+    'hasCheckmate': {
+        'checkmate': false,
+        'by': ''
+    },
+    'moves': [],
+    'bout': 1,
+    'fen': 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1'
 }
 
 export const reducer = (state, action) => {
@@ -424,32 +626,17 @@ export const reducer = (state, action) => {
     //console.log(action.type)
 
     switch (action.type) {
-        case CREATE_EFFECT_ACTION:
-            return {
-                ...state,
-                'effectSquare': {
-                    ...state.effectSquare,
-                    ...action.payload
-                }
-            }
-        case DISPLAY_MOVE_ACTION:
-            return {
-                ...state,
-                'board': action.payload
-            }
-        case HIDDEN_MOVE_ACTION:
-            return {
-                ...state,
-                'board': action.payload,
-                'effectSquare': {
-                    'square': 0,
-                    'display': 'none'
-                }
-            }
         case REPLACE_PIECE_ACTION: 
             return {
                 ...state,
                 ...action.payload
+            }
+
+        case PAWN_PROMOTION: 
+            return {
+                ...state,
+                'hasPawnPromotion': true,
+                'listPawnCanBecome': action.payload
             }
         default:
             throw new Error("Invalid action")

@@ -1,4 +1,10 @@
+import open_sound from '../../assets/sound/notify.mp3'
+import explosion_sound from '../../assets/sound/explosion.mp3'
+import bind_flag_sound from '../../assets/sound/bind-flag.mp3'
 
+const open = new Audio(open_sound)
+const explosion = new Audio(explosion_sound)
+const bindFlag = new Audio(bind_flag_sound)
 // Levels of game
 export const levels = [
     {
@@ -123,6 +129,19 @@ export const isMobileDevice = () => {
 //     isMine: false,
 //     mine: 0
 // })
+
+function soundEffectOpen() {
+    open.currentTime = 0
+    open.play()
+}
+function soundEffectExplosion() {
+    explosion.currentTime = 0
+    explosion.play()
+}
+function soundEffectBindFlag() {
+    bindFlag.currentTime = 0
+    bindFlag.play()
+}
 
 function generateMines(initRow, initCol, rows, cols, mines, cells) {
     const minesPosition = new Set()
@@ -260,6 +279,7 @@ export function handleClickCell(index, copySettings) {
     }
 
     if (copySettings.cells[index].isMine) {
+        soundEffectExplosion()
         copySettings.gameOver = true
         copySettings.message = 'Oh no! You accidentally clicked on the mine'
         return copySettings
@@ -268,6 +288,8 @@ export function handleClickCell(index, copySettings) {
     if (copySettings.cells[index].opened || copySettings.cells[index].flag) {
         return copySettings
     }
+
+    soundEffectOpen()
 
     const [row, col] = [
         Math.floor(index / copySettings.col),
@@ -329,6 +351,7 @@ export function handleToggleFlag(index, copySettings) {
         return copySettings
     }
 
+    soundEffectBindFlag()
     copySettings.cells[index].flag = !copySettings.cells[index].flag
 
     //Upgrade flag

@@ -31,3 +31,15 @@
         opacity: 1;
     }
 }
+
+@keyframes floatInForGoTopBtn {
+    0% {
+        transform: translateY(7rem);
+        opacity: 0;
+    }
+
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}

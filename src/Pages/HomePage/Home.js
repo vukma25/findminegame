@@ -1,5 +1,6 @@
 
 import Card from '../../Components/Card/Card'
+import GoTopBtn from '../../Components/GoTopBtn/GoTopBtn'
 import { games } from './data'
 import './Home.css';
 
@@ -18,6 +19,7 @@ function Home () {
                     />
                 })
             }
+            <GoTopBtn />
         </div>
     );
 }

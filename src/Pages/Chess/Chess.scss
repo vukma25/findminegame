@@ -1,8 +1,12 @@
-
 .chess {
     position: relative;
     width: 100vw;
-    height: auto;
+    display: flex;
+    gap: 5rem;
+    padding: 1rem 0;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
 
     .chess-board-area {
         width: 95%;
@@ -10,222 +14,286 @@
         max-width: 60rem;
         min-width: 35rem;
         position: relative;
-        margin: 3rem auto;
 
         .chess-board {
             width: 100%;
             border: .1rem solid var(--cl-black);
             border-radius: .5rem;
-    
+
             .chess-board-coordinate {
                 font-size: .3rem;
                 user-select: none;
             }
-    
+
         }
 
         .piece {
-            position:absolute;
+            position: absolute;
             top: 0;
             left: 0;
             width: 12.5%;
             height: 12.5%;
+            user-select: none;
             cursor: grab;
             background-position: center;
             background-size: contain;
             background-repeat: no-repeat;
+            transition: transform .05s;
             z-index: 1;
         }
 
         .square-1 {
             transform: translate(0, 695%);
         }
+
         .square-2 {
             transform: translate(100%, 695%);
         }
+
         .square-3 {
             transform: translate(200%, 695%);
         }
+
         .square-4 {
             transform: translate(300%, 695%);
         }
+
         .square-5 {
             transform: translate(400%, 695%);
         }
+
         .square-6 {
             transform: translate(500%, 695%);
         }
+
         .square-7 {
             transform: translate(600%, 695%);
         }
+
         .square-8 {
             transform: translate(700%, 695%);
         }
+
         .square-9 {
             transform: translate(0, 595%);
         }
+
         .square-10 {
             transform: translate(100%, 595%);
         }
+
         .square-11 {
             transform: translate(200%, 595%);
         }
+
         .square-12 {
             transform: translate(300%, 595%);
         }
+
         .square-13 {
             transform: translate(400%, 595%);
         }
+
         .square-14 {
             transform: translate(500%, 595%);
         }
+
         .square-15 {
             transform: translate(600%, 595%);
         }
+
         .square-16 {
             transform: translate(700%, 595%);
         }
+
         .square-17 {
             transform: translate(0, 496%);
         }
+
         .square-18 {
             transform: translate(100%, 496%);
         }
+
         .square-19 {
             transform: translate(200%, 496%);
         }
-        .square-20{
+
+        .square-20 {
             transform: translate(300%, 496%);
         }
+
         .square-21 {
             transform: translate(400%, 496%);
         }
+
         .square-22 {
             transform: translate(500%, 496%);
         }
+
         .square-23 {
             transform: translate(600%, 496%);
         }
+
         .square-24 {
             transform: translate(700%, 496%);
         }
+
         .square-25 {
             transform: translate(0, 398%);
         }
+
         .square-26 {
             transform: translate(100%, 398%);
         }
+
         .square-27 {
             transform: translate(200%, 398%);
         }
+
         .square-28 {
             transform: translate(300%, 398%);
         }
+
         .square-29 {
             transform: translate(400%, 398%);
         }
+
         .square-30 {
             transform: translate(500%, 398%);
         }
+
         .square-31 {
             transform: translate(600%, 398%);
         }
+
         .square-32 {
             transform: translate(700%, 398%);
         }
+
         .square-33 {
             transform: translate(0, 300%);
         }
+
         .square-34 {
             transform: translate(100%, 300%);
         }
+
         .square-35 {
             transform: translate(200%, 300%);
         }
+
         .square-36 {
             transform: translate(300%, 300%);
         }
+
         .square-37 {
             transform: translate(400%, 300%);
         }
+
         .square-38 {
             transform: translate(500%, 300%);
         }
+
         .square-39 {
             transform: translate(600%, 300%);
         }
+
         .square-40 {
             transform: translate(700%, 300%);
         }
+
         .square-41 {
             transform: translate(0, 200%);
         }
+
         .square-42 {
             transform: translate(100%, 200%);
         }
+
         .square-43 {
             transform: translate(200%, 200%);
         }
+
         .square-44 {
             transform: translate(300%, 200%);
         }
+
         .square-45 {
             transform: translate(400%, 200%);
         }
+
         .square-46 {
             transform: translate(500%, 200%);
         }
+
         .square-47 {
             transform: translate(600%, 200%);
         }
+
         .square-48 {
             transform: translate(700%, 200%);
         }
+
         .square-49 {
             transform: translate(0, 100%);
         }
+
         .square-50 {
             transform: translate(100%, 100%);
         }
+
         .square-51 {
             transform: translate(200%, 100%);
         }
+
         .square-52 {
             transform: translate(300%, 100%);
         }
+
         .square-53 {
             transform: translate(400%, 100%);
         }
+
         .square-54 {
             transform: translate(500%, 100%);
         }
+
         .square-55 {
             transform: translate(600%, 100%);
         }
+
         .square-56 {
             transform: translate(700%, 100%);
         }
+
         .square-57 {
             transform: translate(0, 0);
         }
+
         .square-58 {
             transform: translate(100%, 0);
         }
+
         .square-59 {
             transform: translate(200%, 0);
         }
+
         .square-60 {
             transform: translate(300%, 0);
         }
+
         .square-61 {
             transform: translate(400%, 0);
         }
+
         .square-62 {
             transform: translate(500%, 0);
         }
+
         .square-63 {
             transform: translate(600%, 0);
         }
+
         .square-64 {
             transform: translate(700%, 0);
         }
@@ -233,36 +301,47 @@
         .bp {
             background-image: url(../../assets/image/bp.png);
         }
+
         .br {
             background-image: url(../../assets/image/br.png);
         }
+
         .bb {
             background-image: url(../../assets/image/bb.png);
         }
+
         .bn {
             background-image: url(../../assets/image/bn.png);
         }
+
         .bq {
             background-image: url(../../assets/image/bq.png);
         }
+
         .bk {
             background-image: url(../../assets/image/bk.png);
         }
+
         .wp {
             background-image: url(../../assets/image/wp.png);
         }
+
         .wr {
             background-image: url(../../assets/image/wr.png);
         }
+
         .wb {
             background-image: url(../../assets/image/wb.png);
         }
+
         .wn {
             background-image: url(../../assets/image/wn.png);
         }
+
         .wq {
             background-image: url(../../assets/image/wq.png);
         }
+
         .wk {
             background-image: url(../../assets/image/wk.png);
         }
@@ -298,9 +377,355 @@
             align-items: center;
             z-index: 0;
         }
+
         .taken-div {
             @extend .suggest-div;
             z-index: 2;
         }
+
+        .promotion-div {
+            @extend .suggest-div;
+            z-index: 3;
+            //border-radius: .5rem;
+        }
+
+        .attack {
+            position: absolute;
+            width: 12.5%;
+            height: 12.5%;
+            top: 0;
+            left: 0;
+        }
+
+        .bg-white {
+            background-color: var(--cl-white-pure);
+        }
+
+        .bg-purple {
+            background-color: var(--cl-primary-purple);
+        }
+    }
+
+    .move-list-wrapper {
+        flex-direction: column;
+        background-color: var(--cl-black);
+        color: var(--cl-primary-yellow);
+        width: 95%;
+        max-width: 60rem;
+        min-width: 35rem;
+        border-radius: 8px;
+        aspect-ratio: 1;
+        overflow: hidden;
+        font-size: 1.6rem;
+
+        .move-list-header {
+            padding: 0.5rem 1rem;
+            background-color: #111;
+            border-bottom: 1px solid #333;
+            width: 100%;
+        }
+
+        .move-list {
+            width: 100%;
+            height: 60%;
+            border-bottom: .1rem solid var(--cl-gray);
+            overflow-y: scroll;
+
+            &::-webkit-scrollbar {
+                width: .5rem;
+            }
+
+            &::-webkit-scrollbar-track {
+                background: transparent
+            }
+
+            &::-webkit-scrollbar-thumb {
+                background: var(--cl-gray);
+                border-radius: .5rem;
+            }
+
+            .move-row {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0.5rem 1rem;
+                height: 5rem;
+                border-bottom: 1px solid var(--cl-black);
+
+                .move-num {
+                    width: 2.5rem;
+                    color: var(--cl-gray);
+                }
+
+                .move-container {
+                    flex: 1;
+                    color: var(--cl-primary-yellow);
+                    justify-content: center;
+                    gap: .5rem;
+
+                    .move {
+                        width: 10rem;
+                        justify-content: center;
+                        border-radius: .5rem;
+                        cursor: pointer;
+                        user-select: none;
+
+                        &:active {
+                            background-color: gray;
+                            box-shadow: .2rem .2rem var(--cl-gray);
+                        }
+
+                        img {
+                            width: 3rem;
+                            display: block;
+                        }
+
+                        p {
+                            height: 3rem;
+                        }
+                    }
+
+                    .move-current {
+                        background-color: gray;
+                        box-shadow: .2rem .2rem var(--cl-gray);
+                    }
+                }
+            }
+
+            .move-row:nth-child(even) {
+                background-color: #1c1c1c;
+            }
+        }
+
+        .move-list-option {
+            width: 90%;
+            height: 10rem;
+            justify-content: space-between;
+
+            .move-list-new-game,
+            .move-list-resign {
+                width: 45%;
+                height: 6rem;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 1rem;
+                cursor: pointer;
+                transition: background 0.2s ease;
+                border-radius: 1.5rem;
+                background-color: rgba(255, 255, 255, 0.2);
+                box-shadow: .3rem .3rem rgba(116, 116, 116, 0.2);
+                ;
+
+                &:hover {
+                    background-color: var(--cl-primary-yellow);
+                    color: var(--cl-black);
+                    box-shadow: .4rem .4rem var(--cl-white);
+                }
+            }
+        }
+
+        .move-list-settings {
+            width: 90%;
+            height: 6rem;
+            justify-content: center;
+            gap: 1rem;
+            background-color: var(--cl-primary-yellow);
+            transition: background 0.2s ease;
+            border-radius: 1.5rem;
+            background-color: rgba(255, 255, 255, 0.2);
+            box-shadow: .3rem .3rem rgba(116, 116, 116, 0.2);
+
+            &:hover {
+                background-color: var(--cl-primary-yellow);
+                color: var(--cl-black);
+                box-shadow: .4rem .4rem var(--cl-white);
+            }
+        }
+    }
+
+    .game-mode-selector {
+        position: relative;
+        width: 95%;
+        max-width: 60rem;
+        min-width: 35rem;
+        aspect-ratio: 1;
+        overflow-x: hidden;
+        overflow-y: scroll;
+        font-size: 1.6rem;
+        background: var(--cl-black-light);
+        padding: 2rem;
+        padding-bottom: 0;
+        border-radius: 0.8rem;
+        color: var(--cl-white-pure);
+
+        &::-webkit-scrollbar {
+            width: .5rem;
+        }
+
+        &::-webkit-scrollbar-track {
+            background: transparent
+        }
+
+        &::-webkit-scrollbar-thumb {
+            background: var(--cl-gray);
+            border-radius: .5rem;
+        }
+
+        h2,
+        h3 {
+            margin-bottom: 1rem;
+        }
+
+        .mode-buttons {
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+
+            button {
+                width: 100%;
+                padding: 1.5rem 1rem;
+                border: none;
+                border-radius: 0.4rem;
+                background: var(--cl-black-lighter);
+                color: var(--cl-white-pure);
+                cursor: pointer;
+                transition: background 0.3s;
+                font-size: 1.8rem;
+
+                &.active {
+                    background: var(--cl-primary-purple);
+                }
+            }
+        }
+
+        .bot-groups,
+        .time-groups {
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .options-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr));
+            gap: 1rem;
+
+            .time {
+                justify-content: center;
+                border: none;
+                border-radius: 0.4rem;
+                background: var(--cl-black-lighter);
+                padding: 1.5rem 1rem;
+                cursor: pointer;
+
+                &.active {
+                    background: var(--cl-primary-purple);
+                    outline: .2rem solid var(--cl-white-pure);
+                }
+            }
+
+            .bot-chess {
+                @extend .time;
+                aspect-ratio: 1;
+                padding: 0;
+
+                img {
+                    width: 100%;
+                    height: auto;
+                    display: block;
+                }
+            }
+
+        }
+
+        .bot-group,
+        .time-group {
+            width: 100%;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+
+            h4 {
+                margin-bottom: 0.5rem;
+            }
+        }
+
+        .play-container {
+
+            width: 100%;
+            height: auto;
+            position: sticky;
+            bottom: 0;
+            padding-bottom: 1.5rem;
+            background: var(--cl-black-light);
+
+            .bot-info-container {
+                padding: 1rem;
+                background: var(--cl-black);
+                border-radius: 8px;
+                display: flex;
+                align-items: center;
+                gap: 1rem;
+
+                .avatar-bot-large {
+                    width: 80px;
+                    height: 80px;
+                    border-radius: 8px;
+                }
+
+                .bot-details {
+                    flex: 1;
+
+                    h4 {
+                        margin: 0 0 0.5rem 0;
+                    }
+
+                    .bot-des {
+                        gap: .5rem;
+
+                        .beginner {
+                            color: green;
+                        }
+
+                        .intermediate {
+                            color: blue
+                        }
+
+                        .advanced {
+                            color: red;
+                        }
+
+                        .cyberchallenge {
+                            color: red;
+                        }
+                    }
+                }
+
+
+            }
+
+            .play-btn {
+                margin-top: 2rem;
+                width: 100%;
+                padding: 1.5rem 1rem;
+                background: var(--cl-primary-yellow);
+                border: none;
+                border-radius: 0.4rem;
+                font-size: 1.8rem;
+                font-weight: bold;
+                cursor: pointer;
+                color: black;
+
+                &:hover {
+                    opacity: 0.8
+                }
+            }
+        }
+    }
+}
+
+@media screen and (max-width: 80rem) {
+    .chess {
+        padding-top: 3rem
     }
 }

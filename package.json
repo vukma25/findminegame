@@ -2,7 +2,7 @@
   "name": "gameworld",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://vukma25.github.io/findminegame/",
+  "homepage": "https://vukma25.github.io/",
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
@@ -15,6 +15,7 @@
     "react-dom": "^19.1.0",
     "react-router-dom": "^7.6.3",
     "react-scripts": "5.0.1",
+    "stockfish": "^16.0.0",
     "web-vitals": "^2.1.4"
   },
   "scripts": {

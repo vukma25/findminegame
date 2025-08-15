@@ -13,7 +13,7 @@ function App() {
   return (
     <>
       <FormLogin setOpen={setOpen} open={ open }/>
-      <Navbar setOpen={setOpen}/>
+      <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/games/minesweeper" element={<Minesweeper />} />

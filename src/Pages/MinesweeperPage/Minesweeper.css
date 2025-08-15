@@ -1,5 +1,5 @@
 .minesweeper {
-  width: 100vw;
+  width: 100%;
   height: auto;
   margin-top: 2rem;
 }
@@ -253,32 +253,6 @@
 }
 .tool .tool-cell-flag {
   grid-area: flag;
-}
-
-.logger {
-  position: fixed;
-  width: 100%;
-  max-width: 35rem;
-  height: 4rem;
-  text-wrap: wrap;
-  background: var(--cl-white-pure);
-  padding: 1rem;
-  font-size: 1.4rem;
-  color: var(--cl-red-flag);
-  border: 0.1rem solid var(--cl-primary-purple);
-  border-radius: 0.5rem;
-  z-index: 1;
-  left: 50%;
-  bottom: 1rem;
-  display: none;
-  transform: translateX(-50%);
-  transition: transform 0.3s;
-  animation: floatInForLog 0.3s;
-}
-
-.logger-display {
-  display: flex;
-  justify-content: center;
 }
 
 @media screen and (max-width: 45rem) {
