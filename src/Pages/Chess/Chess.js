@@ -25,7 +25,7 @@ function Chess() {
                 {inGame && <MoveList moves={chess.moves} setInGame={setInGame} />}
                 {!inGame && <ChessModeSelector setInGame={setInGame} setLog ={setLog}/>}
                 {/* <ChessBot chess={chess} dispatch={dispatch} setBoard={setBoard} /> */}
-                <Logger log={log} setLog={setLog}/>
+                <Logger log={log} setLog={setLog} type={"error"}/>
             </div>
             <GoTopBtn />
         </>

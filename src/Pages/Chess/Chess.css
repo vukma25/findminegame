@@ -395,6 +395,24 @@
 .chess .move-list-wrapper .move-list .move-row:nth-child(even) {
   background-color: #1c1c1c;
 }
+.chess .move-list-wrapper .move-list-settings, .chess .move-list-wrapper .move-list-option .move-list-new-game,
+.chess .move-list-wrapper .move-list-option .move-list-resign {
+  width: 90%;
+  height: 6rem;
+  justify-content: center;
+  gap: 1rem;
+  background-color: var(--cl-primary-yellow);
+  transition: background 0.2s ease;
+  border-radius: 1.5rem;
+  background-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0.1rem 0.1rem rgba(116, 116, 116, 0.2);
+}
+.chess .move-list-wrapper .move-list-settings:hover, .chess .move-list-wrapper .move-list-option .move-list-new-game:hover,
+.chess .move-list-wrapper .move-list-option .move-list-resign:hover {
+  background-color: var(--cl-primary-yellow);
+  color: var(--cl-black);
+  box-shadow: 0.1rem 0.1rem var(--ink-400);
+}
 .chess .move-list-wrapper .move-list-option {
   width: 90%;
   height: 10rem;
@@ -402,39 +420,7 @@
 }
 .chess .move-list-wrapper .move-list-option .move-list-new-game,
 .chess .move-list-wrapper .move-list-option .move-list-resign {
-  width: 45%;
-  height: 6rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  cursor: pointer;
-  transition: background 0.2s ease;
-  border-radius: 1.5rem;
-  background-color: rgba(255, 255, 255, 0.2);
-  box-shadow: 0.3rem 0.3rem rgba(116, 116, 116, 0.2);
-}
-.chess .move-list-wrapper .move-list-option .move-list-new-game:hover,
-.chess .move-list-wrapper .move-list-option .move-list-resign:hover {
-  background-color: var(--cl-primary-yellow);
-  color: var(--cl-black);
-  box-shadow: 0.4rem 0.4rem var(--cl-white);
-}
-.chess .move-list-wrapper .move-list-settings {
-  width: 90%;
-  height: 6rem;
-  justify-content: center;
-  gap: 1rem;
-  background-color: var(--cl-primary-yellow);
-  transition: background 0.2s ease;
-  border-radius: 1.5rem;
-  background-color: rgba(255, 255, 255, 0.2);
-  box-shadow: 0.3rem 0.3rem rgba(116, 116, 116, 0.2);
-}
-.chess .move-list-wrapper .move-list-settings:hover {
-  background-color: var(--cl-primary-yellow);
-  color: var(--cl-black);
-  box-shadow: 0.4rem 0.4rem var(--cl-white);
+  width: 46%;
 }
 .chess .game-mode-selector {
   position: relative;

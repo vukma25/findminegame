@@ -9,6 +9,10 @@ function Clock({ dispatch, settings }) {
         'remain': 0
     })
 
+    function formatTime(mins, secs) {
+        return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+    }
+
     useEffect(() => {
 
         const duration = settings.setTime.duration
@@ -95,15 +99,8 @@ function Clock({ dispatch, settings }) {
 
     return (
         <div className="minesweeper-settings-clock">
-            <div className="countdown-clock flex-div">
-                <div className="countdown-clock-time">
-                    {clock.minute < 10 ? `0${clock.minute}` : clock.minute}
-                </div>
-                <div className="countdown-clock-spread">:</div>
-                <div className="countdown-clock-time">
-                    {clock.second < 10 ? `0${clock.second}` : clock.second}
-                </div>
-            </div>
+            <div className="stat-value time">{formatTime(clock.minute, clock.second)}</div>
+            <div className="stat-label">Thời gian</div>
         </div>
     )
 }

@@ -18,6 +18,10 @@ html {
 }
 
 body {
+    min-height: 100vh;
+    /* min-h-screen */
+    background: linear-gradient(to bottom right, #f5f3ff, #dbeafe);
+
     .flex-div {
         display: flex;
         align-items: center;

@@ -26,6 +26,7 @@
   --radius-md: 12px;
   --radius-sm: 8px;
   --cl-primary-purple: #5309B3;
+  --cl-primary-blue: #2563eb;
   --cl-primary-yellow: #FACC14;
   --cl-gray: #CED4DA;
   --cl-white-pure: #FFFFFF;
@@ -48,20 +49,30 @@
   }
 }
 @keyframes appear {
-  0% {
+  from {
+    transform: scale(0);
     opacity: 0;
   }
-  100% {
+  to {
+    transform: scale(1);
     opacity: 1;
   }
 }
+@keyframes glow {
+  from {
+    box-shadow: 0 0 5px #10b981;
+  }
+  to {
+    box-shadow: 0 0 20px #10b981, 0 0 30px #10b981;
+  }
+}
 @keyframes floatInForLog {
-  0% {
-    transform: translate(-50%, 5rem);
+  from {
+    transform: translateX(-50%) translateY(24px);
     opacity: 0;
   }
-  100% {
-    transform: translate(-50%, 0);
+  to {
+    transform: translateX(-50%) translateY(0);
     opacity: 1;
   }
 }
@@ -91,6 +102,11 @@ html {
   scrollbar-width: thin;
 }
 
+body {
+  min-height: 100vh;
+  /* min-h-screen */
+  background: linear-gradient(to bottom right, #f5f3ff, #dbeafe);
+}
 body .flex-div {
   display: flex;
   align-items: center;

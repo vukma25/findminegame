@@ -84,7 +84,7 @@ function Minesweeper() {
                     </div>
                 </div>
             </div>
-            <Logger log={log} setLog={setLog} />
+            <Logger log={log} setLog={setLog} type={"error"} />
             <GoTopBtn />
         </>
     )

@@ -25,30 +25,20 @@
 
         .minesweeper-settings-clock {
             margin-left: auto;
+            width: 8.5rem;
+            text-align: center;
 
-            .countdown-clock {
-                height: 5rem;
-                width: 10rem;
-                border: .1rem solid var(--cl-primary-purple);
-                border-radius: .4rem;
-                justify-content: space-evenly;
+            .stat-value {
+                font-size: 1.5rem;
+                font-size: 2rem;
+                font-weight: 700;
 
-                .countdown-clock-time {
-                    width: 42%;
-                    aspect-ratio: 1;
-                    background: var(--cl-primary-yellow);
-                    border-radius: .4rem;
-                    display: flex;
-                    justify-content: center;
-                    align-items: center;
-                    font-size: 1.8rem;
-                    font-family: monospace;
+                &.time {
+                    color: #2563eb;
                 }
 
-                .countdown-clock-spread {
-                    font-size: 1.6rem;
-                    font-weight: 600;
-                    color: var(--cl-primary-purple);
+                &.errors {
+                    color: #16a34a;
                 }
             }
         }
@@ -314,13 +304,13 @@
 
 }
 
-@media screen and (max-width: 45rem){
+@media screen and (max-width: 45rem) {
     .minesweeper {
         .minesweeper-settings {
             display: grid;
             grid-template-rows: repeat(2, 3.5rem);
             grid-template-columns: repeat(2, 1fr);
-            grid-template-areas: 
+            grid-template-areas:
                 "flag clock"
                 "level level"
             ;
@@ -330,9 +320,11 @@
                 grid-area: level;
                 width: 100%;
             }
+
             .minesweeper-settings-flag {
                 grid-area: flag;
             }
+
             .minesweeper-settings-clock {
                 grid-area: clock;
             }

@@ -1,0 +1,185 @@
+.sudoku-container {
+    height: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+
+    .sudoku-card {
+        background-color: white;
+        border-radius: 1rem;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        padding: 2rem;
+        max-width: 42rem;
+        width: 100%;
+
+        .sudoku-header {
+            text-align: center;
+            margin-bottom: 2rem;
+
+            h1 {
+                font-size: 2.25rem;
+                font-weight: 700;
+                color: #1f2937;
+                margin-bottom: 0.5rem;
+            }
+
+            p {
+                color: #4b5563;
+            }
+        }
+
+        .game-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            background-color: #f9fafb;
+            border-radius: 0.5rem;
+            padding: 1rem;
+
+            .stat-item {
+                text-align: center;
+                width: 5rem;
+
+                .stat-value {
+                    font-size: 1.5rem;
+                    font-weight: 700;
+
+                    &.time {
+                        color: #2563eb;
+                    }
+
+                    &.errors {
+                        color: #16a34a;
+                    }
+                }
+
+                .stat-label {
+                    font-size: 0.875rem;
+                    color: #6b7280;
+                }
+            }
+
+            .reset-button {
+                background-color: #4f46e5;
+                color: white;
+                padding: 0.5rem 1rem;
+                border: none;
+                border-radius: 0.5rem;
+                font-weight: 500;
+                transition: background-color 0.2s;
+
+                &:hover {
+                    background-color: #4338ca;
+                }
+            }
+        }
+
+        .sudoku-board {
+            display: grid;
+            grid-template-columns: repeat(9, minmax(3.6rem, 1fr));
+            gap: 0;
+            border: 2px solid #1f2937;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+            margin-left: auto;
+            margin-right: auto;
+            width: fit-content;
+
+            .cell-base {
+                aspect-ratio: 1;
+                border: .1rem solid var(--ink-300);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.6rem;
+                font-weight: bold;
+                cursor: pointer;
+                transition: all .2s;
+            }
+
+            .cell-base__number {
+                background-color: var(--ink-200);
+            }
+            .cell-base__empty {
+                background-color: var(--white);
+
+                &:hover {
+                    background-color: var(--brand-100);
+                }
+            }
+
+            .cell-active {
+                background-color: var(--brand-400);
+            }
+
+            .cell-error {
+                background-color: #ef4444;
+                color: var(--white)
+            }
+
+            .row-3 {
+                border-top: 2px solid #1f2937;
+            }
+
+            .col-3 {
+                border-left: 2px solid #1f2937;
+            }
+        }
+
+        .number-input {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.75rem;
+            max-width: 28rem;
+            margin-left: auto;
+            margin-right: auto;
+
+            .number-button {
+                height: 3rem;
+                background-color: #2563eb;
+                color: white;
+                font-weight: 700;
+                border-radius: 0.5rem;
+                transition: background-color 0.2s;
+                font-size: 1.125rem;
+
+                &:hover {
+                    background-color: #1d4ed8;
+                }
+
+                &:disabled {
+                    background-color: #d1d5db;
+                    cursor: not-allowed;
+                }
+            }
+
+            .clear-button {
+                height: 3rem;
+                background-color: #ef4444;
+                color: white;
+                font-weight: 700;
+                border-radius: 0.5rem;
+                transition: background-color 0.2s;
+
+                &:hover {
+                    background-color: #dc2626;
+                }
+
+                &:disabled {
+                    background-color: #d1d5db;
+                    cursor: not-allowed;
+                }
+            }
+        }
+
+        .instructions {
+            margin-top: 1.5rem;
+            text-align: center;
+            font-size: 0.875rem;
+            color: #6b7280;
+        }
+    }
+}

@@ -498,34 +498,6 @@
             }
         }
 
-        .move-list-option {
-            width: 90%;
-            height: 10rem;
-            justify-content: space-between;
-
-            .move-list-new-game,
-            .move-list-resign {
-                width: 45%;
-                height: 6rem;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 1rem;
-                cursor: pointer;
-                transition: background 0.2s ease;
-                border-radius: 1.5rem;
-                background-color: rgba(255, 255, 255, 0.2);
-                box-shadow: .3rem .3rem rgba(116, 116, 116, 0.2);
-                ;
-
-                &:hover {
-                    background-color: var(--cl-primary-yellow);
-                    color: var(--cl-black);
-                    box-shadow: .4rem .4rem var(--cl-white);
-                }
-            }
-        }
-
         .move-list-settings {
             width: 90%;
             height: 6rem;
@@ -535,14 +507,28 @@
             transition: background 0.2s ease;
             border-radius: 1.5rem;
             background-color: rgba(255, 255, 255, 0.2);
-            box-shadow: .3rem .3rem rgba(116, 116, 116, 0.2);
+            box-shadow: .1rem .1rem rgba(116, 116, 116, 0.2);
 
             &:hover {
                 background-color: var(--cl-primary-yellow);
                 color: var(--cl-black);
-                box-shadow: .4rem .4rem var(--cl-white);
+                box-shadow: .1rem .1rem var(--ink-400);
             }
         }
+
+        .move-list-option {
+            width: 90%;
+            height: 10rem;
+            justify-content: space-between;
+
+            .move-list-new-game,
+            .move-list-resign {
+                @extend .move-list-settings;
+                width: 46%;
+            }
+        }
+
+
     }
 
     .game-mode-selector {

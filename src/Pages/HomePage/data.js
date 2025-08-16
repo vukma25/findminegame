@@ -13,13 +13,13 @@ export const games = [
         sourceBg: "#60a5fa" // blue-400
     },
     {
-        title: "Tic Tac Toe",
+        title: "Caro",
         description: "A quick and fun game for two players. Take turns placing Xs and Os on a 3x3 grid—be the first to make a line!",
         logo: "tictactoe.png",
         sourceBg: "#34d399" // green-400
     },
     {
-        title: "Fast Finger",
+        title: "FastFinger",
         description: "How fast can you react? Put your typing speed and accuracy to the test in this adrenaline-pumping reflex game.",
         logo: "fastfinger.png",
         sourceBg: "#fbbf24" // yellow-400
@@ -37,13 +37,13 @@ export const games = [
         sourceBg: "#10b981" // emerald-500
     },
     {
-        title: "Memory Game",
+        title: "MemoryGame",
         description: "Flip cards and find matching pairs. Sharpen your memory as you try to remember the location of each symbol or image.",
         logo: "memorygame.png",
         sourceBg: "#f472b6" // pink-400
     },
     {
-        title: "Snake Game",
+        title: "SnakeGame",
         description: "Guide the snake to collect food and grow longer, but be careful not to crash into yourself or the wall. A retro arcade classic!",
         logo: "snake.png",
         sourceBg: "#4ade80" // green-400

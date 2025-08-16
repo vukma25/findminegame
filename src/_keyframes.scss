@@ -11,23 +11,35 @@
 }
    
 @keyframes appear {
-    0% {
+    from {
+        transform: scale(0);
         opacity: 0;
     }
 
-    100% {
+    to {
+        transform: scale(1);
         opacity: 1;
     }
 }
 
+@keyframes glow {
+    from {
+        box-shadow: 0 0 5px #10b981;
+    }
+
+    to {
+        box-shadow: 0 0 20px #10b981, 0 0 30px #10b981;
+    }
+}
+
 @keyframes floatInForLog {
-    0% {
-        transform: translate(-50%, 5rem);
+    from {
+        transform: translateX(-50%) translateY(24px);
         opacity: 0;
     }
 
-    100% {
-        transform: translate(-50%, 0);
+    to {
+        transform: translateX(-50%) translateY(0);
         opacity: 1;
     }
 }

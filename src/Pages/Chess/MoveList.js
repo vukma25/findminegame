@@ -74,14 +74,14 @@ function MoveList({ moves, setInGame }) {
                 })}
             </div>
             <div className='move-list-option flex-div'>
-                <div className='move-list-new-game'>
+                <div className='move-list-new-game flex-div'>
                     <Icon
                         sx={{ fontSize: '3.5rem' }}
                     >add</Icon>
                     <p>New Game</p>
                 </div>
                 <div 
-                    className='move-list-resign'
+                    className='move-list-resign flex-div'
                     onClick={() => { setInGame(false) }}
                 >
                     <Icon
