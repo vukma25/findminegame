@@ -1,23 +1,31 @@
 {
   "files": {
-    "main.css": "/findminegame/static/css/main.fb573221.css",
-    "main.js": "/findminegame/static/js/main.0c6004b5.js",
+    "main.css": "/findminegame/static/css/main.d7efda20.css",
+    "main.js": "/findminegame/static/js/main.a2f02088.js",
     "static/js/453.2ad1b043.chunk.js": "/findminegame/static/js/453.2ad1b043.chunk.js",
     "static/media/win.gif": "/findminegame/static/media/win.1c59890545bf798f2b04.gif",
     "static/media/lose.gif": "/findminegame/static/media/lose.62b5c36fe54e307c2fa7.gif",
     "static/media/explosion.mp3": "/findminegame/static/media/explosion.0e7c09a29775bb3fc868.mp3",
+    "static/media/snake.jpg": "/findminegame/static/media/snake.ddc8f54af6300352ea34.jpg",
+    "static/media/minesweeper.jpg": "/findminegame/static/media/minesweeper.74c7bd72d587f4f32e53.jpg",
+    "static/media/fastfinger.jpg": "/findminegame/static/media/fastfinger.5c7da30e71c2f9d6962b.jpg",
+    "static/media/caro.jpg": "/findminegame/static/media/caro.9808a61da931d82fd4bd.jpg",
+    "static/media/chess.jpg": "/findminegame/static/media/chess.17b17ac37a1de143d8be.jpg",
+    "static/media/sudoku.jpg": "/findminegame/static/media/sudoku.04f791536bcf35e6fbfd.jpg",
+    "static/media/memorygame.jpg": "/findminegame/static/media/memorygame.1dae3e26fbecddff186d.jpg",
+    "static/media/wordle.jpg": "/findminegame/static/media/wordle.43f3f2529674aa28dcff.jpg",
     "static/media/bind-flag.mp3": "/findminegame/static/media/bind-flag.8ce924e91e703cf93966.mp3",
     "static/media/wq.png": "/findminegame/static/media/wq.4a8e9cd21180478914ca.png",
     "static/media/capture.mp3": "/findminegame/static/media/capture.79c343c9a73327f96d37.mp3",
     "static/media/notify.mp3": "/findminegame/static/media/notify.d27dbe284ccc3ce8d907.mp3",
     "static/media/move-self.mp3": "/findminegame/static/media/move-self.f4280e96965e14433c3b.mp3",
     "index.html": "/findminegame/index.html",
-    "main.fb573221.css.map": "/findminegame/static/css/main.fb573221.css.map",
-    "main.0c6004b5.js.map": "/findminegame/static/js/main.0c6004b5.js.map",
+    "main.d7efda20.css.map": "/findminegame/static/css/main.d7efda20.css.map",
+    "main.a2f02088.js.map": "/findminegame/static/js/main.a2f02088.js.map",
     "453.2ad1b043.chunk.js.map": "/findminegame/static/js/453.2ad1b043.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.fb573221.css",
-    "static/js/main.0c6004b5.js"
+    "static/css/main.d7efda20.css",
+    "static/js/main.a2f02088.js"
   ]
 }
