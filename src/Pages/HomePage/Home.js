@@ -12,10 +12,10 @@ function Home () {
                 games.map((e, index) => {
                     return <Card 
                         key={index}
-                        title={e.title}
+                        title={e.name}
+                        tags={e.tags}
                         description = {e.description}
-                        logo={e.logo}
-                        sourceBg={e.sourceBg}
+                        source={e.source}
                     />
                 })
             }

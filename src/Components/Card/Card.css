@@ -1,63 +1,184 @@
 .card {
-  height: 32rem;
+  height: auto;
   border: 0.1rem solid var(--cl-gray);
-  border-radius: 1rem;
+  border-radius: 1.2rem;
   overflow: hidden;
-  transition: transform 0.2s;
+  background: var(--cl-white-pure);
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
 }
 .card:hover {
   transform: translateY(-0.5rem);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.1);
+  border-color: rgba(139, 92, 246, 0.35);
 }
 .card .card-image {
   width: 100%;
-  height: 10rem;
+  height: 12rem;
+  position: relative;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 .card .card-detail {
-  width: 100%;
-  height: 2rem;
   position: relative;
-  padding: 0 1rem;
-  padding-top: 6rem;
+  padding: 5.5rem 1.2rem 1.2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 .card .card-detail .card-detail-logo {
-  width: 10rem;
+  width: 8rem;
   aspect-ratio: 1;
-  background-color: gray;
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
   border-radius: 50%;
   position: absolute;
-  top: -5rem;
-  left: 1rem;
+  top: -4rem;
+  left: 1.2rem;
+  border: 0.18rem solid var(--cl-white-pure);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
 }
 .card .card-detail .card-detail-title {
-  font-size: 2.2rem;
+  font-size: 2rem;
+  line-height: 1.25;
   color: var(--cl-primary-purple);
-  margin: 0.5rem 0;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  overflow: hidden;
+}
+.card .card-detail .card-detail-tags {
+  width: 100%;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 1rem;
+  /* Class cho tag Multiplayer */
+  /* Class cho tag Relaxing */
+  /* Class cho tag Keyboard */
+  /* Class cho tag Competitive */
+  /* Class cho tag Time */
+  /* Class cho tag Skill */
+  /* Class cho tag Brain */
+  /* Class cho tag Offline */
+  /* Class cho tag Online */
+  /* Class cho tag Simple */
+}
+.card .card-detail .card-detail-tags .card-detail-tag {
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+}
+.card .card-detail .card-detail-tags .multiplayer {
+  background-color: var(--multiplayer);
+  color: white;
+  border: 2px solid #4338ca;
+  box-shadow: 0 6px 18px rgba(2, 6, 23, 0.06);
+}
+.card .card-detail .card-detail-tags .relaxing {
+  background-color: var(--relaxing);
+  color: white;
+  border: 2px solid #6366f1;
+}
+.card .card-detail .card-detail-tags .keyboard {
+  background-color: var(--keyboard);
+  color: white;
+  border: 2px solid #5b21b6;
+}
+.card .card-detail .card-detail-tags .competitive {
+  background-color: var(--competitive);
+  color: white;
+  border: 2px solid #b91c1c;
+}
+.card .card-detail .card-detail-tags .time {
+  background-color: var(--time);
+  color: #1f2937;
+  border: 2px solid #d97706;
+}
+.card .card-detail .card-detail-tags .skill {
+  background-color: var(--skill);
+  color: white;
+  border: 2px solid #1d4ed8;
+}
+.card .card-detail .card-detail-tags .brain {
+  background-color: var(--brain);
+  color: white;
+  border: 2px solid #4c1d95;
+}
+.card .card-detail .card-detail-tags .offline {
+  background-color: var(--offline);
+  color: white;
+  border: 2px solid #4b5563;
+}
+.card .card-detail .card-detail-tags .online {
+  background-color: var(--online);
+  color: white;
+  border: 2px solid #047857;
+}
+.card .card-detail .card-detail-tags .simple {
+  background-color: var(--simple);
+  color: #4338ca;
+  border: 2px solid #a5b4fc;
 }
 .card .card-detail .card-detail-description {
-  font-size: 1.2rem;
-  height: 5rem;
+  font-size: 1.3rem;
+  color: #4b5563;
+  line-height: 1.55;
+  min-height: 3.8rem;
+  height: auto;
+  margin-top: 0.2rem;
+  overflow: hidden;
 }
 .card .card-detail .card-detail-btn {
-  width: 10rem;
+  width: 12rem;
   height: 4rem;
-  border: 0.1rem solid var(--cl-primary-purple);
-  border-radius: 0.5rem;
+  border: 0.12rem solid var(--cl-primary-purple);
+  border-radius: 0.8rem;
   font-size: 1.6rem;
-  font-weight: 500;
+  font-weight: 600;
   justify-content: center;
-  margin: 1rem 0;
+  align-items: center;
+  margin-top: 0.6rem;
   color: var(--cl-primary-purple);
-  transition: color 0.2s, background 0.2s;
+  background: transparent;
+  gap: 0.5rem;
   cursor: pointer;
+  transition: color 0.2s ease, background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  box-shadow: 0 0 0 rgba(0, 0, 0, 0);
 }
 .card .card-detail .card-detail-btn:hover {
   background: var(--cl-primary-purple);
   color: var(--cl-white-pure);
+  box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3);
+  transform: translateY(-1px);
+}
+.card .card-detail .card-detail-btn:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 12px rgba(139, 92, 246, 0.25);
 }
 .card .card-detail .card-detail-btn .card-detail-btn-arrow {
-  display: none;
+  display: inline-flex;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  opacity: 0.9;
 }
 .card .card-detail .card-detail-btn:hover .card-detail-btn-arrow {
-  transform: translateX(0.3rem);
-  display: inline;
+  transform: translateX(0.35rem);
+  opacity: 1;
+}
+
+@media (max-width: 480px) {
+  .card {
+    border-radius: 1rem;
+  }
+  .card .card-detail {
+    padding: 5rem 1rem 1rem;
+  }
+  .card .card-detail .card-detail-title {
+    font-size: 1.8rem;
+  }
+  .card .card-detail .card-detail-description {
+    font-size: 1.25rem;
+  }
+  .card .card-detail .card-detail-btn {
+    width: 100%;
+  }
 }/*# sourceMappingURL=Card.css.map */

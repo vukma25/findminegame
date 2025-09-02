@@ -178,12 +178,7 @@ const Wordle = () => {
 
     return (
         <div className="wordle-container">
-            <div className="wordle-card">
-                {/* Header */}
-                <div className="wordle-header">
-                    <h1>🔤 Wordle</h1>
-                    <p>Đoán từ 5 chữ cái trong 6 lần thử</p>
-                </div>
+            <div className="wordle-card flex-div">
 
                 {/* Game Status */}
                 {gameStatus === 'won' && (

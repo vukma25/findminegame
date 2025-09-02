@@ -140,12 +140,6 @@ const Snake = () => {
     return (
         <div className="snake-game">
             <div className="game-container">
-                {/* Header */}
-                <div className="game-header">
-                    <h1>🟢 Snake Game</h1>
-                    <p>Dùng phím mũi tên hoặc WASD để điều khiển. Space để tạm dừng.</p>
-                </div>
-
                 <div className="game-layout">
                     {/* Game panel */}
                     <div className="game-board">

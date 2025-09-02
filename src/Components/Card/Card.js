@@ -1,22 +1,32 @@
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router'
 import './Card.css'
 
-function Card({ title, description, logo, sourceBg}) {
+function Card({ title, tags, description, source }) {
 
     const arrow = '>';
 
     return (
         <div className="card">
-            <div className="card-image" style={{background: `${sourceBg}`}}></div>
+            <div className="card-image" style={{ backgroundImage: `url(${source})` }}></div>
             <div className="card-detail">
-                <div className="card-detail-logo"></div>
-                <h2 className="card-detail-title">{title}</h2>
+                <div
+                    className="card-detail-logo"
+                    style={{ backgroundImage: `url(${source})` }}
+                ></div>
+                <div className="card-detail-title">{title}</div>
+                <div className="card-detail-tags flex-div">
+                    {
+                        tags.map(tag => (
+                            <div key={tag} className={`card-detail-tag ${tag.toLowerCase()}`}>{tag}</div>
+                        ))
+                    }
+                </div>
                 <p className="card-detail-description">{description}</p>
-                <Link 
-                    to={`/games/${title.toLowerCase()}`} 
+                <Link
+                    to={`/games/${title.toLowerCase()}`}
                     className="card-detail-btn flex-div"
                 >
-                    Play now
+                    Play
                     <span className="card-detail-btn-arrow">{arrow}</span>
                 </Link>
             </div>

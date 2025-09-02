@@ -170,7 +170,7 @@
   color: var(--cl-black);
 }
 .minesweeper .minesweeper-broad .game-broad .game-broad-cell {
-  border: 0.1rem solid var(--cl-gray);
+  border: 0.1rem solid var(--ink-400);
   justify-content: center;
   font-size: 1.4rem;
   font-weight: 600;

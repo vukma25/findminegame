@@ -19,7 +19,7 @@
 .env.production.local
 
 # sass map
-*.css.map
+.css.map
 
 
 npm-debug.log*

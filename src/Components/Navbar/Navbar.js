@@ -1,7 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
+import { useNavigate } from 'react-router';
 import Icon from '@mui/material/Icon';
-import { Link } from 'react-router-dom';
-import { sampleData } from './fakeData'
+import { Link } from 'react-router';
+import { useLocalStorage } from './UseLocalStorage';
+import SuggestBox from '../SuggestBox/SuggestBox';
 import './Navbar.css';
 
 function Navbar() {
@@ -13,9 +15,12 @@ function Navbar() {
     })
     const [auth, setAuth] = useState('')
     const [suggestBox, setSuggestBox] = useState(false)
-    const [query, setQuery] = useState("");
+    const [query, setQuery] = useState('')
+    const [storage, setStorage] = useLocalStorage("recent-query", [])
 
     const refSuggest = useRef(null)
+
+    const navigate = useNavigate()
 
     function setInit() {
         if (window.innerWidth >= 768) {
@@ -52,10 +57,6 @@ function Navbar() {
         setSuggestBox(true)
     }
 
-    function handleBlur() {
-        setSuggestBox(false)
-    }
-
     function handleKeyDown(e) {
         if (e.key === "/") {
             e.preventDefault();
@@ -64,11 +65,43 @@ function Navbar() {
 
             if (document.activeElement === sgBox) {
                 sgBox.blur()
+                setSuggestBox(false)
             } else {
                 sgBox.focus()
                 setSuggestBox(true)
             }
         }
+    }
+
+    function handleStorageQuery(query) {
+        if (storage.length !== 0) {
+            let queries = storage
+            if (queries.map(e => e.toLowerCase()).includes(query.toLowerCase())) return
+            if (queries.length === 10) {
+                queries.shift()
+                queries.push(query)
+            } else {
+                queries.push(query)
+            }
+
+            setStorage(queries)
+        } else {
+            setStorage([query])
+        }
+    }
+
+    function handleSearch(e) {
+        e.preventDefault()
+        const q = query.trim();
+
+        if (!q) return
+        if (q.length > 3) {
+            setSuggestBox(false)
+            handleStorageQuery(q)
+            const convertQuery = q.replaceAll(/\s+/g, "+")
+            navigate(`/search?q=${convertQuery}`)
+        }
+
     }
 
     useEffect(() => {
@@ -109,7 +142,11 @@ function Navbar() {
                                     viewBox="0 0 20 20"
                                     fill="currentColor"
                                 >
-                                    <path fillRule="evenodd" d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z" clipRule="evenodd" />
+                                    <path
+                                        fillRule="evenodd"
+                                        d="M5.23 7.21a.75.75 0 011.06.02L10 10.94l3.71-3.71a.75.75 0 111.06 1.06l-4.24 4.24a.75.75 0 01-1.06 0L5.21 8.29a.75.75 0 01.02-1.08z"
+                                        clipRule="evenodd"
+                                    />
                                 </svg>
                             </div>
                             <div className={`dropdown-menu ${dropdown ? "dropdown-menu-effect" : ""}`} id="gameDropdown">
@@ -179,39 +216,43 @@ function Navbar() {
                             </div>
                         </div>
 
-                        <Link to="/lead-board" className="nav-link">LeadBoard</Link>
+                        <Link to="/leadboard" className="nav-link">LeadBoard</Link>
                     </div>
 
                     {/* Search */}
                     <div className="search-wrap">
                         <div className="search-box">
                             <div className="search-field">
-                                <svg className="ico" viewBox="0 0 24 24" fill="none">
-                                    <path d="M21 21l-4.3-4.3M10.5 18a7.5 7.5 0 100-15 7.5 7.5 0 000 15z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                                </svg>
+                                <div
+                                    onClick={handleSearch}
+                                >
+                                    <svg className="ico" viewBox="0 0 24 24" fill="none">
+                                        <path
+                                            d="M21 21l-4.3-4.3M10.5 18a7.5 7.5 0 100-15 7.5 7.5 0 000 15z"
+                                            stroke="currentColor" strokeWidth="2" strokeLinecap="round"
+                                        />
+                                    </svg>
+                                </div>
                                 <input
                                     ref={refSuggest}
                                     id="searchInput"
                                     type="text"
+                                    value={query}
+                                    autoComplete="off"
                                     placeholder="Tìm game, thể loại, người chơi..."
                                     onClick={() => { handleFocus() }}
-                                    onBlur={() => { handleBlur() }}
-                                    onChange={(e) => {setQuery(e.target.value)}}
+                                    onChange={(e) => { setQuery(e.target.value) }}
                                 />
                                 <kbd className="kbd">/</kbd>
                             </div>
-
-                            {/* Suggestions */}
-                            {suggestBox && <div id="suggestBox" className="suggest">
-                                <div className="suggest-title">Gợi ý</div>
-                                {
-                                    sampleData.filter(item =>
-                                        (item.name.toLowerCase().includes(query.toLowerCase()) && query.length !== 0)
-                                    ).map(({ name }) => { 
-                                        return (<button className="suggest-btn"><span>♔</span><span>{name}</span></button>)
-                                    })
-                                }
-                            </div>}
+                            <SuggestBox
+                                suggestBox={suggestBox}
+                                setSuggestBox={setSuggestBox}
+                                query={query}
+                                setQuery={setQuery}
+                                storage={storage} 
+                                setStorage={setStorage}
+                            />
                         </div>
                     </div>
 
@@ -253,11 +294,35 @@ function Navbar() {
             {mobile.search && <div id="mobileSearch" className="mobile-panel mobile-search">
                 <div className="w-full relative">
                     <div className="field">
-                        <svg className="ico" viewBox="0 0 24 24" fill="none">
+                        <svg
+                            className="ico"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            onClick={handleSearch}
+                        >
                             <path d="M21 21l-4.3-4.3M10.5 18a7.5 7.5 0 100-15 7.5 7.5 0 000 15z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
                         </svg>
-                        <input type="text" placeholder="Tìm kiếm..." className="w-full" style={{ border: 'none', outline: 'none', color: '#374151' }} />
+                        <input
+                            type="text"
+                            placeholder="Tìm kiếm..."
+                            className="w-full"
+                            style={{ border: 'none', outline: 'none', color: '#374151' }}
+                            ref={refSuggest}
+                            id="searchInput"
+                            value={query}
+                            autoComplete="off"
+                            onClick={() => { handleFocus() }}
+                            onChange={(e) => { setQuery(e.target.value) }}
+                        />
                     </div>
+                    <SuggestBox
+                        suggestBox={suggestBox}
+                        setSuggestBox={setSuggestBox}
+                        query={query}
+                        setQuery={setQuery}
+                        storage={storage}
+                        setStorage={setStorage}
+                    />
                 </div>
             </div>}
 

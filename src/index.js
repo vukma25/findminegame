@@ -3,14 +3,91 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-import { BrowserRouter } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider } from 'react-router';
+import Navbar from './Components/Navbar/Navbar';
+import Home from './Pages/HomePage/Home'
+import SearchPage from './Pages/SearchPage/SearchPage';
+import Minesweeper from './Pages/MinesweeperPage/Minesweeper';
+import Chess from './Pages/Chess/Chess'
+import Sudoku from './Pages/Sudoku/Sudoku'
+import Caro from './Pages/Caro/Caro'
+import FastFinger from './Pages/FastFinger/FastFinger'
+import Memory from './Pages/Memory/Memory';
+import Wordle from './Pages/Wordle/Wordle'
+import Snake from './Pages/Snake/Snake'
+import NotFoundPage from './Pages/NotFound/NotFound'
+import ErrorPage from './Pages/ErrorPage/ErrorPage'
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        index: true,
+        element: <Home />
+      },
+      {
+        path: "games",
+        element: <NotFoundPage />
+      },
+      {
+        path: "games",
+        children: [
+          {
+            path: "minesweeper",
+            element: <Minesweeper />
+          },
+          {
+            path: "chess",
+            element: <Chess />
+          },
+          {
+            path: "sudoku",
+            element: <Sudoku />
+          },
+          {
+            path: "caro",
+            element: <Caro />
+          },
+          {
+            path: "fastfinger",
+            element: <FastFinger />
+          },
+          {
+            path: "memorygame",
+            element: <Memory />
+          },
+          {
+            path: "wordle",
+            element: <Wordle />
+          },
+          {
+            path: "snakegame",
+            element: <Snake />
+          },
+        ]
+      },
+      {
+        path: "search",
+        element: <SearchPage />
+      },
+      {
+        path: "*",
+        element: <NotFoundPage />
+      },
+    ]
+  }
+], {
+  basename: "/findminegame"
+})
+
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <BrowserRouter basename="findminegame">
-      <App />
-    </BrowserRouter>
+    <RouterProvider router={router} />
   </React.StrictMode>
 );
 
