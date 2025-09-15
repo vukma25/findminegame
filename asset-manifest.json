@@ -1,8 +1,10 @@
 {
   "files": {
-    "main.css": "/findminegame/static/css/main.d7efda20.css",
-    "main.js": "/findminegame/static/js/main.a2f02088.js",
+    "main.css": "/findminegame/static/css/main.bcc69c8f.css",
+    "main.js": "/findminegame/static/js/main.da415ab2.js",
     "static/js/453.2ad1b043.chunk.js": "/findminegame/static/js/453.2ad1b043.chunk.js",
+    "static/js/802.aa00d60d.chunk.js": "/findminegame/static/js/802.aa00d60d.chunk.js",
+    "static/js/988.fb14ed53.chunk.js": "/findminegame/static/js/988.fb14ed53.chunk.js",
     "static/media/win.gif": "/findminegame/static/media/win.1c59890545bf798f2b04.gif",
     "static/media/lose.gif": "/findminegame/static/media/lose.62b5c36fe54e307c2fa7.gif",
     "static/media/explosion.mp3": "/findminegame/static/media/explosion.0e7c09a29775bb3fc868.mp3",
@@ -20,12 +22,14 @@
     "static/media/notify.mp3": "/findminegame/static/media/notify.d27dbe284ccc3ce8d907.mp3",
     "static/media/move-self.mp3": "/findminegame/static/media/move-self.f4280e96965e14433c3b.mp3",
     "index.html": "/findminegame/index.html",
-    "main.d7efda20.css.map": "/findminegame/static/css/main.d7efda20.css.map",
-    "main.a2f02088.js.map": "/findminegame/static/js/main.a2f02088.js.map",
-    "453.2ad1b043.chunk.js.map": "/findminegame/static/js/453.2ad1b043.chunk.js.map"
+    "main.bcc69c8f.css.map": "/findminegame/static/css/main.bcc69c8f.css.map",
+    "main.da415ab2.js.map": "/findminegame/static/js/main.da415ab2.js.map",
+    "453.2ad1b043.chunk.js.map": "/findminegame/static/js/453.2ad1b043.chunk.js.map",
+    "802.aa00d60d.chunk.js.map": "/findminegame/static/js/802.aa00d60d.chunk.js.map",
+    "988.fb14ed53.chunk.js.map": "/findminegame/static/js/988.fb14ed53.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.d7efda20.css",
-    "static/js/main.a2f02088.js"
+    "static/css/main.bcc69c8f.css",
+    "static/js/main.da415ab2.js"
   ]
 }
