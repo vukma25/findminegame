@@ -1,163 +1,318 @@
-import { useState, useEffect } from 'react'
+import { useState, useRef, useEffect, useReducer } from 'react'
+import { Link } from "react-router"
+import { initialState, reducer } from './Reducer'
+import {
+    setSelectSquare,
+    setFillSquare,
+    setInitializeGame,
+    setGameOver,
+    setStartGame,
+    setVariant,
+    setLoading
+} from './Action'
+import {
+    Icon,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
+    CircularProgress
+} from '@mui/material'
+import ClockBase from '../../Components/ClockBase/ClockBase';
+import Clock from './Clock'
+import Logger from '../../Components/Logger/Logger'
+import InformBoard from './InformBoard'
+import SUDOKU_VARIANTS from './Variant'
 import './Sudoku.css';
 
 function Sudoku() {
+    const [sudoku, dispatch] = useReducer(reducer, initialState)
+    const [modal, setModal] = useState(false)
+    const [size, setSize] = useState(9)
+    const [difficulty, setDifficulty] = useState(1)
+    const [timeFinish, setTimeFinish] = useState({})
+    const [log, setLog] = useState({
+        message: "",
+        type: "info"
+    })
 
-    const initialBoard = [
-        [5, 3, 0, 0, 7, 0, 0, 0, 0],
-        [6, 0, 0, 1, 9, 5, 0, 0, 0],
-        [0, 9, 8, 0, 0, 0, 0, 6, 0],
-        [8, 0, 0, 0, 6, 0, 0, 0, 3],
-        [4, 0, 0, 8, 0, 3, 0, 0, 1],
-        [7, 0, 0, 0, 2, 0, 0, 0, 6],
-        [0, 6, 0, 0, 0, 0, 2, 8, 0],
-        [0, 0, 0, 4, 1, 9, 0, 0, 5],
-        [0, 0, 0, 0, 8, 0, 0, 7, 9]
-    ];
+    const refStaticSize = useRef(9)
+    const refWebWorker = useRef(null)
 
-    const [board, setBoard] = useState(initialBoard.map(row => [...row]));
-    const [selectedCell, setSelectedCell] = useState(null);
-    const [errors, setErrors] = useState(new Set());
-    const [timer, setTimer] = useState(0);
-    const [isRunning, setIsRunning] = useState(true);
 
-    // Timer
-    useEffect(() => {
-        let interval;
-        if (isRunning) {
-            interval = setInterval(() => {
-                setTimer(timer => timer + 1);
-            }, 1000);
+    const handleSizeChange = (e) => {
+        setSize(e.target.value)
+        setDifficulty(1)
+
+        if (sudoku.status !== "playing") {
+            refStaticSize.current = e.target.value
         }
-        return () => clearInterval(interval);
-    }, [isRunning]);
+    }
 
-    const formatTime = (seconds) => {
-        const mins = Math.floor(seconds / 60);
-        const secs = seconds % 60;
-        return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-    };
-
-    // Kiểm tra số hợp lệ
-    const isValidMove = (board, row, col, num) => {
-        // Kiểm tra hàng
-        for (let x = 0; x < 9; x++) {
-            if (x !== col && board[row][x] === num) return false;
-        }
-
-        // Kiểm tra cột
-        for (let x = 0; x < 9; x++) {
-            if (x !== row && board[x][col] === num) return false;
-        }
-
-        // Kiểm tra ô 3x3
-        const startRow = row - row % 3;
-        const startCol = col - col % 3;
-        for (let i = 0; i < 3; i++) {
-            for (let j = 0; j < 3; j++) {
-                const currentRow = startRow + i;
-                const currentCol = startCol + j;
-                if (currentRow !== row && currentCol !== col &&
-                    board[currentRow][currentCol] === num) {
-                    return false;
-                }
-            }
-        }
-        return true;
-    };
+    const handleDifficultyChange = (e) => {
+        setDifficulty(e.target.value)
+    }
 
     const handleCellClick = (row, col) => {
-        if (initialBoard[row][col] === 0) {
-            setSelectedCell({ row, col });
+        if (sudoku.status !== "playing") {
+            setLog({
+                message: "You are not ready game yet. Let click on button at top-right corner!",
+                type: "info"
+            })
+            return
+        }
+        if (sudoku.gameOver) return
+
+        if (
+            sudoku.puzzle[row][col] === 0 ||
+            sudoku.errors.square.has(`${row}-${col}`)
+        ) {
+            dispatch(setSelectSquare({ row, col }))
         }
     };
 
     const handleNumberInput = (num) => {
-        if (!selectedCell) return;
+        const {
+            status,
+            gameOver,
+            squareActivating,
+            puzzle,
+            answers,
+            errors
+        } = sudoku
 
-        const { row, col } = selectedCell;
-        const newBoard = board.map(r => [...r]);
-        newBoard[row][col] = num;
+        if (status !== "playing") return
+        if (gameOver) return
 
-        const newErrors = new Set(errors);
-        const errorKey = `${row}-${col}`;
+        if (!squareActivating) return;
 
-        if (num === 0 || isValidMove(newBoard, row, col, num)) {
-            newErrors.delete(errorKey);
+        const { row, col } = squareActivating;
+        const updatedPuzzle = puzzle.map(r => [...r]);
+        updatedPuzzle[row][col] = num;
+
+        const result = answers.filter(({ square }) => {
+            const [r, c] = square
+            return row === r && col === c
+        })[0]["correct-value"] === num
+
+        if (!result && num !== 0) {
+            const times = errors.times + 1
+            const square = new Set(errors.square).add(`${row}-${col}`)
+            dispatch(setFillSquare({
+                answers: answers,
+                puzzle: updatedPuzzle,
+                errors: {
+                    times,
+                    square
+                }
+            }))
+
+            if (errors.times === 2) {
+                dispatch(setGameOver({
+                    gameOver: true,
+                    isWin: false
+                }))
+                setModal(true)
+            }
         } else {
-            newErrors.add(errorKey);
+            const updatedAnswers = answers.filter(({ square }) => {
+                const [r, c] = square
+                return row !== r || col !== c
+            })
+
+            const times = errors.times
+            const square = new Set(errors.square)
+            square.delete(`${row}-${col}`)
+            dispatch(setFillSquare({
+                puzzle: updatedPuzzle,
+                answers: updatedAnswers,
+                errors: {
+                    times,
+                    square
+                }
+            }))
+
+            if (updatedAnswers.length === 0) {
+                dispatch(setGameOver({
+                    gameOver: true,
+                    isWin: true
+                }))
+                setModal(true)
+            }
         }
-
-        setBoard(newBoard);
-        setErrors(newErrors);
     };
 
-    const resetGame = () => {
-        setBoard(initialBoard.map(row => [...row]));
-        setSelectedCell(null);
-        setErrors(new Set());
-        setTimer(0);
-        setIsRunning(true);
+    const resetOrStartGame = () => {
+        if (sudoku.status === "playing") {
+            refWebWorker.current.postMessage({
+                size,
+                difficulty: SUDOKU_VARIANTS[size].difficulties[difficulty].cellsToRemove,
+                action: "generate_puzzle"
+            })
+            refStaticSize.current = size
+        } else {
+            dispatch(setStartGame())
+        }
     };
+
+    const cancelGeneratePuzzle = () => {
+        if (refWebWorker.current) {
+            refWebWorker.current.terminate()
+            refWebWorker.current = null
+        }
+    }
 
     const getCellClass = (row, col) => {
+        const { puzzle, squareActivating, errors } = sudoku
         let baseClass = "cell-base ";
 
         // Màu nền cho ô ban đầu
-        if (initialBoard[row][col] !== 0) {
+        if (puzzle[row][col] !== 0) {
             baseClass += "cell-base__number ";
         } else {
             baseClass += "cell-base__empty ";
         }
 
+        if (refStaticSize.current === 16) {
+            baseClass += "cell-base__small-text "
+        }
+
         // Ô được chọn
-        if (selectedCell && selectedCell.row === row && selectedCell.col === col) {
+        if (squareActivating &&
+            squareActivating.row === row &&
+            squareActivating.col === col) {
             baseClass += "cell-active ";
         }
 
         // Ô có lỗi
-        if (errors.has(`${row}-${col}`)) {
+        if (errors.square.has(`${row}-${col}`)) {
             baseClass += "cell-error ";
         }
 
         // Đường viền đậm cho các ô 3x3
-        if (row % 3 === 0 && row) baseClass += "row-3 ";
-        if (col % 3 === 0 && col) baseClass += "col-3 ";
+        if (row % Math.sqrt(refStaticSize.current) === 0 && row)
+            baseClass += "row-border ";
+        if (col % Math.sqrt(refStaticSize.current) === 0 && col)
+            baseClass += "col-border ";
 
         return baseClass;
     };
 
+    useEffect(() => {
+        refWebWorker.current = new Worker(new URL("./SudokuWebWorker.js", import.meta.url))
+
+        refWebWorker.current.onmessage = (event) => {
+            const { type, payload } = event.data
+
+            switch (type) {
+                case "loading":
+                    dispatch(setLoading(payload))
+                    break
+                case "generate_success":
+                    dispatch(setInitializeGame({
+                        puzzle: payload.puzzle,
+                        answers: payload.answers
+                    }))
+
+                    break
+                case "error":
+                    break
+
+                default:
+                    throw new Error("web worker on invalid message")
+            }
+
+        }
+
+        return () => {
+            cancelGeneratePuzzle()
+        }
+
+    }, [])
+
+    useEffect(() => {
+        dispatch(setVariant({
+            size,
+            difficulty: SUDOKU_VARIANTS[size].difficulties[difficulty].cellsToRemove
+        }))
+
+        if (size === 16) {
+            setLog({
+                message: "16x16 puzzles can be take a lot of time to generate. Are you sure when choose this?",
+                type: "warning"
+            })
+        }
+
+        if (sudoku.status !== "playing") {
+            refWebWorker.current.postMessage({
+                size,
+                difficulty: SUDOKU_VARIANTS[size].difficulties[difficulty].cellsToRemove,
+                action: "generate_puzzle"
+            })
+        }
+    }, [size, difficulty, sudoku.status])
+
     return (
         <div className="sudoku-container">
-            <div className="sudoku-card">
+            {modal && <InformBoard 
+                isWin={sudoku.isWin}
+                errors={sudoku.errors.times}
+                timeFinish={timeFinish}
+                setModal={setModal}/>}
+            <div className="sudoku-card-left">
                 {/* Header */}
                 <div className="sudoku-header">
-                    <h1>🧩 Sudoku</h1>
-                    <p>Điền số từ 1-9 vào các ô trống</p>
+                    <h1>Sudoku</h1>
                 </div>
 
                 {/* Game Stats */}
                 <div className="game-stats">
+                    <ClockBase
+                        type={"count"}
+                        duration={0}
+                        semaphore={sudoku.semaphore}
+                        setTimeFinish={setTimeFinish}
+                    >
+                        <Clock />
+                    </ClockBase>
                     <div className="stat-item">
-                        <div className="stat-value time">{formatTime(timer)}</div>
-                        <div className="stat-label">Thời gian</div>
-                    </div>
-                    <div className="stat-item">
-                        <div className="stat-value errors">{errors.size === 0 ? '✓' : errors.size}</div>
+                        <div className="stat-value errors">
+                            {sudoku.errors.times} / 3
+                        </div>
                         <div className="stat-label">Lỗi</div>
                     </div>
                     <button
-                        onClick={resetGame}
+                        onClick={resetOrStartGame}
                         className="reset-button"
+                        disabled={sudoku.loading}
                     >
-                        Chơi lại
+                        {`${sudoku.status === "waiting" ? "Bắt đầu" : "Ván mới"}`}
                     </button>
                 </div>
 
+
+                {/* Loading */}
+                {sudoku.loading &&
+                    <div className="sudoku-loading flex-div">
+                        <CircularProgress sx={{ color: "var(--brand-500)" }} />
+                        <span className="sudoku-loading__description">Generating puzzle ...</span>
+                        <div className="sudoku-loading__info flex-div">
+                            <Icon
+                                sx={{ color: "var(--cl-primary-yellow)" }}
+                            >warning</Icon>
+                            <p>16x16 puzzles can take a while to generate</p>
+                        </div>
+                    </div>}
                 {/* Sudoku Board */}
-                <div className="sudoku-board">
-                    {board.map((row, rowIndex) =>
-                        row.map((cell, colIndex) => (
+                {!sudoku.loading && <div
+                    className="sudoku-board"
+                    style={{
+                        "gridTemplateColumns": `repeat(${refStaticSize.current}, minmax(${refStaticSize.current < 16 ? 3.6 : 2.2
+                            }rem, 1fr))`
+                    }}
+                >
+                    {sudoku.puzzle.map((rows, rowIndex) =>
+                        rows.map((cell, colIndex) => (
                             <div
                                 key={`${rowIndex}-${colIndex}`}
                                 className={getCellClass(rowIndex, colIndex)}
@@ -167,35 +322,161 @@ function Sudoku() {
                             </div>
                         ))
                     )}
-                </div>
+                </div>}
 
                 {/* Number Input */}
                 <div className="number-input">
-                    {[1, 2, 3, 4, 5, 6, 7, 8, 9].map(num => (
-                        <button
+                    {Array.from({ length: refStaticSize.current }, () => 0).map((_, index) => {
+                        const num = refStaticSize.current - (refStaticSize.current - index - 1)
+
+                        return (<button
                             key={num}
                             onClick={() => handleNumberInput(num)}
-                            disabled={!selectedCell}
+                            disabled={!sudoku.squareActivating}
                             className="number-button"
                         >
                             {num}
-                        </button>
-                    ))}
+                        </button>)
+                    })}
                     <button
                         onClick={() => handleNumberInput(0)}
-                        disabled={!selectedCell}
+                        disabled={!sudoku.squareActivating}
                         className="clear-button"
+                        style={{
+                            "gridColumn": `${refStaticSize.current === 16 ? "2 / span 4" : "5 / span 1"
+                                }`
+                        }}
                     >
                         ✕
                     </button>
                 </div>
-
-                {/* Instructions */}
-                <div className="instructions">
-                    <p>💡 Nhấp vào ô trống để chọn, sau đó nhấp số để điền</p>
-                    <p>Mỗi hàng, cột và ô 3×3 phải chứa các số từ 1-9</p>
-                </div>
             </div>
+            <div className="sudoku-card-right">
+                {sudoku.loading && <Link className="back-home" to="/">Don't wait until generate successfully. Go home!</Link>}
+                <div className="sudoku-settings">
+                    <div className="sudoku-header">
+                        <h1>Settings</h1>
+                    </div>
+
+                    <FormControl fullWidth>
+                        <InputLabel
+                            className="select-label"
+                            id="select-size"
+                        >Size</InputLabel>
+                        <Select
+                            className="select-settings flex-div"
+                            labelId="select-side"
+                            label="Size"
+                            value={size}
+                            onChange={handleSizeChange}
+                        >
+                            <MenuItem sx={{
+                                fontSize: "1.3rem"
+                            }} value={4}>4 x 4</MenuItem>
+                            <MenuItem sx={{
+                                fontSize: "1.3rem"
+                            }} value={9}>9 x 9</MenuItem>
+                            <MenuItem sx={{
+                                fontSize: "1.3rem"
+                            }} value={16}>16 x 16</MenuItem>
+                        </Select>
+                    </FormControl>
+                    <FormControl fullWidth>
+                        <InputLabel
+                            className="select-label"
+                            id="select-difficulty"
+                        >Difficulty</InputLabel>
+                        <Select
+                            className="select-settings flex-div"
+                            labelId="select-difficulty"
+                            label="Difficulty"
+                            value={difficulty}
+                            onChange={handleDifficultyChange}
+                        >
+                            {
+                                Object.values(SUDOKU_VARIANTS[size].difficulties).map(({
+                                    name
+                                }, index) => {
+                                    return (
+                                        <MenuItem
+                                            key={index}
+                                            sx={{
+                                                fontSize: "1.3rem",
+                                                justifyContent: "space-between"
+                                            }}
+                                            value={index + 1}
+                                            className="flex-div"
+                                        >
+                                            <p>{name}</p>
+                                            {(size === 16 && [1, 2].includes(index)) &&
+                                                <div
+                                                    className="flex-div"
+                                                    style={{ gap: ".5rem" }}
+                                                >
+                                                    <Icon
+                                                        sx={{ color: "var(--cl-red-flag)" }}
+                                                    >warning</Icon>
+                                                    <p
+                                                        style={{
+                                                            fontSize: "1rem",
+                                                            color: "var(--ink-500)"
+                                                        }}
+                                                    >Generating take too many time</p>
+                                                </div>}
+                                        </MenuItem>
+                                    )
+                                })
+                            }
+                        </Select>
+                    </FormControl>
+                </div>
+                <div className="sudoku-detail">
+                    <div className="sudoku-header">
+                        <h1>Details</h1>
+                    </div>
+                    <div className="sudoku-detail-containers">
+                        <div className="sudoku-detail-name">
+                            Variant name
+                        </div>
+                        <div className="sudoku-detail-value">
+                            {SUDOKU_VARIANTS[size].name}
+                        </div>
+                    </div>
+                    <div className="sudoku-detail-containers">
+                        <div className="sudoku-detail-name">
+                            Region size
+                        </div>
+                        <div className="sudoku-detail-value">
+                            {refStaticSize.current}
+                        </div>
+                    </div>
+                    <div className="sudoku-detail-containers">
+                        <div className="sudoku-detail-name">
+                            Difficulty
+                        </div>
+                        <div className={`sudoku-detail-value difficulty-${difficulty}`}>
+                            {SUDOKU_VARIANTS[size].difficulties[difficulty].name}
+                        </div>
+                    </div>
+                    <div className="sudoku-detail-containers">
+                        <div className="sudoku-detail-name">
+                            The number of cells need open
+                        </div>
+                        <div className="sudoku-detail-value">
+                            {sudoku.answers.length}
+                        </div>
+                    </div>
+                    <div className="sudoku-detail-containers">
+                        <div className="sudoku-detail-name">
+                            Description
+                        </div>
+                        <div className="sudoku-detail-value">
+                            {SUDOKU_VARIANTS[size].difficulties[difficulty].description}
+                        </div>
+                    </div>
+                </div>
+            </div >
+            <Logger log={log} setLog={setLog}/>
         </div>
     );
 }

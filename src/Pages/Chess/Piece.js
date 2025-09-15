@@ -1,40 +1,42 @@
 
 import { useState, useEffect, useRef } from 'react'
 import {
-    setReplacePiece,
-    setPawnPromotion
-} from './Action'
-import {
-    copyBoardChess,
-    copyPiecesChess,
     calculateEssentialSize,
     createLimit,
     calculateTopOrLeft,
-    hiddenInvalidMoveAndTake,
     identifyRowAndCol,
-    replacePiece,
-    displayInvalidMoveAndTake,
-    capturePiece,
     matchSquareSuggest,
     matchSquareTaken,
     matchSquareCastle,
-    isPawnPromotion,
-    pawnPromotionByReplaceOrCapture,
-    listPawnCanBecome,
-    copyMoves
 } from './Function'
 
-function Piece({ piece, square, coordinate, bounding, dispatch, chess, setSquareEffect, board, setBoard }) {
+function Piece({ 
+    piece, 
+    square, 
+    coordinate, 
+    bounding, 
+    chess, 
+    setChess,
+    board,
+    setBoard, 
+    setSquareEffect,  
+    pieceActive, 
+    setPieceActive,
+    aiThinking,
+    animation
+}) {
 
     const [prop, setProp] = useState({
         'isMove': false,
         'style': {
             'backgroundColor': 'transparent',
-            'transform': `translate(${chess.squares[square][0]}%, ${chess.squares[square][1]}%)`
+            'transform': `translate(${chess.squares[square][0]}%, ${chess.squares[square][1]}%)`,
+            'transition': animation
         }
     })
 
     const ref = useRef(null)
+    const refBoard = useRef(board)
     const squareSuggest = useRef(0)
     const squareTaken = useRef(0)
     const squareCastle = useRef([])
@@ -51,38 +53,27 @@ function Piece({ piece, square, coordinate, bounding, dispatch, chess, setSquare
         })
     }, [square])
 
+    useEffect(() => {
+        refBoard.current = board
+    }, [board])
 
     useEffect(() => {
 
+        if (aiThinking) return
+        if (chess.status === 'preparing') return 
         if (chess.hasCheckmate.checkmate) return
 
         const el = ref.current
         if (!el) return
 
-        const copyBoard = copyBoardChess(chess.board)
-        const copyPieces = copyPiecesChess(chess.pieces)
-        let turn = chess.turn
         let hoveringSquare = square
-        let isClicked = false
+        const chessClone = chess.getState()
 
         function onMouseDown(e) {
             //e.preventDefault()
 
             if (e.button === 0) {
                 const [x, y, squareWidth] = calculateEssentialSize(e, bounding)
-                setBoard(displayInvalidMoveAndTake(
-                        piece,
-                        square, 
-                        coordinate, 
-                        copyBoard, 
-                        copyPieces,
-                        chess.attacks,
-                        chess.protects,
-                        chess.direction,
-                        chess.canCastle,
-                        chess.squaresEP,
-                        chess.pins
-                ))
                 setProp(prevState => {
                     return {
                         ...prevState,
@@ -97,6 +88,14 @@ function Piece({ piece, square, coordinate, bounding, dispatch, chess, setSquare
                         }
                     }
                 })
+                setPieceActive(prev => {
+                    if (prev === square) return prev
+                    return square
+                })
+                setBoard(chessClone.displayInvalidMoveAndTake(
+                    piece, square, coordinate, chessClone.getBoard()
+                ))
+                
 
                 document.addEventListener('mousemove', onMouseMove)
                 document.addEventListener('mouseup', onMouseUp)
@@ -119,9 +118,9 @@ function Piece({ piece, square, coordinate, bounding, dispatch, chess, setSquare
             const posFromTopToPointer = Math.max(1, yPointer - bounding.top)
             const [col, row] = identifyRowAndCol(posFromLeftToPointer, posFromTopToPointer, squareWidth)
             hoveringSquare = 8 * row + col
-            squareSuggest.current = matchSquareSuggest(copyBoard, row, col, hoveringSquare)
-            squareTaken.current = matchSquareTaken(copyBoard, row, col, hoveringSquare)
-            squareCastle.current = matchSquareCastle(copyBoard, row, col)
+            squareSuggest.current = matchSquareSuggest(refBoard.current, row, col, hoveringSquare)
+            squareTaken.current = matchSquareTaken(refBoard.current, row, col, hoveringSquare)
+            squareCastle.current = matchSquareCastle(refBoard.current, row, col)
 
             //====================================================
             setProp(prevState => {
@@ -154,7 +153,7 @@ function Piece({ piece, square, coordinate, bounding, dispatch, chess, setSquare
                     'isMove': false,
                     'style': {
                         ...prevState.style,
-                        'transform': `translate(${chess.squares[square][0]}%, ${chess.squares[square][1]}%)`
+                        'transform': `translate(${chess.squares[square][0]}%, ${chess.squares[square][1]}%)`,
                     }
                 }
             })
@@ -163,109 +162,72 @@ function Piece({ piece, square, coordinate, bounding, dispatch, chess, setSquare
                 'display': 'none'
             })
 
-            if (turn === 'b') return
+            console.log(hoveringSquare)
 
             //an hien nuoc goi y cua quan duoc click vao
-            let freshBoard = copyBoard
-            let freshPieces = copyPieces
-            if (isClicked && !(hoveringSquare !== square)) {
-                console.log('ok', chess.board)
-                freshBoard = copyBoardChess(chess.board)
-                freshPieces = copyPiecesChess(chess.pieces)
-                isClicked = false
-            } else {
-                isClicked = true
+            if (pieceActive === square && 
+                !(hoveringSquare !== square)
+            ) {
+                 setPieceActive(0)
             }
             //=======================================================
 
-            setBoard(freshBoard)
-
-            const [row, sq, type] = pawnPromotionByReplaceOrCapture(
+            const [row, sq, type] = chessClone.pawnPromotionByReplaceOrCapture(
                 squareSuggest.current,
                 squareTaken.current,
             )
-            if (isPawnPromotion(
+            if (chessClone.isPawnPromotion(
                 piece,
-                row,
-                chess.direction
+                row
             )) {
                 squareSuggest.current = 0
                 squareTaken.current = 0
-                dispatch(setPawnPromotion(listPawnCanBecome(piece, square, sq, type.action, row)))
+                chessClone.listPawnAbleToTransform(piece, square, sq, type.action, row)
+                setChess(chessClone)
                 return
             }
             //=======================================================
 
             if (squareSuggest.current !== 0) {
 
-                const newChess = replacePiece(
+                const newChess = chessClone.replacePiece(
                     square,
                     squareSuggest.current,
-                    hiddenInvalidMoveAndTake(freshBoard),
-                    freshPieces,
-                    piece,
-                    turn,
-                    chess.direction,
-                    chess.canCastle,
-                    chess.squaresEP,
-                    copyMoves(chess.moves),
-                    chess.bout
+                    piece
                 )
-
                 squareSuggest.current = 0
-                dispatch(setReplacePiece(newChess))
+                setChess(newChess)
+                return
             }
             else if (squareTaken.current !== 0) {
-                const newChess = capturePiece(
+                const newChess = chessClone.capturePiece(
                     square,
                     squareTaken.current,
-                    hiddenInvalidMoveAndTake(freshBoard),
-                    freshPieces,
-                    piece,
-                    turn,
-                    chess.direction,
-                    chess.canCastle,
-                    chess.squaresEP,
-                    copyMoves(chess.moves),
-                    chess.bout
+                    piece
                 )
 
                 squareTaken.current = 0
-                dispatch(setReplacePiece(newChess))
+                setChess(newChess)
+                return
             } else if (['wk', 'bk'].includes(piece) && squareCastle.current.length !== 0) {
                 const [curRook, reRook, sq, squareKing] = squareCastle.current
-                let newChess = replacePiece(
+                let newChess = chessClone.replacePiece(
                     curRook,
                     reRook,
-                    hiddenInvalidMoveAndTake(freshBoard),
-                    freshPieces,
                     piece[0] + 'r',
-                    turn,
-                    chess.direction,
-                    chess.canCastle,
-                    chess.squaresEP,
-                    copyMoves(chess.moves),
-                    chess.bout,
                     true
                 )
 
-                newChess = replacePiece(
+                newChess = newChess.replacePiece(
                     squareKing,
                     sq,
-                    freshBoard,
-                    freshPieces,
                     piece,
-                    turn,
-                    chess.direction,
-                    newChess.canCastle,
-                    chess.squaresEP,
-                    copyMoves(chess.moves),
-                    chess.bout,
                     true
                 )
 
                 squareCastle.current = []
-                dispatch(setReplacePiece(newChess))
+                setChess(newChess)
+                return
             }
         }
 
@@ -274,7 +236,7 @@ function Piece({ piece, square, coordinate, bounding, dispatch, chess, setSquare
         return () => {
             el.removeEventListener('mousedown', onMouseDown)
         }
-    }, [bounding, board, chess])
+    }, [bounding, chess, chess.status, aiThinking, pieceActive])
 
     return (
         <div

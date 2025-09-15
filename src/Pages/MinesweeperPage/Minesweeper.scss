@@ -58,7 +58,7 @@
             width: 100vw;
             max-width: 50rem;
             font-size: 1.6rem;
-            background: var(--cl-white);
+            background: var(--cl-white-pure);
             padding: 2rem;
             border-radius: .5rem;
             transform: translateX(-50%);
@@ -66,26 +66,35 @@
 
             .customize-container {
                 margin-bottom: 1rem;
+                background-color: #8080801e;
+                padding: .5rem 1rem;
+                border-radius: 1rem;
 
                 .customize-field {
                     display: flex;
                     align-items: center;
-                    width: 20rem;
+                    height: 2rem;
+                    width: 100%;
                     justify-content: space-between;
                     gap: 1rem;
 
                     .customize-name {
                         color: var(--cl-primary-purple);
+                        gap: .5rem;
+
+                        &-icon {
+                            color: var(--ink-500);
+                            font-size: 2rem;
+                        }
                     }
 
                     .customize-data {
                         background: transparent;
                         color: var(--cl-primary-purple);
-                        padding: .5rem;
+                        padding: .5rem 0;
                         display: block;
                         width: 10rem;
-                        border-bottom: .2rem solid var(--cl-primary-purple);
-                        text-align: center;
+                        text-align: end;
                     }
                 }
 
@@ -147,7 +156,7 @@
                 position: absolute;
 
                 .game-over {
-                    background: var(--cl-primary-purple);
+                    background: linear-gradient(135deg, var(--brand-600), var(--purple-600));
                     color: var(--cl-white-pure);
                     width: 100%;
                     max-width: 40rem;

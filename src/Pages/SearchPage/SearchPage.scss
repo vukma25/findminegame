@@ -21,9 +21,11 @@
     transform: translate(-50%, -50%);
     flex-direction: column;
     gap: 1rem;
+    width: 100%;
 
     .expect-des {
         font-size: 2rem;
+        text-align: center;
     }
 
     .expect-return {

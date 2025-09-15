@@ -2,51 +2,13 @@
     color: #6b7280;
 }
 
-@keyframes blink {
-
-    0%,
-    50% {
-        opacity: 1;
-    }
-
-    51%,
-    100% {
-        opacity: 0.3;
-    }
-}
-
 .progress-bar {
     transition: width 0.3s ease-in-out;
-}
-
-.stat-card {
-    transition: all 0.3s ease-in-out;
-}
-
-.stat-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
 .typing-area {
     line-height: 2;
     letter-spacing: 0.5px;
-}
-
-.pulse-animation {
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-
-    0%,
-    100% {
-        opacity: 1;
-    }
-
-    50% {
-        opacity: 0.7;
-    }
 }
 
 .typing-game-container {
@@ -63,65 +25,9 @@
         max-width: 80rem;
         width: 100%;
 
-        .game-header {
+        .card-title {
             text-align: center;
-            margin-bottom: 2rem;
-
-            h1 {
-                font-size: 2.5rem;
-                font-weight: 700;
-                color: #1f2937;
-                margin-bottom: 0.5rem;
-            }
-
-            p {
-                color: #4b5563;
-                font-size: 1.125rem;
-            }
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            margin-bottom: 2rem;
-
-            @media (min-width: 768px) {
-                grid-template-columns: repeat(4, 1fr);
-            }
-
-            .stat-card {
-                padding: 1rem;
-                border-radius: 0.5rem;
-                text-align: center;
-                color: white;
-
-                &.blue {
-                    background: linear-gradient(to right, #3b82f6, #2563eb);
-                }
-
-                &.green {
-                    background: linear-gradient(to right, #10b981, #059669);
-                }
-
-                &.purple {
-                    background: linear-gradient(to right, #8b5cf6, #7c3aed);
-                }
-
-                &.orange {
-                    background: linear-gradient(to right, #f59e0b, #d97706);
-                }
-
-                .stat-value {
-                    font-size: 1.5rem;
-                    font-weight: 700;
-                }
-
-                .stat-label {
-                    font-size: 0.875rem;
-                    opacity: 0.9;
-                }
-            }
+            margin-bottom: 1.5rem;
         }
 
         .progress-container {
@@ -148,27 +54,27 @@
             flex-direction: column;
             gap: 1.5rem;
 
-            .time-selection {
+            .selection {
                 background-color: #f9fafb;
+                border: .1rem solid var(--ink-300);
                 border-radius: 0.5rem;
                 padding: 1.5rem;
 
-                h3 {
-                    font-size: 1.25rem;
-                    font-weight: 700;
+                h1 {
                     margin-bottom: 1rem;
                 }
 
-                .time-options {
+                .options {
                     display: flex;
                     justify-content: center;
                     gap: 1rem;
                     margin-bottom: 1.5rem;
 
-                    .time-option {
+                    .option {
                         padding: 0.75rem 1.5rem;
                         border-radius: 0.5rem;
-                        font-weight: 500;
+                        border: none;
+                        font-size: 1.2rem;
                         transition: all 0.2s;
                         cursor: pointer;
 
@@ -193,6 +99,7 @@
                     background: linear-gradient(to right, #10b981, #059669);
                     color: white;
                     padding: 1rem 2rem;
+                    border: none;
                     border-radius: 0.5rem;
                     font-weight: 700;
                     font-size: 1.125rem;
@@ -253,7 +160,7 @@
                 padding: 1.5rem;
 
                 .typing-text {
-                    font-size: 1.25rem;
+                    font-size: 1.4rem;
                     line-height: 1.75;
 
                     .char {
@@ -313,7 +220,7 @@
 
             .live-stats {
                 display: grid;
-                grid-template-columns: repeat(3, 1fr);
+                grid-template-columns: repeat(4, 1fr);
                 gap: 1rem;
                 text-align: center;
 
@@ -333,6 +240,10 @@
                         background-color: #f3f4f6;
                     }
 
+                    &.green {
+                        background-color: #10b981;
+                    }
+
                     .stat-value {
                         font-size: 1.125rem;
                         font-weight: 700;
@@ -341,18 +252,27 @@
                     .stat-label {
                         font-size: 0.875rem;
                     }
+
+                    .danger {
+                        color: var(--cl-red-flag)
+                    }
                 }
             }
 
             .reset-section {
                 text-align: center;
+                display: flex;
+                justify-content: space-between;
 
                 .reset-button {
                     background-color: #6b7280;
                     color: white;
-                    padding: 0.5rem 1.5rem;
+                    padding: 1.25rem 0;
+                    width: 49%;
+                    border: none;
                     border-radius: 0.5rem;
                     font-weight: 500;
+                    font-size: 1.4rem;
                     transition: background-color 0.2s;
                     cursor: pointer;
 
@@ -452,6 +372,7 @@
 
                     .action-button {
                         padding: 0.75rem 1.5rem;
+                        border: none;
                         border-radius: 0.5rem;
                         font-weight: 500;
                         color: white;
@@ -473,47 +394,6 @@
                                 background-color: #047857;
                             }
                         }
-                    }
-                }
-            }
-        }
-
-        .instructions {
-            background-color: #dbeafe;
-            border-radius: 0.5rem;
-            padding: 1rem;
-            margin-top: 2rem;
-
-            h3 {
-                font-weight: 700;
-                font-size: 1.125rem;
-                margin-bottom: 0.5rem;
-            }
-
-            .instructions-content {
-                font-size: 0.875rem;
-                display: flex;
-                flex-direction: column;
-                gap: 0.25rem;
-
-                .char {
-                    padding: 0 0.25rem;
-                    border-radius: 0.25rem;
-
-                    &.correct {
-                        color: #10b981;
-                        font-weight: 700;
-                    }
-
-                    &.incorrect {
-                        color: #ef4444;
-                        font-weight: 700;
-                    }
-
-                    &.current {
-                        background-color: #1e40af;
-                        color: white;
-                        font-weight: 700;
                     }
                 }
             }

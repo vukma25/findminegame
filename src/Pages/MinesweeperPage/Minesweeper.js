@@ -1,4 +1,4 @@
-import { useState, useEffect, useReducer } from 'react'
+import { useState, useReducer } from 'react'
 import OptionsBar from './OptionBar';
 import SettingsBroad from './SettingsBroad';
 import GameOver from './GameOver'
@@ -19,7 +19,11 @@ import "./Minesweeper.css";
 function Minesweeper() {
 
     const [settings, dispatch] = useReducer(reducer, initialState)
-    const [log, setLog] = useState(settings.logError)
+    const [timeFinish, setTimeFinish] = useState({})
+    const [log, setLog] = useState({
+        "message": settings.logError,
+        "type": "info"
+    })
 
     return (
         <>
@@ -30,6 +34,7 @@ function Minesweeper() {
             <div className="minesweeper">
                 {/* Thanh thong tin */}
                 <OptionsBar
+                    setTimeFinish={setTimeFinish}
                     settings={settings}
                     dispatch={dispatch}
                 />
@@ -84,7 +89,7 @@ function Minesweeper() {
                     </div>
                 </div>
             </div>
-            <Logger log={log} setLog={setLog} type={"error"} />
+            <Logger log={log} setLog={setLog} />
             <GoTopBtn />
         </>
     )

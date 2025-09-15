@@ -14,10 +14,10 @@
 }
 .not-found-container .not-found-content .error-title {
   font-size: 2.4rem;
+  text-align: center;
 }
 .not-found-container .not-found-content .error-message {
   font-size: 1.6rem;
-  text-align: center;
 }
 .not-found-container .not-found-content .error-code {
   font-size: 5rem;

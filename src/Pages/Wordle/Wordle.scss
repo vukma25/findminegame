@@ -15,48 +15,51 @@
         max-width: 42rem;
         width: 100%;
 
-        .game-status {
-            border-radius: 0.5rem;
-            padding: 1rem;
-            margin-bottom: 1.5rem;
-            text-align: center;
-            font-weight: 500;
+        .wordle-stats {
+            height: auto;
+            width: 100%;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
 
-            &.won {
-                background-color: #d1fae5;
-                border: 1px solid #a7f3d0;
-                color: #065f46;
+            .wordle-btn-new-game {
+                background-color: #10b981;
+                border: none;
+                padding: 1rem 2rem;
+                border-radius: .5rem;
+                font-size: 1.4rem;
+                color: var(--cl-white-pure);
             }
 
-            &.lost {
-                background-color: #fee2e2;
-                border: 1px solid #fecaca;
-                color: #b91c1c;
-            }
+            .wordle-select-len-word {
+                width: 40%;
 
-            &.invalid {
-                background-color: #ffedd5;
-                border: 1px solid #fed7aa;
-                color: #9a3412;
+                .select-label {
+                    font-size: 1.3rem;
+                }
+
+                .select-input {
+                    font-size: 1.2rem;
+                }
             }
         }
 
         .wordle-grid {
             display: grid;
             grid-template-rows: repeat(6, 1fr);
-            width: 70%;
+            width: 100%;
             gap: 0.5rem;
             margin-bottom: 2rem;
+            justify-content: center;
 
             .wordle-row {
                 display: grid;
-                grid-template-columns: repeat(5, 1fr);
                 gap: 0.5rem;
             }
 
             .wordle-cell {
                 width: 100%;
-                aspect-ratio: 1/1;
+                aspect-ratio: 1;
                 border: 2px solid #d1d5db;
                 display: flex;
                 align-items: center;
@@ -100,20 +103,18 @@
         }
 
         .keyboard {
-            display: flex;
-            flex-direction: column;
-            background: gray;
+            display: block;
             padding: 1rem 0;
             border-radius: 1rem 1rem 3.5rem 3.5rem;
-            width: 90%;
-            gap: 0.5rem;
+            width: 100%;
             margin-bottom: 1.5rem;
 
             .keyboard-row {
-                display: flex;
-                width: 98%;
-                justify-content: center;
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(3rem, 1fr));
+                width: 100%;
                 gap: 0.25rem;
+                margin-bottom: 0.25rem;
 
                 .keyboard-key {
                     min-width: 3rem;
@@ -153,11 +154,6 @@
                     &.absent {
                         background-color: #6b7280;
                         color: white;
-                    }
-
-                    &.special-key {
-                        padding: 0 1rem;
-                        font-size: 0.75rem;
                     }
                 }
             }

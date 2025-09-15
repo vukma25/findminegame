@@ -1,27 +1,31 @@
 import { useState, useEffect } from 'react';
+import WORDS from '../../VocabResource'
+import {
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem
+} from '@mui/material'
+import VirtualKeyBoard from './VirtualKeyBoard'
+import Logger from '../../Components/Logger/Logger'
 import './Wordle.css'
 
-const WORDS = [
-    'CHIEN', 'THANG', 'NGUOI', 'NHANH', 'TRANG',
-    'XANH', 'VANG', 'TRANG', 'DUNG', 'SACH',
-    'BANH', 'CANH', 'DANH', 'GANH', 'HANH',
-    'LANH', 'MANH', 'NANH', 'PANH', 'RANH',
-    'SANH', 'TANH', 'VANH', 'WANH', 'YANH'
-];
-
 const Wordle = () => {
-    const [targetWord, setTargetWord] = useState('');
-    const [currentGuess, setCurrentGuess] = useState('');
-    const [guesses, setGuesses] = useState([]);
-    const [gameStatus, setGameStatus] = useState('playing');
-    const [currentRow, setCurrentRow] = useState(0);
-    const [keyboardStatus, setKeyboardStatus] = useState({});
-    const [showInvalidWord, setShowInvalidWord] = useState(false);
+    const [lengthWord, setLengthWord] = useState(4)
+    const [targetWord, setTargetWord] = useState('') // từ được random từ kho từ, và là từ cần đoán
+    const [currentGuess, setCurrentGuess] = useState('') // từ đang đoán hiện tại
+    const [guesses, setGuesses] = useState([]) // chuỗi lịch sử các từ đã đoán
+    const [gameStatus, setGameStatus] = useState('playing')
+    const [currentRow, setCurrentRow] = useState(0)
+    const [keyboardStatus, setKeyboardStatus] = useState({})
+    const [log, setLog] = useState({
+        'message': '',
+        'type': 'info'
+    })
 
     useEffect(() => {
-        const randomWord = WORDS[Math.floor(Math.random() * WORDS.length)];
-        setTargetWord(randomWord);
-    }, []);
+        newGame()
+    }, [lengthWord]);
 
     useEffect(() => {
         const handleKeyPress = (e) => {
@@ -42,35 +46,60 @@ const Wordle = () => {
         return () => window.removeEventListener('keydown', handleKeyPress);
     }, [currentGuess, gameStatus]);
 
+    const handleRandomWord = () => {
+        const listWords = WORDS[lengthWord]
+        let randomNum = Math.floor(Math.random() * listWords.length)
+        let randomWord = listWords[randomNum];
+
+        //chưa đảm bảo được danh sách hoàn toàn chỉ chứa các từ có độ dài bằng với key
+        //nên phải random cho tới khi hợp lệ -> đảm bảo
+        while (randomWord.length !== lengthWord) {
+            randomNum = Math.floor(Math.random() * listWords.length)
+            randomWord = listWords[randomNum];
+        }
+
+        return randomWord
+    }
+
     const handleAddLetter = (letter) => {
-        if (currentGuess.length < 5) {
+        if (currentGuess.length < lengthWord) {
             setCurrentGuess(prev => prev + letter);
         }
-    };
+    }
 
     const handleDeleteLetter = () => {
         setCurrentGuess(prev => prev.slice(0, -1));
-    };
+    }
 
     const handleSubmitGuess = () => {
-        if (currentGuess.length !== 5) return;
+        if (currentGuess.length !== lengthWord) {
+            setLog({
+                'message': 'Too short',
+                'type': 'info'
+            })
+            return
+        }
 
-        if (!WORDS.includes(currentGuess)) {
-            setShowInvalidWord(true);
-            setTimeout(() => setShowInvalidWord(false), 1000);
+        const lowerCurrentGuess = currentGuess.toLowerCase()
+
+        if (!WORDS[lengthWord].includes(lowerCurrentGuess)) {
+            setLog({
+                'message': 'This word is invalid or its not in data resource',
+                'type': 'info'
+            })
             return;
         }
 
         const newGuess = {
             word: currentGuess,
-            result: getGuessResult(currentGuess, targetWord)
+            result: getGuessResult(lowerCurrentGuess, targetWord)
         };
 
         const newGuesses = [...guesses, newGuess];
         setGuesses(newGuesses);
         updateKeyboardStatus(currentGuess, newGuess.result);
 
-        if (currentGuess === targetWord) {
+        if (lowerCurrentGuess === targetWord) {
             setGameStatus('won');
         } else if (newGuesses.length >= 6) {
             setGameStatus('lost');
@@ -78,14 +107,26 @@ const Wordle = () => {
 
         setCurrentGuess('');
         setCurrentRow(prev => prev + 1);
-    };
+    }
+
+    //just use VirtualKeyBoard
+    const handlePressKey = (key) => {
+        if (key === 'ENTER') {
+            handleSubmitGuess();
+        } else if (key === 'DELETE') {
+            handleDeleteLetter();
+        } else {
+            handleAddLetter(key);
+        }
+    }
 
     const getGuessResult = (guess, target) => {
-        const result = [];
+        const result = Array.from({ length: lengthWord }, () => '')
         const targetLetters = target.split('');
         const guessLetters = guess.split('');
 
-        for (let i = 0; i < 5; i++) {
+        // khớp kí tự đúng và xóa chúng
+        for (let i = 0; i < lengthWord; i++) {
             if (guessLetters[i] === targetLetters[i]) {
                 result[i] = 'correct';
                 targetLetters[i] = null;
@@ -93,7 +134,8 @@ const Wordle = () => {
             }
         }
 
-        for (let i = 0; i < 5; i++) {
+        // các kí tự còn lại, có thể là tồn tại nhưng đặt sai vị trí, hoặc không tồn tại trong từ cần đoán
+        for (let i = 0; i < lengthWord; i++) {
             if (guessLetters[i] && targetLetters.includes(guessLetters[i])) {
                 result[i] = 'present';
                 const targetIndex = targetLetters.indexOf(guessLetters[i]);
@@ -104,7 +146,7 @@ const Wordle = () => {
         }
 
         return result;
-    };
+    }
 
     const updateKeyboardStatus = (guess, result) => {
         const newStatus = { ...keyboardStatus };
@@ -123,17 +165,22 @@ const Wordle = () => {
         }
 
         setKeyboardStatus(newStatus);
-    };
+    }
 
-    const resetGame = () => {
-        const randomWord = WORDS[Math.floor(Math.random() * WORDS.length)];
-        setTargetWord(randomWord);
+    const handleSelectChange = (e) => {
+        const value = e.target.value
+        setLengthWord(value)
+    }
+
+    const newGame = () => {
+        const newWord = handleRandomWord()
+        setTargetWord(newWord);
         setCurrentGuess('');
         setGuesses([]);
         setGameStatus('playing');
         setCurrentRow(0);
         setKeyboardStatus({});
-    };
+    }
 
     const getCellClass = (letter, status, isCurrentRow = false) => {
         let baseClass = "wordle-cell";
@@ -148,12 +195,12 @@ const Wordle = () => {
             baseClass += " filled";
         }
 
-        if (isCurrentRow && showInvalidWord) {
+        if (isCurrentRow && log.message.length !== 0) {
             baseClass += " shake";
         }
 
         return baseClass;
-    };
+    }
 
     const getKeyClass = (letter) => {
         let baseClass = "keyboard-key";
@@ -168,42 +215,42 @@ const Wordle = () => {
         }
 
         return baseClass;
-    };
-
-    const keyboard = [
-        ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
-        ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
-        ['ENTER', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '⌫']
-    ];
+    }
 
     return (
         <div className="wordle-container">
             <div className="wordle-card flex-div">
-
-                {/* Game Status */}
-                {gameStatus === 'won' && (
-                    <div className="game-status won">
-                        🎉 Chúc mừng! Bạn đã đoán đúng từ "{targetWord}"!
-                    </div>
-                )}
-
-                {gameStatus === 'lost' && (
-                    <div className="game-status lost">
-                        😔 Bạn đã thua! Từ đúng là "{targetWord}"
-                    </div>
-                )}
-
-                {showInvalidWord && (
-                    <div className="game-status invalid">
-                        ⚠️ Từ không hợp lệ!
-                    </div>
-                )}
+                <div className="wordle-stats flex-div">
+                    <button
+                        className="wordle-btn-new-game"
+                        onClick={newGame}
+                    >New</button>
+                    <FormControl className="wordle-select-len-word">
+                        <InputLabel className="select-label" id="select-len-word">The length of word</InputLabel>
+                        <Select
+                            className="select-input"
+                            label={"The length of word"}
+                            labelId="select-len-word"
+                            value={lengthWord}
+                            onChange={handleSelectChange}
+                        >
+                            <MenuItem value={4}>4</MenuItem>
+                            <MenuItem value={5}>5</MenuItem>
+                            <MenuItem value={6}>6</MenuItem>
+                            <MenuItem value={7}>7</MenuItem>
+                            <MenuItem value={8}>8</MenuItem>
+                        </Select>
+                    </FormControl>
+                </div>
 
                 {/* Game Grid */}
                 <div className="wordle-grid">
                     {Array.from({ length: 6 }, (_, rowIndex) => (
-                        <div key={rowIndex} className="wordle-row">
-                            {Array.from({ length: 5 }, (_, colIndex) => {
+                        <div key={rowIndex}
+                            className="wordle-row"
+                            style={{ gridTemplateColumns: `repeat(${lengthWord}, minmax(4rem, 5rem))` }}
+                        >
+                            {Array.from({ length: lengthWord }, (_, colIndex) => {
                                 let letter = '';
                                 let status = '';
 
@@ -227,49 +274,9 @@ const Wordle = () => {
                     ))}
                 </div>
 
-                {/* Virtual Keyboard */}
-                <div className="keyboard">
-                    {keyboard.map((row, rowIndex) => (
-                        <div key={rowIndex} className="keyboard-row">
-                            {row.map((key) => (
-                                <button
-                                    key={key}
-                                    onClick={() => {
-                                        if (key === 'ENTER') {
-                                            handleSubmitGuess();
-                                        } else if (key === '⌫') {
-                                            handleDeleteLetter();
-                                        } else {
-                                            handleAddLetter(key);
-                                        }
-                                    }}
-                                    disabled={gameStatus !== 'playing'}
-                                    className={`${getKeyClass(key)} ${key === 'ENTER' || key === '⌫' ? 'special-key' : ''}`}
-                                >
-                                    {key === '⌫' ? '⌫' : key}
-                                </button>
-                            ))}
-                        </div>
-                    ))}
-                </div>
-
-                {/* Reset Button */}
-                <div className="reset-section">
-                    <button
-                        onClick={resetGame}
-                        className="reset-button"
-                    >
-                        🔄 Chơi lại
-                    </button>
-                </div>
-
-                {/* Instructions */}
-                <div className="instructions">
-                    <p>💡 <span className="color-sample correct"></span> Đúng vị trí</p>
-                    <p><span className="color-sample present"></span> Có trong từ nhưng sai vị trí</p>
-                    <p><span className="color-sample absent"></span> Không có trong từ</p>
-                </div>
+                <VirtualKeyBoard gameStatus={gameStatus} getKeyClass={getKeyClass} handlePressKey={handlePressKey} />
             </div>
+            <Logger log={log} setLog={setLog} />
         </div>
     );
 };

@@ -4,7 +4,6 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { createBrowserRouter, RouterProvider } from 'react-router';
-import Navbar from './Components/Navbar/Navbar';
 import Home from './Pages/HomePage/Home'
 import SearchPage from './Pages/SearchPage/SearchPage';
 import Minesweeper from './Pages/MinesweeperPage/Minesweeper';
@@ -86,9 +85,7 @@ const router = createBrowserRouter([
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>
+  <RouterProvider router={router} />
 );
 
 // If you want to start measuring performance in your app, pass a function

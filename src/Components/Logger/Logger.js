@@ -1,29 +1,32 @@
 import { useEffect, useState } from "react";
 import './Logger.css'
 
-function Logger({ log, setLog, type }) {
+function Logger({ log, setLog }) {
     const [message, setMessage] = useState('');
 
     function clearLog() {
         setMessage('');
-        setLog('')
+        setLog({
+            "message": "",
+            "type": log.type
+        })
     }
 
     useEffect(() => {
-        setMessage(log);
+        setMessage(log.message);
 
         const timeout = setTimeout(() => {
             clearLog()
-        }, 5000);
+        }, 3500);
 
         return () => clearTimeout(timeout);
-    }, [log]);
+    }, [log.message]);
 
     return (
-        <div className={`logger logger--${type} ${message === "" ? "" : "logger-display"}`}>
+        <div className={`logger logger--${log.type} ${message === "" ? "" : "logger-display"}`}>
                 <div className="logger__inner">
                     <span className="logger__icon" style={{ background: "#e03131" }}></span>
-                    <span className="logger__message">{message}</span>
+                    <div className="logger__message">{message}</div>
                     <button 
                         className="logger__close" aria-label="Đóng"
                         onClick={() => {clearLog()}}

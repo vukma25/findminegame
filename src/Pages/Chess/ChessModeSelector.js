@@ -1,10 +1,12 @@
 import { useState } from "react";
+import { Link } from 'react-router'
 import { staticURL, bots, timeOptions } from "./ChessBotData";
 
-export default function ChessModeSelector({ setInGame, setLog }) {
-    const [mode, setMode] = useState(null);
+export default function ChessModeSelector({ chess, setChess, setMode, setLog }) {
+    const [type, setType] = useState(null);
     const [selectedTime, setSelectedTime] = useState(null);
     const [selectedBot, setSelectedBot] = useState(null);
+    const [selectedOneDevice, setSelectedOneDevice] = useState(null);
 
 
     return (
@@ -14,27 +16,43 @@ export default function ChessModeSelector({ setInGame, setLog }) {
             {/* Chọn chế độ */}
             <div className="mode-buttons flex-div">
                 <button
-                    className={mode === "player" ? "active" : ""}
+                    className={type === "player" ? "active" : ""}
                     onClick={() => {
-                        setMode("player");
+                        setType("player");
                         setSelectedBot(null);
+                        setSelectedOneDevice(null)
                     }}
                 >
                     Play with person
                 </button>
                 <button
-                    className={mode === "bot" ? "active" : ""}
+                    className={type === "bot" ? "active" : ""}
                     onClick={() => {
-                        setMode("bot");
+                        setType("bot");
                         setSelectedTime(null);
+                        setSelectedOneDevice(null)
                     }}
                 >
                     Play with bot
                 </button>
+                <button
+                    className={type === "one-device" ? "active" : ""}
+                    onClick={() => {
+                        setType("one-device");
+                        setSelectedOneDevice({
+                            "name": "Player 2",
+                            "elo": "???"
+                        })
+                        setSelectedTime(null);
+                        setSelectedBot(null)
+                    }}
+                >
+                    2 player 1 device
+                </button>
             </div>
 
             {/* Nếu chọn người */}
-            {mode === "player" && (
+            {type === "player" && (
                 <>
                     <h3>Select time</h3>
                     <div className="time-groups flex-div">
@@ -59,7 +77,7 @@ export default function ChessModeSelector({ setInGame, setLog }) {
             )}
 
             {/* Nếu chọn máy */}
-            {mode === "bot" && (
+            {type === "bot" && (
                 <>
                     <h3>Select bot</h3>
                     <div className="bot-groups flex-div">
@@ -74,7 +92,8 @@ export default function ChessModeSelector({ setInGame, setLog }) {
                                             onClick={() => setSelectedBot({
                                                 'name': name,
                                                 'elo': elo,
-                                                'level': level
+                                                'level': level,
+                                                'avatar': `${staticURL}/${name}`
                                             })}
                                         >
                                             <img
@@ -116,16 +135,45 @@ export default function ChessModeSelector({ setInGame, setLog }) {
                 <button
                     className="play-btn"
                     onClick={() => { 
-                        if (selectedBot || selectedTime) {
-                            setInGame(true)
-                        } else {
-                            setLog('Please choose full information')
+                        if (selectedBot) {
+                            const newChess = chess.getState()
+
+                            setMode({
+                                type, 
+                                'opposite': selectedBot
+                            })
+                            newChess.setStatus('playing')
+                            setChess(newChess)
+                        }
+                        else if (selectedOneDevice) {
+                            const newChess = chess.getState()
+
+                            setMode({
+                                type,
+                                'opposite': selectedOneDevice
+                            })
+                            newChess.setStatus('playing')
+                            setChess(newChess)
+                        }
+                        else if (selectedTime) {
+                            setLog({
+                                "message": "This feature is coming soon...",
+                                "type": "info"
+                            })
+                        }
+                        else {
+                            setLog({
+                                "message": "Please choose full information",
+                                "type": "warning"
+                            })
                         }
                     }}
                 >
                     Play
                 </button>
             </div>
+
+            <Link to="/" className="back-home">Home</Link>
         </div>
     );
 }

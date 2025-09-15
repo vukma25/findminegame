@@ -1,45 +1,52 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
-import { textSamples } from './data';
+import { useState, useEffect, useCallback, useRef, useReducer } from 'react';
+import {
+    setNewGame,
+    setGameState,
+    setUserInput,
+    setOptions,
+    setTime,
+    setQuitGame
+} from './Action'
+import { initialState, reducer } from './Reducer';
+import { renderParagraph, getWpmAndStat, getProgress } from './Functions'
 import './FastFinger.css'
 
 const FastFinger = () => {
     
-
-    const [gameState, setGameState] = useState('waiting');
-    const [currentText, setCurrentText] = useState('');
-    const [userInput, setUserInput] = useState('');
-    const [currentIndex, setCurrentIndex] = useState(0);
-    const [timeLeft, setTimeLeft] = useState(60);
-    const [selectedTime, setSelectedTime] = useState(60);
-    const [startTime, setStartTime] = useState(null);
-    const [wpm, setWpm] = useState(0);
-    const [accuracy, setAccuracy] = useState(100);
-    const [correctChars, setCorrectChars] = useState(0);
-    const [incorrectChars, setIncorrectChars] = useState(0);
-    const [totalChars, setTotalChars] = useState(0);
-    const [bestWpm, setBestWpm] = useState(localStorage.getItem('bestWpm') || 0);
-    const [bestAccuracy, setBestAccuracy] = useState(localStorage.getItem('bestAccuracy') || 0);
+    const [game, dispatch] = useReducer(reducer, initialState)
+    const [bestWpm, setBestWpm] = useState(JSON.parse(localStorage.getItem('bestWpm')) || 0)
+    const [accuracy, setAccuracy] = useState(JSON.parse(localStorage.getItem('accuracy')) || 0)
+    const [timeLeft, setTimeLeft] = useState(game.duration)
 
     const inputRef = useRef(null);
     const timerRef = useRef(null);
+    const gameRef = useRef(game)
+    gameRef.current = game
 
-    const initializeText = useCallback(() => {
-        const randomText = textSamples[Math.floor(Math.random() * textSamples.length)];
-        setCurrentText(randomText);
-        setUserInput('');
-        setCurrentIndex(0);
-        setCorrectChars(0);
-        setIncorrectChars(0);
-        setTotalChars(0);
-        setWpm(0);
-        setAccuracy(100);
-    }, []);
+    const initializeNewGame = useCallback(() => {
+        const randomText = renderParagraph(game.options)
+        dispatch(setNewGame(randomText))
+    }, [game.options]);
 
-    const startGame = () => {
-        setGameState('playing');
-        setTimeLeft(selectedTime);
-        setStartTime(Date.now());
-        initializeText();
+    const handleSetTime = useCallback((time) => {
+        dispatch(setTime(time))
+    }, [game])
+
+    const handleSetOption = useCallback((option) => {
+        dispatch(setOptions(option))
+    }, [game])
+
+    const startGame = (type = 'new') => {
+
+        if (type === 'new') {
+            resetGame()
+        } else {
+            tryAgainThisGame()
+        }
+
+        setTimeLeft(game.duration)
+        dispatch(setGameState("playing"))
+
         inputRef.current?.focus();
 
         timerRef.current = setInterval(() => {
@@ -51,75 +58,83 @@ const FastFinger = () => {
                 return prev - 1;
             });
         }, 1000);
-    };
+    }
 
-    const endGame = () => {
-        setGameState('finished');
+    const endGame = useCallback(() => {
+        dispatch(setGameState("finished"))
+        updateRecord(gameRef.current.wpm, gameRef.current.accuracy)
         clearInterval(timerRef.current);
-
-        if (wpm > bestWpm) {
-            setBestWpm(wpm);
-            localStorage.setItem('bestWpm', wpm);
-        }
-        if (accuracy > bestAccuracy) {
-            setBestAccuracy(accuracy);
-            localStorage.setItem('bestAccuracy', accuracy);
-        }
-    };
+    }, [])
 
     const resetGame = () => {
-        setGameState('waiting');
-        clearInterval(timerRef.current);
-        setTimeLeft(selectedTime);
-        initializeText();
-    };
+        clearInterval(timerRef.current)
+        initializeNewGame()
+    }
+
+    const tryAgainThisGame = () => {
+        clearInterval(timerRef.current)
+        dispatch(setNewGame(game.targetParagraph))
+    }
+
+    const quitGame = () => {
+        clearInterval(timerRef.current)
+        dispatch(setQuitGame())
+    }
 
     const handleInputChange = (e) => {
-        if (gameState !== 'playing') return;
+        if (game.state !== 'playing') return;
 
         const value = e.target.value;
         const newIndex = value.length;
 
-        setUserInput(value);
-        setCurrentIndex(newIndex);
+        const [
+            correct,
+            incorrect,
+            wpm, 
+            accuracy
+        ] = getWpmAndStat(value, game.targetParagraph, game.startTime)
 
-        let correct = 0;
-        let incorrect = 0;
+        dispatch(setUserInput({
+            value,
+            newIndex,
+            correct,
+            incorrect,
+            wpm,
+            accuracy
+        }))
 
-        for (let i = 0; i < value.length; i++) {
-            if (i < currentText.length) {
-                if (value[i] === currentText[i]) {
-                    correct++;
-                } else {
-                    incorrect++;
-                }
+        if (value.length >= game.targetParagraph.length) {
+            endGame();
+        }
+    }
+
+    const updateRecord = (newWpm, newAccuracy) => {
+        let bestWpm = localStorage.getItem('bestWpm')
+        let wpm = newWpm
+
+        if (bestWpm) {
+            wpm = JSON.parse(bestWpm)
+
+            if (newWpm > wpm){
+                wpm = newWpm
             }
         }
 
-        setCorrectChars(correct);
-        setIncorrectChars(incorrect);
-        setTotalChars(value.length);
-
-        const timeElapsed = (Date.now() - startTime) / 1000 / 60;
-        const wordsTyped = correct / 5;
-        const currentWpm = timeElapsed > 0 ? Math.round(wordsTyped / timeElapsed) : 0;
-        setWpm(currentWpm);
-
-        const currentAccuracy = value.length > 0 ? Math.round((correct / value.length) * 100) : 100;
-        setAccuracy(currentAccuracy);
-
-        if (value.length >= currentText.length) {
-            endGame();
-        }
-    };
+        localStorage.setItem('bestWpm', JSON.stringify(wpm))
+        localStorage.setItem('accuracy', JSON.stringify(newAccuracy))
+        setBestWpm(wpm)
+        setAccuracy(newAccuracy)
+    }
 
     const renderText = () => {
-        return currentText.split('').map((char, index) => {
+        const { targetParagraph, userInput } = game
+
+        return targetParagraph.split('').map((char, index) => {
             let className = 'char';
 
             if (index < userInput.length) {
                 className += userInput[index] === char ? ' correct' : ' incorrect';
-            } else if (index === currentIndex) {
+            } else if (index === game.currentIndex) {
                 className += ' current';
             } else {
                 className += ' untyped';
@@ -131,81 +146,80 @@ const FastFinger = () => {
                 </span>
             );
         });
-    };
+    }
 
     useEffect(() => {
-        initializeText();
-        return () => clearInterval(timerRef.current);
-    }, [initializeText]);
+        initializeNewGame();
+        return () => {
+            if (!timerRef.current) {
+                clearInterval(timerRef.current)
+            }
+        };
+    }, [initializeNewGame]);
 
     useEffect(() => {
-        if (gameState === 'playing') {
+        if (game.state === 'playing') {
             inputRef.current?.focus();
         }
-    }, [gameState]);
-
-    const progress = currentText.length > 0 ? (currentIndex / currentText.length) * 100 : 0;
+    }, [game.state]);
 
     return (
         <div className="typing-game-container">
             <div className="typing-game-card">
-                {/* Header */}
-                <div className="game-header">
-                    <h1>⚡ Fast Finger Typing</h1>
-                    <p>Thử thách tốc độ đánh máy của bạn!</p>
-                </div>
-
-                {/* Game Stats */}
-                <div className="stats-grid">
-                    <div className="stat-card blue">
-                        <div className="stat-value">{wpm}</div>
-                        <div className="stat-label">WPM</div>
-                    </div>
-                    <div className="stat-card green">
-                        <div className="stat-value">{accuracy}%</div>
-                        <div className="stat-label">Độ chính xác</div>
-                    </div>
-                    <div className="stat-card purple">
-                        <div className="stat-value">{timeLeft}</div>
-                        <div className="stat-label">Giây còn lại</div>
-                    </div>
-                    <div className="stat-card orange">
-                        <div className="stat-value">{Math.round(progress)}%</div>
-                        <div className="stat-label">Tiến độ</div>
-                    </div>
-                </div>
+                <h1 className="card-title">FastFinger</h1>
 
                 {/* Progress Bar */}
                 <div className="progress-container">
                     <div className="progress-track">
                         <div
                             className="progress-bar"
-                            style={{ width: `${progress}%` }}
+                            style={{ width: `${getProgress(game)}%` }}
                         ></div>
                     </div>
                 </div>
 
                 {/* Game Area */}
-                {gameState === 'waiting' && (
+                {game.state === 'waiting' && (
                     <div className="waiting-screen">
-                        <div className="time-selection">
-                            <h3>Chọn thời gian thử thách:</h3>
-                            <div className="time-options">
-                                {[30, 60, 120].map(time => (
+                        <div className="selection">
+                            <h1>Select option</h1>
+                            <div className="options">
+                                {[15, 30, 60, 120].map(time => (
                                     <button
                                         key={time}
-                                        onClick={() => setSelectedTime(time)}
-                                        className={`time-option ${selectedTime === time ? 'selected' : ''}`}
+                                        onClick={() => {
+                                            handleSetTime(time)
+                                        }}
+                                        className={`option ${game.duration === time ? 'selected' : ''}`}
                                     >
                                         {time}s
                                     </button>
                                 ))}
                             </div>
+                            <div className="options">
+                                {
+                                    [
+                                        {name: "with capitalization", type: "useUpper"},
+                                        {name: "with mark and article", type: "useMarkAndArticle"}
+
+                                    ].map(({ name, type }) => (
+                                        <button
+                                            key={name}
+                                            onClick={() => {handleSetOption({
+                                                [type]: !game.options[type]
+                                            })}}
+                                            className={`option ${game.options[type] ? 'selected' : ''}`}
+                                        >
+                                            {name}
+                                        </button>
+                                    ))
+                                }
+                            </div>
                             <button
-                                onClick={startGame}
+                                onClick={() => {startGame()}}
                                 className="start-button"
                             >
-                                🚀 Bắt đầu thử thách!
+                                Start
                             </button>
                         </div>
 
@@ -213,18 +227,19 @@ const FastFinger = () => {
                         <div className="best-scores">
                             <div className="best-score yellow">
                                 <div className="score-value">{bestWpm}</div>
-                                <div className="score-label">Kỷ lục WPM</div>
+                                <div className="score-label">The best WPM</div>
                             </div>
                             <div className="best-score green">
-                                <div className="score-value">{bestAccuracy}%</div>
-                                <div className="score-label">Kỷ lục độ chính xác</div>
+                                <div className="score-value">{accuracy}%</div>
+                                <div className="score-label">Accuracy</div>
                             </div>
                         </div>
                     </div>
                 )}
 
-                {gameState === 'playing' && (
+                {game.state === 'playing' && (
                     <div className="playing-screen">
+
                         {/* Text Display */}
                         <div className="text-display">
                             <div className="typing-text">
@@ -236,113 +251,110 @@ const FastFinger = () => {
                         <div className="input-area">
                             <textarea
                                 ref={inputRef}
-                                value={userInput}
+                                value={game.userInput}
                                 onChange={handleInputChange}
                                 className="typing-input"
                                 placeholder="Bắt đầu gõ ở đây..."
-                                disabled={gameState !== 'playing'}
+                                disabled={game.state !== 'playing'}
                             />
                             <div className="input-counter">
-                                {userInput.length} / {currentText.length}
+                                {game.userInput.length} / {game.targetParagraph.length}
                             </div>
                         </div>
 
                         {/* Live Stats */}
                         <div className="live-stats">
                             <div className="live-stat blue">
-                                <div className="stat-value">{correctChars}</div>
-                                <div className="stat-label">Ký tự đúng</div>
+                                <div className="stat-value">{game.correctChars}</div>
+                                <div className="stat-label">Correct</div>
                             </div>
                             <div className="live-stat red">
-                                <div className="stat-value">{incorrectChars}</div>
-                                <div className="stat-label">Ký tự sai</div>
+                                <div className="stat-value">{game.incorrectChars}</div>
+                                <div className="stat-label">Incorrect</div>
+                            </div>
+                            <div className="live-stat green">
+                                <div className="stat-value">{game.totalChars}</div>
+                                <div className="stat-label">Total</div>
                             </div>
                             <div className="live-stat gray">
-                                <div className="stat-value">{totalChars}</div>
-                                <div className="stat-label">Tổng ký tự</div>
+                                <div className={`stat-value ${timeLeft < 10 ? "danger" : ""}`}>
+                                    {timeLeft}
+                                </div>
+                                <div className="stat-label">Time</div>
                             </div>
                         </div>
 
                         <div className="reset-section">
                             <button
-                                onClick={resetGame}
+                                onClick={() => {startGame()}}
                                 className="reset-button"
                             >
-                                🔄 Làm lại
+                                New game
+                            </button>
+                            <button
+                                onClick={quitGame}
+                                className="reset-button"
+                            >
+                                Cancel
                             </button>
                         </div>
                     </div>
                 )}
 
-                {gameState === 'finished' && (
+                {game.state === 'finished' && (
                     <div className="finished-screen">
                         <div className="results-container">
-                            <h2>🎉 Hoàn thành!</h2>
+                            <h2>Hoàn thành!</h2>
 
                             <div className="results-grid">
                                 <div className="result-card">
-                                    <div className="result-value blue">{wpm}</div>
+                                    <div className="result-value blue">{game.wpm}</div>
                                     <div className="result-label">WPM</div>
-                                    {wpm > bestWpm && <div className="record-badge">🎉 Kỷ lục mới!</div>}
+                                    {game.wpm > bestWpm && <div className="record-badge">New record!</div>}
                                 </div>
                                 <div className="result-card">
-                                    <div className="result-value green">{accuracy}%</div>
-                                    <div className="result-label">Độ chính xác</div>
-                                    {accuracy > bestAccuracy && <div className="record-badge">🎉 Kỷ lục mới!</div>}
+                                    <div className="result-value green">{game.accuracy}%</div>
+                                    <div className="result-label">Accuracy</div>
                                 </div>
                                 <div className="result-card">
-                                    <div className="result-value purple">{correctChars}</div>
-                                    <div className="result-label">Ký tự đúng</div>
+                                    <div className="result-value purple">{game.correctChars}</div>
+                                    <div className="result-label">Correct</div>
                                 </div>
                                 <div className="result-card">
-                                    <div className="result-value orange">{Math.round(progress)}%</div>
-                                    <div className="result-label">Hoàn thành</div>
+                                    <div className="result-value orange">{Math.round(getProgress(game))}%</div>
+                                    <div className="result-label">Progress</div>
                                 </div>
                             </div>
 
                             {/* Performance Rating */}
                             <div className="performance-rating">
-                                <div className="rating-title">Đánh giá hiệu suất:</div>
+                                <div className="rating-title">Evaluate</div>
                                 <div className="rating-text">
-                                    {wpm >= 60 ? '🏆 Xuất sắc!' :
-                                        wpm >= 40 ? '🥇 Rất tốt!' :
-                                            wpm >= 25 ? '🥈 Tốt!' :
-                                                wpm >= 15 ? '🥉 Khá!' : '📚 Cần luyện tập thêm!'}
+                                    {game.wpm >= 60 ? 'Super fast! Check leadboard to see if you on top' :
+                                        game.wpm >= 44 ? 'Good! You are quite fast' :
+                                            game.wpm >= 32 ? 'Average' :
+                                                game.wpm >= 15 ? 'Slow! Training as needed' : 
+                                                'Too slow! Is this your the first time using phone or PC?'}
                                 </div>
                             </div>
 
                             <div className="action-buttons">
                                 <button
-                                    onClick={resetGame}
+                                    onClick={() => {startGame("old")}}
                                     className="action-button blue"
                                 >
-                                    🔄 Thử lại
+                                    Try again
                                 </button>
                                 <button
-                                    onClick={() => {
-                                        resetGame();
-                                        setTimeout(startGame, 100);
-                                    }}
+                                    onClick={() => {startGame()}}
                                     className="action-button green"
                                 >
-                                    🚀 Thử thách mới
+                                    New game
                                 </button>
                             </div>
                         </div>
                     </div>
                 )}
-
-                {/* Instructions */}
-                <div className="instructions">
-                    <h3>💡 Hướng dẫn:</h3>
-                    <div className="instructions-content">
-                        <p>• <strong>WPM (Words Per Minute):</strong> Số từ gõ được trong 1 phút (1 từ = 5 ký tự)</p>
-                        <p>• <strong>Độ chính xác:</strong> Tỷ lệ phần trăm ký tự gõ đúng</p>
-                        <p>• Ký tự <span className="char correct">xanh</span> là đúng, <span className="char incorrect">đỏ</span> là sai</p>
-                        <p>• Ký tự <span className="char current">xanh đậm</span> là vị trí hiện tại cần gõ</p>
-                        <p>• Mục tiêu: Đạt WPM cao nhất có thể với độ chính xác tối đa!</p>
-                    </div>
-                </div>
             </div>
         </div>
     );

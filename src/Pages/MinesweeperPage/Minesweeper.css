@@ -46,7 +46,7 @@
   width: 100vw;
   max-width: 50rem;
   font-size: 1.6rem;
-  background: var(--cl-white);
+  background: var(--cl-white-pure);
   padding: 2rem;
   border-radius: 0.5rem;
   transform: translateX(-50%);
@@ -54,25 +54,33 @@
 }
 .minesweeper .minesweeper-broad .customize-broad .customize-container {
   margin-bottom: 1rem;
+  background-color: rgba(128, 128, 128, 0.1176470588);
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
 }
 .minesweeper .minesweeper-broad .customize-broad .customize-container .customize-field {
   display: flex;
   align-items: center;
-  width: 20rem;
+  height: 2rem;
+  width: 100%;
   justify-content: space-between;
   gap: 1rem;
 }
 .minesweeper .minesweeper-broad .customize-broad .customize-container .customize-field .customize-name {
   color: var(--cl-primary-purple);
+  gap: 0.5rem;
+}
+.minesweeper .minesweeper-broad .customize-broad .customize-container .customize-field .customize-name-icon {
+  color: var(--ink-500);
+  font-size: 2rem;
 }
 .minesweeper .minesweeper-broad .customize-broad .customize-container .customize-field .customize-data {
   background: transparent;
   color: var(--cl-primary-purple);
-  padding: 0.5rem;
+  padding: 0.5rem 0;
   display: block;
   width: 10rem;
-  border-bottom: 0.2rem solid var(--cl-primary-purple);
-  text-align: center;
+  text-align: end;
 }
 .minesweeper .minesweeper-broad .customize-broad .customize-container .range-allow {
   color: var(--cl-primary-purple);
@@ -123,7 +131,7 @@
   position: absolute;
 }
 .minesweeper .minesweeper-broad .game-broad .wrapper-game-over .game-over {
-  background: var(--cl-primary-purple);
+  background: linear-gradient(135deg, var(--brand-600), var(--purple-600));
   color: var(--cl-white-pure);
   width: 100%;
   max-width: 40rem;

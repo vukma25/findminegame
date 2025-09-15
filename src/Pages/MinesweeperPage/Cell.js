@@ -32,7 +32,10 @@ function Cell({
     function leftClickForDesktop() {
         const updatedCells = handleClickCell(index, copySettings);
         if (updatedCells?.logError){
-            setLog(updatedCells.logError)
+            setLog({
+                "message": updatedCells.logError, 
+                "type": "error"
+            })
         }
 
         if (updatedCells) {
@@ -43,7 +46,10 @@ function Cell({
     function rightClickForDesktop() {
         const updatedCells = handleToggleFlag(index, copySettings);
         if (updatedCells?.logError) {
-            setLog(updatedCells.logError)
+            setLog({
+                "message": updatedCells.logError,
+                "type": "error"
+            })
         }
         
         if (updatedCells) {

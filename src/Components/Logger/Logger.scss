@@ -9,12 +9,12 @@
 .logger {
     position: fixed;
     left: 50%;
-    bottom: 1rem;
+    top: 7rem;
     transform: translateX(-50%) translateY(16px);
     width: calc(100% - 2rem);
     max-width: 38rem;
     min-height: 3.5rem;
-    padding: .875rem 1rem;
+    padding: 1rem 1rem;
     display: none;
     align-items: center;
     gap: .75rem;
@@ -22,7 +22,7 @@
     border-radius: .75rem;
     background: var(--logger-bg);
     color: var(--logger-text);
-    font-size: 1.4rem;
+    font-size: 1.6rem;
     line-height: 1.4;
     z-index: 9999;
     box-shadow: var(--logger-shadow);
@@ -43,6 +43,7 @@
 /* Nội dung + icon căn hàng ngang đẹp mắt */
 .logger__inner {
     display: grid;
+    width: fit-content;
     grid-template-columns: auto 1fr auto;
     align-items: center;
     gap: .75rem;
@@ -77,9 +78,9 @@
 
 /* Vùng text an toàn, không dính viền */
 .logger__message {
-    display: block;
+    text-align: center;
     overflow: hidden;
-    text-overflow: ellipsis;
+    //text-overflow: ellipsis;
 }
 
 /* Trạng thái nhanh: thêm class vào .logger để đổi màu */

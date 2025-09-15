@@ -1,3 +1,4 @@
+@charset "UTF-8";
 .chess {
   position: relative;
   width: 100vw;
@@ -7,26 +8,108 @@
   justify-content: center;
   align-items: center;
   flex-wrap: wrap;
+  -webkit-user-select: none;
+     -moz-user-select: none;
+          user-select: none;
 }
-.chess .chess-board-area {
+.chess .chess-left-area {
   width: 95%;
   height: auto;
+  flex-direction: column;
+  justify-content: center;
   max-width: 60rem;
   min-width: 35rem;
+}
+.chess .chess-left-area .chess-info-player-area {
+  width: 100%;
+  height: auto;
+  display: grid;
+  grid-template-columns: repeat(21, 1fr);
+  padding: 1rem 0;
+}
+.chess .chess-left-area .chess-info-player-area .chess-info-player {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(3, 2rem);
+}
+.chess .chess-left-area .chess-info-player-area .left {
+  grid-column: 1/span 10;
+}
+.chess .chess-left-area .chess-info-player-area .left-avatar {
+  border: 0.1rem solid black;
+  border-radius: 0.5rem;
+  height: 100%;
+  grid-row: 1/span 3;
+  grid-column: 1/span 2;
+  align-self: center;
+}
+.chess .chess-left-area .chess-info-player-area .left-name-and-elo {
+  grid-column: 3/span 5;
+  font-size: 1.4rem;
+  gap: 0.5rem;
+}
+.chess .chess-left-area .chess-info-player-area .left-time {
+  grid-column: 3/span 3;
+  grid-row: 2/span 2;
+}
+.chess .chess-left-area .chess-info-player-area .right {
+  justify-content: end;
+  grid-column: 11/span 10;
+}
+.chess .chess-left-area .chess-info-player-area .right-avatar {
+  border: 0.1rem solid black;
+  border-radius: 0.5rem;
+  height: 100%;
+  grid-row: 1/span 3;
+  grid-column: 6/span 2;
+  align-self: center;
+  justify-self: end;
+}
+.chess .chess-left-area .chess-info-player-area .right-name-and-elo {
+  grid-column: 1/span 5;
+  justify-content: end;
+  font-size: 1.4rem;
+  gap: 0.5rem;
+}
+.chess .chess-left-area .chess-info-player-area .right-time, .chess .chess-left-area .chess-info-player-area .right .bot-thinking {
+  grid-column: 3/span 3;
+  grid-row: 2/span 2;
+}
+.chess .chess-left-area .chess-info-player-area .right .bot-thinking {
+  justify-content: space-between;
+}
+.chess .chess-left-area .chess-info-player-area .right .bot-thinking p {
+  font-size: 1.2rem;
+  font-style: italic;
+}
+.chess .chess-left-area .chess-info-player-area .chess-options {
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+}
+.chess .chess-left-area .chess-info-player-area .chess-options .chess-options-icon {
+  font-size: 2rem;
+  color: var(--ink-500);
+}
+.chess .chess-left-area .chess-board-area {
+  width: 90%;
   position: relative;
 }
-.chess .chess-board-area .chess-board {
+.chess .chess-left-area .chess-board-area .chess-board {
   width: 100%;
-  border: 0.1rem solid var(--cl-black);
+  border: 0.3rem solid var(--cl-black);
   border-radius: 0.5rem;
 }
-.chess .chess-board-area .chess-board .chess-board-coordinate {
+.chess .chess-left-area .chess-board-area .chess-board .chess-board-coordinate {
   font-size: 0.3rem;
   -webkit-user-select: none;
      -moz-user-select: none;
           user-select: none;
 }
-.chess .chess-board-area .piece {
+.chess .chess-left-area .chess-board-area .chess-board__without-border {
+  border: none;
+}
+.chess .chess-left-area .chess-board-area .piece {
   position: absolute;
   top: 0;
   left: 0;
@@ -39,241 +122,240 @@
   background-position: center;
   background-size: contain;
   background-repeat: no-repeat;
-  transition: transform 0.05s;
   z-index: 1;
 }
-.chess .chess-board-area .square-1 {
+.chess .chess-left-area .chess-board-area .square-1 {
   transform: translate(0, 695%);
 }
-.chess .chess-board-area .square-2 {
+.chess .chess-left-area .chess-board-area .square-2 {
   transform: translate(100%, 695%);
 }
-.chess .chess-board-area .square-3 {
+.chess .chess-left-area .chess-board-area .square-3 {
   transform: translate(200%, 695%);
 }
-.chess .chess-board-area .square-4 {
+.chess .chess-left-area .chess-board-area .square-4 {
   transform: translate(300%, 695%);
 }
-.chess .chess-board-area .square-5 {
+.chess .chess-left-area .chess-board-area .square-5 {
   transform: translate(400%, 695%);
 }
-.chess .chess-board-area .square-6 {
+.chess .chess-left-area .chess-board-area .square-6 {
   transform: translate(500%, 695%);
 }
-.chess .chess-board-area .square-7 {
+.chess .chess-left-area .chess-board-area .square-7 {
   transform: translate(600%, 695%);
 }
-.chess .chess-board-area .square-8 {
+.chess .chess-left-area .chess-board-area .square-8 {
   transform: translate(700%, 695%);
 }
-.chess .chess-board-area .square-9 {
+.chess .chess-left-area .chess-board-area .square-9 {
   transform: translate(0, 595%);
 }
-.chess .chess-board-area .square-10 {
+.chess .chess-left-area .chess-board-area .square-10 {
   transform: translate(100%, 595%);
 }
-.chess .chess-board-area .square-11 {
+.chess .chess-left-area .chess-board-area .square-11 {
   transform: translate(200%, 595%);
 }
-.chess .chess-board-area .square-12 {
+.chess .chess-left-area .chess-board-area .square-12 {
   transform: translate(300%, 595%);
 }
-.chess .chess-board-area .square-13 {
+.chess .chess-left-area .chess-board-area .square-13 {
   transform: translate(400%, 595%);
 }
-.chess .chess-board-area .square-14 {
+.chess .chess-left-area .chess-board-area .square-14 {
   transform: translate(500%, 595%);
 }
-.chess .chess-board-area .square-15 {
+.chess .chess-left-area .chess-board-area .square-15 {
   transform: translate(600%, 595%);
 }
-.chess .chess-board-area .square-16 {
+.chess .chess-left-area .chess-board-area .square-16 {
   transform: translate(700%, 595%);
 }
-.chess .chess-board-area .square-17 {
+.chess .chess-left-area .chess-board-area .square-17 {
   transform: translate(0, 496%);
 }
-.chess .chess-board-area .square-18 {
+.chess .chess-left-area .chess-board-area .square-18 {
   transform: translate(100%, 496%);
 }
-.chess .chess-board-area .square-19 {
+.chess .chess-left-area .chess-board-area .square-19 {
   transform: translate(200%, 496%);
 }
-.chess .chess-board-area .square-20 {
+.chess .chess-left-area .chess-board-area .square-20 {
   transform: translate(300%, 496%);
 }
-.chess .chess-board-area .square-21 {
+.chess .chess-left-area .chess-board-area .square-21 {
   transform: translate(400%, 496%);
 }
-.chess .chess-board-area .square-22 {
+.chess .chess-left-area .chess-board-area .square-22 {
   transform: translate(500%, 496%);
 }
-.chess .chess-board-area .square-23 {
+.chess .chess-left-area .chess-board-area .square-23 {
   transform: translate(600%, 496%);
 }
-.chess .chess-board-area .square-24 {
+.chess .chess-left-area .chess-board-area .square-24 {
   transform: translate(700%, 496%);
 }
-.chess .chess-board-area .square-25 {
+.chess .chess-left-area .chess-board-area .square-25 {
   transform: translate(0, 398%);
 }
-.chess .chess-board-area .square-26 {
+.chess .chess-left-area .chess-board-area .square-26 {
   transform: translate(100%, 398%);
 }
-.chess .chess-board-area .square-27 {
+.chess .chess-left-area .chess-board-area .square-27 {
   transform: translate(200%, 398%);
 }
-.chess .chess-board-area .square-28 {
+.chess .chess-left-area .chess-board-area .square-28 {
   transform: translate(300%, 398%);
 }
-.chess .chess-board-area .square-29 {
+.chess .chess-left-area .chess-board-area .square-29 {
   transform: translate(400%, 398%);
 }
-.chess .chess-board-area .square-30 {
+.chess .chess-left-area .chess-board-area .square-30 {
   transform: translate(500%, 398%);
 }
-.chess .chess-board-area .square-31 {
+.chess .chess-left-area .chess-board-area .square-31 {
   transform: translate(600%, 398%);
 }
-.chess .chess-board-area .square-32 {
+.chess .chess-left-area .chess-board-area .square-32 {
   transform: translate(700%, 398%);
 }
-.chess .chess-board-area .square-33 {
+.chess .chess-left-area .chess-board-area .square-33 {
   transform: translate(0, 300%);
 }
-.chess .chess-board-area .square-34 {
+.chess .chess-left-area .chess-board-area .square-34 {
   transform: translate(100%, 300%);
 }
-.chess .chess-board-area .square-35 {
+.chess .chess-left-area .chess-board-area .square-35 {
   transform: translate(200%, 300%);
 }
-.chess .chess-board-area .square-36 {
+.chess .chess-left-area .chess-board-area .square-36 {
   transform: translate(300%, 300%);
 }
-.chess .chess-board-area .square-37 {
+.chess .chess-left-area .chess-board-area .square-37 {
   transform: translate(400%, 300%);
 }
-.chess .chess-board-area .square-38 {
+.chess .chess-left-area .chess-board-area .square-38 {
   transform: translate(500%, 300%);
 }
-.chess .chess-board-area .square-39 {
+.chess .chess-left-area .chess-board-area .square-39 {
   transform: translate(600%, 300%);
 }
-.chess .chess-board-area .square-40 {
+.chess .chess-left-area .chess-board-area .square-40 {
   transform: translate(700%, 300%);
 }
-.chess .chess-board-area .square-41 {
+.chess .chess-left-area .chess-board-area .square-41 {
   transform: translate(0, 200%);
 }
-.chess .chess-board-area .square-42 {
+.chess .chess-left-area .chess-board-area .square-42 {
   transform: translate(100%, 200%);
 }
-.chess .chess-board-area .square-43 {
+.chess .chess-left-area .chess-board-area .square-43 {
   transform: translate(200%, 200%);
 }
-.chess .chess-board-area .square-44 {
+.chess .chess-left-area .chess-board-area .square-44 {
   transform: translate(300%, 200%);
 }
-.chess .chess-board-area .square-45 {
+.chess .chess-left-area .chess-board-area .square-45 {
   transform: translate(400%, 200%);
 }
-.chess .chess-board-area .square-46 {
+.chess .chess-left-area .chess-board-area .square-46 {
   transform: translate(500%, 200%);
 }
-.chess .chess-board-area .square-47 {
+.chess .chess-left-area .chess-board-area .square-47 {
   transform: translate(600%, 200%);
 }
-.chess .chess-board-area .square-48 {
+.chess .chess-left-area .chess-board-area .square-48 {
   transform: translate(700%, 200%);
 }
-.chess .chess-board-area .square-49 {
+.chess .chess-left-area .chess-board-area .square-49 {
   transform: translate(0, 100%);
 }
-.chess .chess-board-area .square-50 {
+.chess .chess-left-area .chess-board-area .square-50 {
   transform: translate(100%, 100%);
 }
-.chess .chess-board-area .square-51 {
+.chess .chess-left-area .chess-board-area .square-51 {
   transform: translate(200%, 100%);
 }
-.chess .chess-board-area .square-52 {
+.chess .chess-left-area .chess-board-area .square-52 {
   transform: translate(300%, 100%);
 }
-.chess .chess-board-area .square-53 {
+.chess .chess-left-area .chess-board-area .square-53 {
   transform: translate(400%, 100%);
 }
-.chess .chess-board-area .square-54 {
+.chess .chess-left-area .chess-board-area .square-54 {
   transform: translate(500%, 100%);
 }
-.chess .chess-board-area .square-55 {
+.chess .chess-left-area .chess-board-area .square-55 {
   transform: translate(600%, 100%);
 }
-.chess .chess-board-area .square-56 {
+.chess .chess-left-area .chess-board-area .square-56 {
   transform: translate(700%, 100%);
 }
-.chess .chess-board-area .square-57 {
+.chess .chess-left-area .chess-board-area .square-57 {
   transform: translate(0, 0);
 }
-.chess .chess-board-area .square-58 {
+.chess .chess-left-area .chess-board-area .square-58 {
   transform: translate(100%, 0);
 }
-.chess .chess-board-area .square-59 {
+.chess .chess-left-area .chess-board-area .square-59 {
   transform: translate(200%, 0);
 }
-.chess .chess-board-area .square-60 {
+.chess .chess-left-area .chess-board-area .square-60 {
   transform: translate(300%, 0);
 }
-.chess .chess-board-area .square-61 {
+.chess .chess-left-area .chess-board-area .square-61 {
   transform: translate(400%, 0);
 }
-.chess .chess-board-area .square-62 {
+.chess .chess-left-area .chess-board-area .square-62 {
   transform: translate(500%, 0);
 }
-.chess .chess-board-area .square-63 {
+.chess .chess-left-area .chess-board-area .square-63 {
   transform: translate(600%, 0);
 }
-.chess .chess-board-area .square-64 {
+.chess .chess-left-area .chess-board-area .square-64 {
   transform: translate(700%, 0);
 }
-.chess .chess-board-area .bp {
+.chess .chess-left-area .chess-board-area .bp {
   background-image: url(../../assets/image/bp.png);
 }
-.chess .chess-board-area .br {
+.chess .chess-left-area .chess-board-area .br {
   background-image: url(../../assets/image/br.png);
 }
-.chess .chess-board-area .bb {
+.chess .chess-left-area .chess-board-area .bb {
   background-image: url(../../assets/image/bb.png);
 }
-.chess .chess-board-area .bn {
+.chess .chess-left-area .chess-board-area .bn {
   background-image: url(../../assets/image/bn.png);
 }
-.chess .chess-board-area .bq {
+.chess .chess-left-area .chess-board-area .bq {
   background-image: url(../../assets/image/bq.png);
 }
-.chess .chess-board-area .bk {
+.chess .chess-left-area .chess-board-area .bk {
   background-image: url(../../assets/image/bk.png);
 }
-.chess .chess-board-area .wp {
+.chess .chess-left-area .chess-board-area .wp {
   background-image: url(../../assets/image/wp.png);
 }
-.chess .chess-board-area .wr {
+.chess .chess-left-area .chess-board-area .wr {
   background-image: url(../../assets/image/wr.png);
 }
-.chess .chess-board-area .wb {
+.chess .chess-left-area .chess-board-area .wb {
   background-image: url(../../assets/image/wb.png);
 }
-.chess .chess-board-area .wn {
+.chess .chess-left-area .chess-board-area .wn {
   background-image: url(../../assets/image/wn.png);
 }
-.chess .chess-board-area .wq {
+.chess .chess-left-area .chess-board-area .wq {
   background-image: url(../../assets/image/wq.png);
 }
-.chess .chess-board-area .wk {
+.chess .chess-left-area .chess-board-area .wk {
   background-image: url(../../assets/image/wk.png);
 }
-.chess .chess-board-area .dragging {
+.chess .chess-left-area .chess-board-area .dragging {
   z-index: 2;
 }
-.chess .chess-board-area .chess-effect {
+.chess .chess-left-area .chess-board-area .chess-effect {
   position: absolute;
   width: 12.5%;
   height: 12.5%;
@@ -284,7 +366,7 @@
   background: transparent;
   z-index: 0;
 }
-.chess .chess-board-area .suggest-div, .chess .chess-board-area .promotion-div, .chess .chess-board-area .taken-div {
+.chess .chess-left-area .chess-board-area .suggest-div, .chess .chess-left-area .chess-board-area .promotion-div, .chess .chess-left-area .chess-board-area .taken-div {
   position: absolute;
   width: 12.5%;
   height: 12.5%;
@@ -296,24 +378,18 @@
   align-items: center;
   z-index: 0;
 }
-.chess .chess-board-area .taken-div {
+.chess .chess-left-area .chess-board-area .taken-div {
   z-index: 2;
 }
-.chess .chess-board-area .promotion-div {
+.chess .chess-left-area .chess-board-area .promotion-div {
   z-index: 3;
 }
-.chess .chess-board-area .attack {
+.chess .chess-left-area .chess-board-area .attack {
   position: absolute;
   width: 12.5%;
   height: 12.5%;
   top: 0;
   left: 0;
-}
-.chess .chess-board-area .bg-white {
-  background-color: var(--cl-white-pure);
-}
-.chess .chess-board-area .bg-purple {
-  background-color: var(--cl-primary-purple);
 }
 .chess .move-list-wrapper {
   flex-direction: column;
@@ -335,7 +411,7 @@
 }
 .chess .move-list-wrapper .move-list {
   width: 100%;
-  height: 60%;
+  height: 80%;
   border-bottom: 0.1rem solid var(--cl-gray);
   overflow-y: scroll;
 }
@@ -395,32 +471,26 @@
 .chess .move-list-wrapper .move-list .move-row:nth-child(even) {
   background-color: #1c1c1c;
 }
-.chess .move-list-wrapper .move-list-settings, .chess .move-list-wrapper .move-list-option .move-list-new-game,
-.chess .move-list-wrapper .move-list-option .move-list-resign {
-  width: 90%;
-  height: 6rem;
-  justify-content: center;
-  gap: 1rem;
-  background-color: var(--cl-primary-yellow);
-  transition: background 0.2s ease;
-  border-radius: 1.5rem;
-  background-color: rgba(255, 255, 255, 0.2);
-  box-shadow: 0.1rem 0.1rem rgba(116, 116, 116, 0.2);
-}
-.chess .move-list-wrapper .move-list-settings:hover, .chess .move-list-wrapper .move-list-option .move-list-new-game:hover,
-.chess .move-list-wrapper .move-list-option .move-list-resign:hover {
-  background-color: var(--cl-primary-yellow);
-  color: var(--cl-black);
-  box-shadow: 0.1rem 0.1rem var(--ink-400);
-}
 .chess .move-list-wrapper .move-list-option {
   width: 90%;
   height: 10rem;
   justify-content: space-between;
 }
-.chess .move-list-wrapper .move-list-option .move-list-new-game,
-.chess .move-list-wrapper .move-list-option .move-list-resign {
-  width: 46%;
+.chess .move-list-wrapper .move-list-option .move-list-btn {
+  width: 30%;
+  height: 6rem;
+  justify-content: center;
+  gap: 0.5rem;
+  color: var(--cl-primary-yellow);
+  transition: background 0.2s ease;
+  border-radius: 1.5rem;
+  background-color: rgba(255, 255, 255, 0.2);
+  box-shadow: 0.1rem 0.1rem rgba(116, 116, 116, 0.2);
+}
+.chess .move-list-wrapper .move-list-option .move-list-btn:hover {
+  background-color: var(--cl-primary-yellow);
+  color: var(--cl-black);
+  box-shadow: 0.1rem 0.1rem var(--ink-400);
 }
 .chess .game-mode-selector {
   position: relative;
@@ -568,9 +638,282 @@
 .chess .game-mode-selector .play-container .play-btn:hover {
   opacity: 0.8;
 }
+.chess .game-mode-selector .back-home {
+  display: block;
+  width: 100%;
+  padding: 1.5rem 1rem;
+  border: none;
+  border-radius: 0.4rem;
+  background: var(--cl-black-lighter);
+  color: var(--cl-white-pure);
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.3s;
+  font-size: 1.8rem;
+}
+.chess .game-mode-selector .back-home:hover {
+  background: var(--cl-primary-purple);
+}
+.chess .chess-settings-container {
+  display: flex;
+  align-items: center;
+  width: 100vw;
+  height: 100vh;
+  -webkit-backdrop-filter: saturate(160%) blur(8px);
+          backdrop-filter: saturate(160%) blur(8px);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.65));
+  padding: 1.5rem;
+  position: fixed;
+  top: 0;
+  z-index: 99;
+}
+.chess .chess-settings-container .preview-section {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+.chess .chess-settings-container .preview-section .preview-title {
+  gap: 0.5rem;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+.chess .chess-settings-container .preview-section .chess-preview {
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  grid-template-rows: repeat(8, 1fr);
+  width: 40rem;
+  height: 40rem;
+  border: 0.4rem solid #1f2937;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+.chess .chess-settings-container .preview-section .chess-preview .preview-square {
+  transition: background-color 0.3s ease;
+}
+.chess .chess-settings-container .settings-section {
+  flex: 1.5;
+  background-color: var(--cl-white-pure);
+  box-shadow: 0 0 1.5rem var(--ink-300);
+  border-radius: 0.5rem;
+  padding: 2rem;
+  overflow-y: auto;
+  height: -moz-fit-content;
+  height: fit-content;
+  position: relative;
+}
+.chess .chess-settings-container .settings-section::-webkit-scrollbar {
+  width: 0.5rem;
+}
+.chess .chess-settings-container .settings-section::-webkit-scrollbar-track {
+  background: transparent;
+}
+.chess .chess-settings-container .settings-section::-webkit-scrollbar-thumb {
+  background: var(--cl-gray);
+  border-radius: 0.5rem;
+}
+.chess .chess-settings-container .settings-section h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+.chess .chess-settings-container .settings-section .close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  font-size: 2.5rem;
+}
+.chess .chess-settings-container .settings-section .settings-grid {
+  display: flex;
+  gap: 1.5rem;
+}
+.chess .chess-settings-container .settings-section .settings-grid .game-settings,
+.chess .chess-settings-container .settings-section .settings-grid .appearance-settings {
+  width: 48%;
+}
+.chess .chess-settings-container .settings-section .settings-grid .game-settings .settings-title,
+.chess .chess-settings-container .settings-section .settings-grid .appearance-settings .settings-title {
+  gap: 0.5rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom-width: 2px;
+}
+.chess .chess-settings-container .settings-section .settings-grid .game-settings .settings-title .settings-icon,
+.chess .chess-settings-container .settings-section .settings-grid .appearance-settings .settings-title .settings-icon {
+  color: var(--brand-500);
+}
+.chess .chess-settings-container .settings-section .setting-card {
+  width: 100%;
+  background: linear-gradient(90deg, #f9fafb 0%, #f3f4f6 100%);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
+}
+.chess .chess-settings-container .settings-section .setting-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+.chess .chess-settings-container .settings-section .setting-card .setting-info {
+  flex: 1;
+}
+.chess .chess-settings-container .settings-section .setting-card .setting-info h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+.chess .chess-settings-container .settings-section .setting-card .setting-info p {
+  font-size: 0.875rem;
+  color: var(--ink-500);
+  margin-top: 0.25rem;
+}
+.chess .chess-settings-container .settings-section .setting-card .color-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+.chess .chess-settings-container .settings-section .setting-card .custom-color {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.chess .chess-settings-container .settings-section .setting-card__col {
+  flex-direction: column;
+  align-items: start;
+  gap: 0.4rem;
+}
+.chess .chess-settings-container .settings-section .setting-card__col h3 {
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+.chess .color-option {
+  width: 4rem;
+  aspect-ratio: 1;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 3px solid transparent;
+  transition: all 0.3s ease;
+  position: relative;
+}
+.chess .color-option:hover {
+  transform: scale(1.1);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+.chess .color-option.selected {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+.chess .color-option.selected::after {
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-weight: bold;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+.chess .custom-color-input {
+  width: 4rem;
+  height: 4rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 3px solid #e5e7eb;
+  transition: all 0.3s ease;
+}
+.chess .custom-color-input:hover {
+  transform: scale(1.1);
+  border-color: #3b82f6;
+}
+.chess .custom-color-label {
+  gap: 0.5rem;
+}
+.chess .action-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+.chess .action-buttons button {
+  font-weight: 700;
+  padding: 0.75rem 2rem;
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transform: hover scale(1.05);
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+.chess .action-buttons .btn-save {
+  background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
+  color: white;
+}
+.chess .action-buttons .btn-save:hover {
+  background: linear-gradient(90deg, #2563eb 0%, #7c3aed 100%);
+}
+.chess .action-buttons .btn-reset {
+  background: linear-gradient(90deg, #9ca3af 0%, #6b7280 100%);
+  color: white;
+}
+.chess .action-buttons .btn-reset:hover {
+  background: linear-gradient(90deg, #6b7280 0%, #4b5563 100%);
+}
+@media (max-width: 1024px) {
+  .chess .chess-settings-container {
+    flex-direction: column;
+  }
+  .chess .chess-settings-container .preview-section {
+    padding: 1rem;
+  }
+  .chess .chess-settings-container .preview-section .chess-preview {
+    width: 20rem;
+    height: 20rem;
+  }
+  .chess .color-option {
+    width: 3rem;
+  }
+  .chess .custom-color-input {
+    width: 3rem;
+    height: 3rem;
+  }
+}
+@media (max-width: 42rem) {
+  .chess .chess-settings-container {
+    flex-direction: column;
+  }
+  .chess .chess-settings-container .settings-section .settings-grid {
+    flex-direction: column;
+  }
+  .chess .chess-settings-container .settings-section .settings-grid .game-settings,
+  .chess .chess-settings-container .settings-section .settings-grid .appearance-settings {
+    width: 100%;
+  }
+}
 
 @media screen and (max-width: 80rem) {
   .chess {
     padding-top: 3rem;
+  }
+  .chess .chess-left-area .chess-info-player-area .left-avatar {
+    width: 80%;
+    height: auto;
+  }
+  .chess .chess-left-area .chess-info-player-area .right-avatar {
+    width: 80%;
+    height: auto;
+  }
+  .chess .chess-left-area .chess-options .chess-options-icon {
+    font-size: 1rem;
+    color: var(--cl-black);
   }
 }/*# sourceMappingURL=Chess.css.map */

@@ -95,7 +95,7 @@ function SuggestBox({ suggestBox, setSuggestBox, query, setQuery, storage, setSt
                                         <Icon sx={{
                                             fontSize: "2rem",
                                             color: "var(--brand-500)"
-                                        }}>search</Icon>
+                                        }}>history</Icon>
                                         <span>{q}</span>
                                     </button>
                                     <Icon

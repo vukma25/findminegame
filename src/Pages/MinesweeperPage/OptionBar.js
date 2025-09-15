@@ -1,14 +1,16 @@
-
+import { useEffect, useState } from 'react';
 import Icon from '@mui/material/Icon';
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
 import { styled } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
+import ClockBase from '../../Components/ClockBase/ClockBase';
 import Clock from './Clock'
 import {
     setToggleSetting,
     setSelect
 } from './Action'
+
 
 const BootstrapInput = styled(InputBase)(() => ({
     '& .MuiInputBase-input': {
@@ -25,7 +27,25 @@ const BootstrapInput = styled(InputBase)(() => ({
 }
 ));
 
-function OptionsBar({ settings, dispatch }) {
+function OptionsBar({ setTimeFinish, settings, dispatch }) {
+    const [semaphore, setSemaphore] = useState(false)
+
+    function handleAssignSemaphore () {
+        if (settings.gameOver) {
+            setSemaphore(true)
+        }
+        else if (settings.level === 4 && !settings.isInGame) {
+            setSemaphore(true)
+        } 
+        else {
+            setSemaphore(false)
+        }
+    }
+
+    useEffect(() => {
+        handleAssignSemaphore()
+    }, [settings.level, settings.gameOver, settings.isInGame])
+
     return (
         <div className="minesweeper-settings flex-div">
             <Select
@@ -78,10 +98,14 @@ function OptionsBar({ settings, dispatch }) {
             </div>
             {
                 settings.setTime.isTime ?
-                    <Clock
-                        dispatch={dispatch}
-                        settings={settings}
-                    /> :
+                    <ClockBase 
+                        type={"countdown"}
+                        duration={settings.setTime.duration}
+                        semaphore={semaphore}
+                        setTimeFinish={setTimeFinish}
+                    >
+                        <Clock level={settings.level} dispatch={dispatch}/>
+                    </ClockBase> :
                     <Icon
                         sx={{
                             fontSize: '3rem',

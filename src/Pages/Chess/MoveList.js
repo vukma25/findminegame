@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react'
+import { Link } from 'react-router'
 import Icon from '@mui/material/Icon';
 import wp from '../../assets/image/wp.png'
 import wq from '../../assets/image/wq.png'
@@ -13,7 +14,7 @@ import bn from '../../assets/image/bn.png'
 import br from '../../assets/image/br.png'
 import bb from '../../assets/image/bb.png'
 
-function MoveList({ moves, setInGame }) {
+function MoveList({ chess, setChess }) {
 
     const image = {
         wp,
@@ -37,19 +38,19 @@ function MoveList({ moves, setInGame }) {
         if (scrollRef.current) {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
         }
-    }, [moves])
+    }, [chess])
 
     return (
         <div className="move-list-wrapper flex-div">
             <div className="move-list-header">Starting Position</div>
             <div className="move-list" ref={scrollRef}>
-                {moves.map(({ turn, white, black }) => {
+                {chess.moves.map(({ turn, white, black }) => {
                     const whiteIsCurrent = (
-                        turn === moves.length &&
+                        turn === chess.moves.length &&
                         !black
                     ) ? "move-current" : ""
                     const blackIsCurrent = (
-                        turn === moves.length &&
+                        turn === chess.moves.length &&
                         black
                     ) ? "move-current" : ""
 
@@ -74,27 +75,35 @@ function MoveList({ moves, setInGame }) {
                 })}
             </div>
             <div className='move-list-option flex-div'>
-                <div className='move-list-new-game flex-div'>
+                <div 
+                    className='move-list-btn flex-div'
+                    onClick={() => {
+                        const newChess = chess.getInit()
+                        setChess(newChess)
+                    }}
+                >
                     <Icon
                         sx={{ fontSize: '3.5rem' }}
                     >add</Icon>
                     <p>New Game</p>
                 </div>
                 <div 
-                    className='move-list-resign flex-div'
-                    onClick={() => { setInGame(false) }}
+                    className='move-list-btn flex-div'
                 >
                     <Icon
                         sx={{ fontSize: '3rem' }}
                     >flag</Icon>
                     <p>Resign</p>
                 </div>
-            </div>
-            <div className="move-list-settings flex-div">
-                <Icon
-                    sx={{ fontSize: '3rem' }}
-                >settings</Icon>
-                <p>Settings</p>
+                <Link
+                    to="/"
+                    className='move-list-btn flex-div'
+                >
+                    <Icon
+                        sx={{ fontSize: '3rem' }}
+                    >arrow_back_2</Icon>
+                    <p>Home</p>
+                </Link>
             </div>
         </div>
     );

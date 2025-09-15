@@ -1,4 +1,4 @@
-import Slider from '@mui/material/Slider'
+import { Icon, Slider } from '@mui/material'
 import {
     setCol,
     setRow,
@@ -26,7 +26,11 @@ function SettingsBroad({
         >
             <div className="customize-container">
                 <div className="customize-field">
-                    <p className="customize-name">Row</p>
+                    <div className="customize-name flex-div">
+                        <Icon
+                            className="customize-name-icon"
+                        >table_rows_narrow</Icon><p>Row</p>
+                    </div>
                     <p className="customize-data">{settings.row}</p>
                 </div>
                 <Slider
@@ -42,7 +46,11 @@ function SettingsBroad({
             </div>
             <div className="customize-container">
                 <div className="customize-field">
-                    <p className="customize-name">Column</p>
+                    <div className="customize-name flex-div">
+                        <Icon
+                            className="customize-name-icon"
+                        >calendar_view_week</Icon><p>Column</p>
+                    </div>
                     <p className="customize-data">{settings.col}</p>
                 </div>
                 <Slider
@@ -58,11 +66,15 @@ function SettingsBroad({
             </div>
             <div className="customize-container">
                 <div className="customize-field">
-                    <p className="customize-name">Proportion</p>
+                    <div className="customize-name flex-div">
+                        <Icon
+                            className="customize-name-icon"
+                        >percent</Icon><p>Proportion</p>
+                    </div>
                     <p className="customize-data">{settings.proportion}</p>
                 </div>  
                 <Slider
-                    className="range-allow"
+                    className="difficulty"
                     valueLabelDisplay="auto"
                     defaultValue={1.5}
                     step={0.5}
@@ -76,7 +88,10 @@ function SettingsBroad({
                             fontSize: '1.2rem',
                             fontWeight: 600,
                             transform: 'translateY(-.2rem)'
-                        }
+                        },
+                        color: `${settings.proportion >= 4 ? "red" : 
+                                settings.proportion >= 2.5 ? "var(--cl-primary-purple)" : "green"
+                            }`
                     }}
                     value={settings.proportion}
                     onChange={(_, newValue) => dispatch(setPro(newValue))}
@@ -84,7 +99,11 @@ function SettingsBroad({
             </div>
             <div className="customize-container">
                 <div className="customize-field">
-                    <p className="customize-name">Mines</p>
+                    <div className="customize-name flex-div">
+                        <Icon
+                            className="customize-name-icon"
+                        >all_out</Icon><p>Mines</p>
+                    </div>
                     <p className="customize-data">{settings.mine}</p>
                 </div>
                 <Slider
@@ -110,7 +129,11 @@ function SettingsBroad({
                 settings.setTime.isTime &&
                 <div className="customize-container">
                     <div className="customize-field">
-                        <p className="customize-name">Time (s)</p>
+                        <div className="customize-name flex-div">
+                            <Icon
+                                className="customize-name-icon"
+                            >alarm</Icon><p>Time (s)</p>
+                        </div>
                         <p className="customize-data">
                             {`${settings.setTime.duration}s ~ ${convertToMinute(settings.setTime.duration)
                                 }`}

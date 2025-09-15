@@ -1,33 +1,104 @@
 .sudoku-container {
     height: auto;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     justify-content: center;
     padding: 1rem;
+    gap: 2rem;
 
-    .sudoku-card {
+    /* Style cho modal */
+    .sudoku-modal {
+        display: block;
+        position: fixed;
+        z-index: 99;
+        left: 0;
+        top: 6.5rem;
+        width: 100%;
+        height: 100%;
+        backdrop-filter: saturate(160%) blur(.2rem);
+        background: linear-gradient(135deg, rgba(255, 255, 255, .85), rgba(255, 255, 255, .65));
+        animation: fadeIn 0.3s ease;
+
+        .modal-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 10% auto;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            position: relative;
+            color: white;
+            animation: slideDown 0.4s ease;
+
+
+            .close {
+                position: absolute;
+                right: 20px;
+                top: 15px;
+                font-size: 28px;
+                font-weight: bold;
+                cursor: pointer;
+                color: white;
+                transition: color 0.3s ease;
+
+                &:hover {
+                    color: #ffeb3b;
+                }
+            }
+
+            .result-icon {
+                font-size: 80px;
+                margin-bottom: 20px;
+                animation: bounce 1s ease;
+            }
+
+            .result-title {
+                font-size: 28px;
+                margin-bottom: 15px;
+                text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            }
+
+            .result-message {
+                font-size: 18px;
+                margin-bottom: 20px;
+                line-height: 1.5;
+            }
+
+            .result-stats {
+                background: rgba(255, 255, 255, 0.1);
+                padding: 1.5rem;
+                border-radius: 10px;
+                margin: 20px 0;
+                backdrop-filter: blur(10px);
+
+                p {
+                    margin: 8px 0;
+                    font-size: 16px;
+                }
+            }
+
+            .result-btn-go-home {
+                background: rgba(255, 255, 255, 0.1);
+                padding: 1.5rem;
+                border-radius: 1rem;
+                display: block;
+                padding: 1.5rem 0;
+                color: var(--cl-white-pure);
+                font-size: 1.4rem;
+            }
+        }
+    }
+
+    .sudoku-card-left {
         background-color: white;
         border-radius: 1rem;
         box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
         padding: 2rem;
         max-width: 42rem;
         width: 100%;
-
-        .sudoku-header {
-            text-align: center;
-            margin-bottom: 2rem;
-
-            h1 {
-                font-size: 2.25rem;
-                font-weight: 700;
-                color: #1f2937;
-                margin-bottom: 0.5rem;
-            }
-
-            p {
-                color: #4b5563;
-            }
-        }
 
         .game-stats {
             display: flex;
@@ -76,9 +147,25 @@
             }
         }
 
+        .sudoku-loading {
+            justify-content: center;
+            flex-direction: column;
+            gap: 1rem;
+            margin: 2rem 0;
+
+            .sudoku-loading__description {
+                font-size: 1.4rem;
+                transform: opacity .3s;
+                animation: generating 1.5s infinite ease-in-out;
+            }
+
+            .sudoku-loading__info {
+                gap: .5rem;
+            }
+        }
+
         .sudoku-board {
             display: grid;
-            grid-template-columns: repeat(9, minmax(3.6rem, 1fr));
             gap: 0;
             border: 2px solid #1f2937;
             border-radius: 0.5rem;
@@ -100,9 +187,15 @@
                 transition: all .2s;
             }
 
+            .cell-base__small-text {
+                font-size: 1.2rem;
+                font-weight: 500;
+            }
+
             .cell-base__number {
                 background-color: var(--ink-200);
             }
+
             .cell-base__empty {
                 background-color: var(--white);
 
@@ -120,11 +213,11 @@
                 color: var(--white)
             }
 
-            .row-3 {
+            .row-border {
                 border-top: 2px solid #1f2937;
             }
 
-            .col-3 {
+            .col-border {
                 border-left: 2px solid #1f2937;
             }
         }
@@ -142,6 +235,7 @@
                 background-color: #2563eb;
                 color: white;
                 font-weight: 700;
+                border: none;
                 border-radius: 0.5rem;
                 transition: background-color 0.2s;
                 font-size: 1.125rem;
@@ -161,6 +255,7 @@
                 background-color: #ef4444;
                 color: white;
                 font-weight: 700;
+                border: none;
                 border-radius: 0.5rem;
                 transition: background-color 0.2s;
 
@@ -174,12 +269,99 @@
                 }
             }
         }
+    }
 
-        .instructions {
-            margin-top: 1.5rem;
-            text-align: center;
-            font-size: 0.875rem;
-            color: #6b7280;
+    .sudoku-card-right {
+        background-color: white;
+        border-radius: 1rem;
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        padding: 2rem;
+        max-width: 42rem;
+        width: 100%;
+
+        .back-home {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem 0;
+            margin-bottom: .5rem;
+            background-color: var(--brand-500);
+            border-radius: .8rem;
+            color: var(--cl-white-pure);
+        }
+
+        .sudoku-settings,
+        .sudoku-detail {
+            border-radius: 0.75rem;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            border: 1px solid var(--ink-500);
+        }
+
+        .sudoku-settings {
+            .select-label {
+                font-size: 1.5rem;
+                color: var(--ink-500)
+            }
+
+            .select-settings {
+                margin-bottom: 1.5rem;
+                font-size: 1.3rem;
+            }
+        }
+
+        .sudoku-detail {
+            .sudoku-detail-containers {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 1.5rem .85rem;
+                border-radius: 1rem;
+                font-size: 1.2rem;
+                background: linear-gradient(90deg, #f9fafb 0%, #f3f4f6 100%);
+                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+                border: .1rem solid #e5e7eb;
+                margin-bottom: .5rem;
+                transition: all 0.3s ease;
+
+                &:hover {
+                    transform: translateY(-2px);
+                    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+                }
+
+                .sudoku-detail-name::after {
+                    content: ":";
+                }
+
+                .difficulty-1 {
+                    color: green;
+                }
+
+                .difficulty-2 {
+                    color: var(--brand-500);
+                }
+
+                .difficulty-3 {
+                    color: var(--cl-red-flag);
+                }
+
+                .difficulty-4 {
+                    color: var(--cl-primary-purple);
+                }
+            }
         }
     }
+
+    .sudoku-header {
+        text-align: center;
+        margin-bottom: 2rem;
+
+        h1 {
+            font-size: 2.25rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+        }
+    }
+
 }
