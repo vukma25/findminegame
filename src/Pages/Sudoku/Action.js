@@ -7,7 +7,8 @@ export const ACTION = {
     MATCH_GAME_OVER: "game_over",
     CHANGE_VARIANT: "change_variant",
     LOADING: "loading",
-    OPEN_CORRECT: "open_correct"
+    OPEN_CORRECT: "open_correct",
+    UNMOUNT_SQUARE: "unmount_square",
 }
 
 export const setOpenCorrect = (payload) => {
@@ -62,5 +63,11 @@ export const setLoading = (payload) => {
     return {
         type: ACTION.LOADING,
         payload
+    }
+}
+
+export const setUnmountSquare = () => {
+    return {
+        type: ACTION.UNMOUNT_SQUARE
     }
 }

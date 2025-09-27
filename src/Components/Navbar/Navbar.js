@@ -70,7 +70,10 @@ function Navbar() {
                 sgBox.focus()
                 setSuggestBox(true)
             }
-        }
+        } 
+        // else if (e.key === "Enter") {
+        //     handleSearch(e)
+        // }
     }
 
     function handleStorageQuery(query) {

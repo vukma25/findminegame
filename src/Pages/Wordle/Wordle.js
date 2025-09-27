@@ -8,6 +8,7 @@ import {
 } from '@mui/material'
 import VirtualKeyBoard from './VirtualKeyBoard'
 import Logger from '../../Components/Logger/Logger'
+import Modal from './Modal';
 import './Wordle.css'
 
 const Wordle = () => {
@@ -22,6 +23,7 @@ const Wordle = () => {
         'message': '',
         'type': 'info'
     })
+    const [modal, setModal] = useState(false)
 
     useEffect(() => {
         newGame()
@@ -101,8 +103,10 @@ const Wordle = () => {
 
         if (lowerCurrentGuess === targetWord) {
             setGameStatus('won');
+            setModal(true)
         } else if (newGuesses.length >= 6) {
             setGameStatus('lost');
+            setModal(true)
         }
 
         setCurrentGuess('');
@@ -224,7 +228,7 @@ const Wordle = () => {
                     <button
                         className="wordle-btn-new-game"
                         onClick={newGame}
-                    >New</button>
+                    >New game</button>
                     <FormControl className="wordle-select-len-word">
                         <InputLabel className="select-label" id="select-len-word">The length of word</InputLabel>
                         <Select
@@ -277,6 +281,13 @@ const Wordle = () => {
                 <VirtualKeyBoard gameStatus={gameStatus} getKeyClass={getKeyClass} handlePressKey={handlePressKey} />
             </div>
             <Logger log={log} setLog={setLog} />
+            {modal && 
+            <Modal 
+                targetWord={targetWord} 
+                setModal={setModal} 
+                newGame={newGame}
+                gameStatus={gameStatus}
+            />}
         </div>
     );
 };

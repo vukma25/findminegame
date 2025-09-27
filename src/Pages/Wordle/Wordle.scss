@@ -23,9 +23,9 @@
             margin-bottom: 1rem;
 
             .wordle-btn-new-game {
-                background-color: #10b981;
+                background-color: var(--cl-green);
                 border: none;
-                padding: 1rem 2rem;
+                padding: 1.5rem 2rem;
                 border-radius: .5rem;
                 font-size: 1.4rem;
                 color: var(--cl-white-pure);
@@ -205,6 +205,103 @@
                 &.absent {
                     background-color: #6b7280;
                 }
+            }
+        }
+    }
+
+    .wordle-modal {
+        position: fixed;
+        width: 100vw;
+        height: 100vh;
+        backdrop-filter: saturate(160%) blur(8px);
+        background: linear-gradient(135deg,
+                rgba(255, 255, 255, .85),
+                rgba(255, 255, 255, .65));
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 10;
+
+        .modal-content {
+            width: 30%;
+            min-width: 40rem;
+            height: auto;
+            background-color: var(--cl-white-pure);
+            box-shadow: 0 0 .5rem var(--ink-300);
+            border-radius: 1rem;
+            text-align: center;
+
+            .inform {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 1rem 0;
+                position: relative;
+                border-bottom: .1rem solid var(--ink-300);
+
+                .inform-title {
+                    text-align: center;
+                }
+
+                .inform-close {
+                    position: absolute;
+                    right: 1rem;
+                    font-size: 2rem;
+                }
+            }
+
+            .result {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                height: auto;
+                gap: 1rem;
+                padding: 1rem 0;
+
+                .result-title {
+                    font-size: 1.4rem;
+                    color: var(--ink-500)
+                }
+
+                .result-content {
+                    display: inline;
+                    height: auto;
+                    padding: 1rem 1.5rem;
+                    border: .1rem dashed var(--ink-400);
+
+                    .char {
+                        margin: 0 .2rem;
+                        font-size: 1.4rem
+                    }
+                }
+            }
+
+            .links {
+                .links-title {
+                    font-size: 1.4rem;
+                }
+
+                a {
+                    display: block;
+                    font-size: 1.2rem;
+                    color: var(--cl-black);
+
+                    &:hover,
+                    &:focus,
+                    &:active {
+                        color: var(--brand-500);
+                    }
+                }
+            }
+
+            .reset-btn {
+                border: none;
+                border-radius: .5rem;
+                padding: 1rem;
+                width: 40%;
+                margin: 2rem 0 1rem 0;
+                font-size: 1.4rem;
+                background-color: var(--cl-green);
             }
         }
     }

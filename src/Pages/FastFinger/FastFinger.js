@@ -4,7 +4,6 @@ import {
     setGameState,
     setUserInput,
     setOptions,
-    setTime,
     setQuitGame
 } from './Action'
 import { initialState, reducer } from './Reducer';
@@ -14,9 +13,10 @@ import './FastFinger.css'
 const FastFinger = () => {
     
     const [game, dispatch] = useReducer(reducer, initialState)
+    const [buffer, setBuffer] = useState('')
     const [bestWpm, setBestWpm] = useState(JSON.parse(localStorage.getItem('bestWpm')) || 0)
     const [accuracy, setAccuracy] = useState(JSON.parse(localStorage.getItem('accuracy')) || 0)
-    const [timeLeft, setTimeLeft] = useState(game.duration)
+    const [timeLeft, setTimeLeft] = useState(game.options.duration)
 
     const inputRef = useRef(null);
     const timerRef = useRef(null);
@@ -28,9 +28,6 @@ const FastFinger = () => {
         dispatch(setNewGame(randomText))
     }, [game.options]);
 
-    const handleSetTime = useCallback((time) => {
-        dispatch(setTime(time))
-    }, [game])
 
     const handleSetOption = useCallback((option) => {
         dispatch(setOptions(option))
@@ -44,7 +41,7 @@ const FastFinger = () => {
             tryAgainThisGame()
         }
 
-        setTimeLeft(game.duration)
+        setTimeLeft(game.options.duration)
         dispatch(setGameState("playing"))
 
         inputRef.current?.focus();
@@ -62,48 +59,75 @@ const FastFinger = () => {
 
     const endGame = useCallback(() => {
         dispatch(setGameState("finished"))
+        setBuffer('')
         updateRecord(gameRef.current.wpm, gameRef.current.accuracy)
         clearInterval(timerRef.current);
     }, [])
 
     const resetGame = () => {
         clearInterval(timerRef.current)
+        setBuffer('')
         initializeNewGame()
     }
 
     const tryAgainThisGame = () => {
         clearInterval(timerRef.current)
+        setBuffer('')
         dispatch(setNewGame(game.targetParagraph))
     }
 
     const quitGame = () => {
         clearInterval(timerRef.current)
+        setBuffer('')
         dispatch(setQuitGame())
+    }
+
+    const handlePreprocessingInput = (input) => {
+        if (input === '\n' || input === ' ') return ''
+
+        const regex = /\s[^\s]+/;
+
+        if (regex.test(input)) {
+            const posSpace = input.match(regex).index;
+            const filteredInput = input.slice(0, posSpace);
+            return filteredInput;
+        }
+
+        return input;
     }
 
     const handleInputChange = (e) => {
         if (game.state !== 'playing') return;
 
-        const value = e.target.value;
-        const newIndex = value.length;
+        let value = handlePreprocessingInput(e.target.value);
+        let newIndex = game.currentIndex;
 
-        const [
-            correct,
-            incorrect,
-            wpm, 
-            accuracy
-        ] = getWpmAndStat(value, game.targetParagraph, game.startTime)
+        console.log(value)
 
-        dispatch(setUserInput({
-            value,
-            newIndex,
-            correct,
-            incorrect,
-            wpm,
-            accuracy
-        }))
+        if (value.slice(-1) === ' ' || value.slice(-1) === '\n') {
+            newIndex += 1
 
-        if (value.length >= game.targetParagraph.length) {
+            const [
+                correct,
+                incorrect,
+                wpm,
+                accuracy
+            ] = getWpmAndStat([...game.userInput, buffer], game.targetParagraph, game.startTime)
+
+            dispatch(setUserInput({
+                buffer,
+                newIndex,
+                correct,
+                incorrect,
+                wpm,
+                accuracy
+            }))
+            setBuffer('')
+        } else {
+            setBuffer(value)
+        }
+
+        if (newIndex > game.targetParagraph.length) {
             endGame();
         }
     }
@@ -129,11 +153,11 @@ const FastFinger = () => {
     const renderText = () => {
         const { targetParagraph, userInput } = game
 
-        return targetParagraph.split('').map((char, index) => {
-            let className = 'char';
+        return targetParagraph.map((word, index) => {
+            let className = 'word';
 
             if (index < userInput.length) {
-                className += userInput[index] === char ? ' correct' : ' incorrect';
+                className += userInput[index] === word ? ' correct' : ' incorrect';
             } else if (index === game.currentIndex) {
                 className += ' current';
             } else {
@@ -142,10 +166,17 @@ const FastFinger = () => {
 
             return (
                 <span key={index} className={className}>
-                    {char}
+                    {word}
                 </span>
             );
         });
+    }
+
+    const formatTime = (time) => {
+        if (!time || typeof time !== 'number') return
+        const minute = Math.floor(time / 60)
+        const second = time % 60
+        return `${minute.toString().padStart(2, '0')}:${second.toString().padStart(2, '0')}`;
     }
 
     useEffect(() => {
@@ -188,9 +219,11 @@ const FastFinger = () => {
                                     <button
                                         key={time}
                                         onClick={() => {
-                                            handleSetTime(time)
+                                            handleSetOption({
+                                                'duration': time
+                                            })
                                         }}
-                                        className={`option ${game.duration === time ? 'selected' : ''}`}
+                                        className={`option ${game.options.duration === time ? 'selected' : ''}`}
                                     >
                                         {time}s
                                     </button>
@@ -251,14 +284,14 @@ const FastFinger = () => {
                         <div className="input-area">
                             <textarea
                                 ref={inputRef}
-                                value={game.userInput}
+                                value={buffer}
                                 onChange={handleInputChange}
                                 className="typing-input"
                                 placeholder="Bắt đầu gõ ở đây..."
                                 disabled={game.state !== 'playing'}
                             />
                             <div className="input-counter">
-                                {game.userInput.length} / {game.targetParagraph.length}
+                                {game.userInput.join('').length} / {game.targetParagraph.join('').length}
                             </div>
                         </div>
 
@@ -278,7 +311,7 @@ const FastFinger = () => {
                             </div>
                             <div className="live-stat gray">
                                 <div className={`stat-value ${timeLeft < 10 ? "danger" : ""}`}>
-                                    {timeLeft}
+                                    {formatTime(timeLeft)}
                                 </div>
                                 <div className="stat-label">Time</div>
                             </div>

@@ -9,79 +9,81 @@
   /* Style cho modal */
 }
 .sudoku-container .sudoku-modal {
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   position: fixed;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
   z-index: 99;
-  left: 0;
-  top: 6.5rem;
-  width: 100%;
-  height: 100%;
   -webkit-backdrop-filter: saturate(160%) blur(0.2rem);
           backdrop-filter: saturate(160%) blur(0.2rem);
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.65));
   animation: fadeIn 0.3s ease;
 }
 .sudoku-container .sudoku-modal .modal-content {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  margin: 10% auto;
-  padding: 30px;
+  background-color: var(--cl-white-pure);
+  box-shadow: 0 0 0.5rem var(--ink-300);
   border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-  width: 90%;
-  max-width: 400px;
+  width: 30%;
+  min-width: 400px;
+  padding: 0 0 2rem 0;
   text-align: center;
   position: relative;
-  color: white;
+  color: var(--cl-black);
   animation: slideDown 0.4s ease;
 }
-.sudoku-container .sudoku-modal .modal-content .close {
+.sudoku-container .sudoku-modal .modal-content .inform {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 0;
+  position: relative;
+  border-bottom: 0.1rem solid var(--ink-300);
+}
+.sudoku-container .sudoku-modal .modal-content .inform .inform-title {
+  text-align: center;
+}
+.sudoku-container .sudoku-modal .modal-content .inform .inform-close {
   position: absolute;
-  right: 20px;
-  top: 15px;
-  font-size: 28px;
-  font-weight: bold;
-  cursor: pointer;
-  color: white;
-  transition: color 0.3s ease;
-}
-.sudoku-container .sudoku-modal .modal-content .close:hover {
-  color: #ffeb3b;
-}
-.sudoku-container .sudoku-modal .modal-content .result-icon {
-  font-size: 80px;
-  margin-bottom: 20px;
-  animation: bounce 1s ease;
-}
-.sudoku-container .sudoku-modal .modal-content .result-title {
-  font-size: 28px;
-  margin-bottom: 15px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
-}
-.sudoku-container .sudoku-modal .modal-content .result-message {
-  font-size: 18px;
-  margin-bottom: 20px;
-  line-height: 1.5;
+  right: 1rem;
+  font-size: 2rem;
 }
 .sudoku-container .sudoku-modal .modal-content .result-stats {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 1.5rem;
-  border-radius: 10px;
-  margin: 20px 0;
+  padding: 1.5rem 1rem;
   -webkit-backdrop-filter: blur(10px);
           backdrop-filter: blur(10px);
 }
-.sudoku-container .sudoku-modal .modal-content .result-stats p {
-  margin: 8px 0;
-  font-size: 16px;
+.sudoku-container .sudoku-modal .modal-content .result-stats .result-stat {
+  margin: 0.8rem 0;
+  padding: 1rem 0;
+  font-size: 1.6rem;
+  justify-content: space-between;
+  border-bottom: 0.1rem solid var(--ink-300);
 }
-.sudoku-container .sudoku-modal .modal-content .result-btn-go-home {
-  background: rgba(255, 255, 255, 0.1);
-  padding: 1.5rem;
+.sudoku-container .sudoku-modal .modal-content .result-stats .result-stat .stat-name {
+  height: auto;
+  gap: 0.5rem;
+}
+.sudoku-container .sudoku-modal .modal-content .result-stats .result-stat .stat-name .icon {
+  color: var(--ink-500);
+}
+.sudoku-container .sudoku-modal .modal-content .result-stats .highlight {
+  color: var(--brand-500);
+}
+.sudoku-container .sudoku-modal .modal-content .result-btn {
+  background-color: var(--brand-500);
+  padding: 1rem;
   border-radius: 1rem;
   display: block;
+  width: 95%;
+  margin: 0 auto;
   padding: 1.5rem 0;
   color: var(--cl-white-pure);
   font-size: 1.4rem;
+  border: none;
+  margin-bottom: 1rem;
 }
 .sudoku-container .sudoku-card-left {
   background-color: white;

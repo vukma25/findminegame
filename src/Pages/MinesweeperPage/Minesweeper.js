@@ -67,14 +67,6 @@ function Minesweeper() {
                         }
                     >
                         {
-                            settings.gameOver &&
-                            <GameOver
-                                dispatch={dispatch}
-                                message={settings.message}
-                                isWin={isWin(settings)}
-                            />
-                        }
-                        {
                             settings.cells?.map((cell, index) => {
                                 return <Cell
                                     key={index}
@@ -89,6 +81,14 @@ function Minesweeper() {
                     </div>
                 </div>
             </div>
+            {
+                settings.gameOver &&
+                <GameOver
+                    dispatch={dispatch}
+                    message={settings.message}
+                    isWin={isWin(settings)}
+                />
+            }
             <Logger log={log} setLog={setLog} />
             <GoTopBtn />
         </>

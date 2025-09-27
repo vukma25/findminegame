@@ -124,59 +124,6 @@
   justify-content: center;
   position: relative;
 }
-.minesweeper .minesweeper-broad .game-broad .wrapper-game-over {
-  background: transparent;
-  height: 100%;
-  width: 100%;
-  position: absolute;
-}
-.minesweeper .minesweeper-broad .game-broad .wrapper-game-over .game-over {
-  background: linear-gradient(135deg, var(--brand-600), var(--purple-600));
-  color: var(--cl-white-pure);
-  width: 100%;
-  max-width: 40rem;
-  height: auto;
-  text-align: center;
-  padding: 1.5rem;
-  font-size: 2.4rem;
-  position: sticky;
-  top: 1rem;
-  flex-direction: column;
-  gap: 1.8rem;
-  margin: 0 auto;
-  border-radius: 1rem;
-  animation: appear 0.5s;
-}
-.minesweeper .minesweeper-broad .game-broad .wrapper-game-over .game-over .game-over-state {
-  width: 80%;
-  height: auto;
-  text-align: center;
-  text-wrap: wrap;
-}
-.minesweeper .minesweeper-broad .game-broad .wrapper-game-over .game-over .game-over-gif {
-  width: 90%;
-  height: auto;
-}
-.minesweeper .minesweeper-broad .game-broad .wrapper-game-over .game-over .game-over-option {
-  width: 100%;
-  max-width: 40rem;
-  justify-content: space-between;
-}
-.minesweeper .minesweeper-broad .game-broad .wrapper-game-over .game-over .game-over-option .game-over-option-restart, .minesweeper .minesweeper-broad .game-broad .wrapper-game-over .game-over .game-over-option .game-over-option-home {
-  width: 35%;
-  min-width: 10rem;
-  font-size: 1.6rem;
-  padding: 1rem;
-  border: none;
-  border-radius: 0.5rem;
-  background: var(--cl-white-pure);
-  color: var(--cl-primary-purple);
-  transition: all 0.3s;
-}
-.minesweeper .minesweeper-broad .game-broad .wrapper-game-over .game-over .game-over-option .game-over-option-restart:hover, .minesweeper .minesweeper-broad .game-broad .wrapper-game-over .game-over .game-over-option .game-over-option-home:hover {
-  background: var(--cl-primary-yellow);
-  color: var(--cl-black);
-}
 .minesweeper .minesweeper-broad .game-broad .game-broad-cell {
   border: 0.1rem solid var(--ink-400);
   justify-content: center;
@@ -217,6 +164,64 @@
   color: #7B1FA2;
 }
 
+.wrapper-game-over {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  width: 100vw;
+  position: fixed;
+  top: 0;
+  -webkit-backdrop-filter: saturate(160%) blur(8px);
+          backdrop-filter: saturate(160%) blur(8px);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.65));
+}
+.wrapper-game-over .game-over {
+  color: var(--cl-black);
+  box-shadow: 0 0 0.5rem var(--ink-300);
+  background-color: var(--cl-white-pure);
+  width: 30%;
+  min-width: 40rem;
+  height: auto;
+  text-align: center;
+  padding: 1.5rem;
+  flex-direction: column;
+  gap: 1.8rem;
+  margin: 0 auto;
+  border-radius: 1rem;
+  animation: appear 0.5s;
+}
+.wrapper-game-over .game-over .game-over-state {
+  width: 80%;
+  height: auto;
+  font-size: 1.8rem;
+  text-align: center;
+  text-wrap: wrap;
+}
+.wrapper-game-over .game-over .game-over-gif {
+  width: 90%;
+  height: auto;
+  border-radius: 0.5rem;
+}
+.wrapper-game-over .game-over .game-over-option {
+  width: 100%;
+  max-width: 40rem;
+  justify-content: space-between;
+}
+.wrapper-game-over .game-over .game-over-option .game-over-option-restart, .wrapper-game-over .game-over .game-over-option .game-over-option-home {
+  width: 35%;
+  min-width: 10rem;
+  font-size: 1.6rem;
+  padding: 1rem;
+  border: none;
+  border-radius: 0.5rem;
+  color: var(--cl-white-pure);
+  background-color: var(--brand-500);
+  transition: all 0.3s;
+}
+.wrapper-game-over .game-over .game-over-option .game-over-option-restart:hover, .wrapper-game-over .game-over .game-over-option .game-over-option-home:hover {
+  background: var(--ink-500);
+}
 .tool {
   display: grid;
   grid-template-columns: repeat(2, 3rem);

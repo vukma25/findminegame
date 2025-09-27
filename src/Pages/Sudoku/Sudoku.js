@@ -8,7 +8,8 @@ import {
     setGameOver,
     setStartGame,
     setVariant,
-    setLoading
+    setLoading,
+    setUnmountSquare
 } from './Action'
 import {
     Icon,
@@ -131,6 +132,7 @@ function Sudoku() {
                     square
                 }
             }))
+            dispatch(setUnmountSquare())
 
             if (updatedAnswers.length === 0) {
                 dispatch(setGameOver({
@@ -179,8 +181,8 @@ function Sudoku() {
 
         // Ô được chọn
         if (squareActivating &&
-            squareActivating.row === row &&
-            squareActivating.col === col) {
+            squareActivating?.row === row &&
+            squareActivating?.col === col) {
             baseClass += "cell-active ";
         }
 
@@ -258,7 +260,8 @@ function Sudoku() {
                 isWin={sudoku.isWin}
                 errors={sudoku.errors.times}
                 timeFinish={timeFinish}
-                setModal={setModal}/>}
+                setModal={setModal}
+                resetOrStartGame={resetOrStartGame}/>}
             <div className="sudoku-card-left">
                 {/* Header */}
                 <div className="sudoku-header">

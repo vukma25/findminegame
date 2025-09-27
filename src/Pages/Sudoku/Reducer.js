@@ -95,6 +95,12 @@ export const reducer = (state, action) => {
                 ...state,
                 "answers": action.payload
             }
+
+        case ACTION.UNMOUNT_SQUARE: 
+            return {
+                ...state,
+                "squareActivating": null
+            }
         default:
             throw new Error("Invalid action")
     }

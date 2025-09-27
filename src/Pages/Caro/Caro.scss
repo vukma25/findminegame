@@ -1,6 +1,53 @@
-
 .winning-line {
     animation: glow 1s ease-in-out infinite alternate;
+    position: relative;
+}
+
+.line-cross-main {
+    &:before {
+        content: "";
+        display: block;
+        background-color: black;
+        width: 140%;
+        height: .1rem;
+        position: absolute;
+        transform: rotate(-45deg);
+    }
+}
+
+.line-cross-not-main {
+    &:before {
+        content: "";
+        display: block;
+        background-color: black;
+        width: 140%;
+        height: .1rem;
+        position: absolute;
+        transform: rotate(45deg);
+    }
+}
+
+.line-vertical {
+    &:before {
+        content: "";
+        display: block;
+        background-color: black;
+        width: 100%;
+        height: .1rem;
+        position: absolute;
+        transform: rotate(90deg);
+    }
+}
+
+.line-horizontal {
+    &:before {
+        content: "";
+        display: block;
+        background-color: black;
+        width: 100%;
+        height: .1rem;
+        position: absolute;
+    }
 }
 
 .piece-appear {
@@ -52,57 +99,32 @@
             align-items: center;
             flex-direction: column;
 
-            .current-player {
-                text-align: center;
-                margin-bottom: 1rem;
-                font-size: 1.5rem;
-                font-weight: 700;
+            .evaluate-bar {
+                display: flex;
+                width: 100%;
+                height: 1rem;
+                margin-bottom: .5rem;
 
-                .player-x {
-                    color: #ef4444;
+                .evaluate-x {
+                    width: 40%;
+                    height: 100%;
+                    background-color: var(--cl-red-flag);
                 }
 
-                .player-o {
-                    color: #3b82f6;
+                .evaluate-o {
+                    width: 60%;
+                    height: 100%;
+                    background-color: var(--brand-500);
                 }
 
-                .ai-thinking {
-                    color: #6b7280;
-                    font-size: 1rem;
-                }
-            }
-
-            .game-status {
-                border-radius: 0.5rem;
-                padding: 0.75rem 1rem;
-                margin-bottom: 1rem;
-                text-align: center;
-                font-weight: 500;
-
-                &.x-wins {
-                    background-color: #fee2e2;
-                    border: 1px solid #fca5a5;
-                    color: #dc2626;
-                }
-
-                &.o-wins {
-                    background-color: #dbeafe;
-                    border: 1px solid #93c5fd;
-                    color: #2563eb;
-                }
-
-                &.draw {
-                    background-color: #fef3c7;
-                    border: 1px solid #fcd34d;
-                    color: #d97706;
-                }
             }
 
             .board-container {
                 overflow: scroll;
                 margin-bottom: 1rem;
                 height: auto;
-                width: 80%;
+                width: 100%;
+                min-width: 40vh;
 
                 &::-webkit-scrollbar {
                     width: .5rem;
@@ -120,14 +142,14 @@
                 .caro-board {
                     display: grid;
                     gap: 0;
-                    border: 2px solid #9ca3af;
+                    border: .1rem solid var(--cl-black-light);
                     margin-left: auto;
                     margin-right: auto;
                     width: 100%;
 
                     .caro-cell {
                         aspect-ratio: 1;
-                        border: 1px solid #d1d5db;
+                        border: .1rem solid var(--ink-300);
                         display: flex;
                         align-items: center;
                         justify-content: center;
@@ -144,19 +166,35 @@
                         }
 
                         .player-x {
-                            font-size: 1.5rem;
                             font-weight: 700;
                             color: #ef4444;
                             animation: appear 0.3s;
                         }
 
                         .player-o {
-                            font-size: 1.5rem;
                             font-weight: 700;
-                            color: #3b82f6;
+                            color: var(--cl-white-pure);
+                            border: .2rem solid #3b82f6;
+                            border-radius: 50%;
                             animation: appear 0.3s;
                         }
                     }
+                }
+            }
+        }
+
+        .side-panel {
+            width: 100%;
+
+            @media (min-width: 1024px) {
+                width: 23rem;
+            }
+
+            >* {
+                margin-bottom: 1.5rem;
+
+                &:last-child {
+                    margin-bottom: 0;
                 }
             }
 
@@ -164,6 +202,7 @@
                 text-align: center;
 
                 .reset-button {
+                    width: 100%;
                     background-color: #4f46e5;
                     color: white;
                     padding: 0.75rem 1.5rem;
@@ -177,127 +216,81 @@
                     }
                 }
             }
-        }
-
-        .side-panel {
-            width: 100%;
-
-            @media (min-width: 1024px) {
-                width: 20rem;
-            }
-
-            >* {
-                margin-bottom: 1.5rem;
-
-                &:last-child {
-                    margin-bottom: 0;
-                }
-            }
 
             h3 {
                 font-weight: 700;
-                font-size: 1.125rem;
+                font-size: 1.6rem;
                 margin-bottom: 0.75rem;
+            }
+
+            .statistics-match-panel {
+                background-color: #f9fafb;
+                border-radius: 0.5rem;
+                padding: 1rem;
+                box-shadow: 0 0 .5rem var(--ink-400);
+
+                .statistics-content {
+                    display: flex;
+                    justify-content: space-between;
+                    font-size: 1.3rem;
+                    margin-bottom: 1rem;
+                    color: var(--cl-black-light);
+
+                    .statistics-name {
+                        font-weight: 600;
+                    }
+
+                    .statistics-data {
+                        .player-x {
+                            font-weight: 700;
+                            color: #ef4444;
+                            animation: appear 0.3s;
+                        }
+
+                        .player-o {
+                            font-weight: 700;
+                            color: var(--cl-white-pure);
+                            border: .2rem solid #3b82f6;
+                            border-radius: 50%;
+                            animation: appear 0.3s;
+                        }
+
+                        .status {
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            gap: .5rem;
+
+                            &.waiting {
+                                color: var(--cl-primary-yellow)
+                            }
+
+                            &.success {
+                                color: var(--cl-green)
+                            }
+                        }
+                    }
+                }
             }
 
             .settings-panel {
                 background-color: #f9fafb;
                 border-radius: 0.5rem;
                 padding: 1rem;
+                box-shadow: 0 0 .5rem var(--ink-400);
 
                 .setting-group {
                     margin-bottom: 0.75rem;
-
-                    &:last-child {
-                        margin-bottom: 0;
-                    }
-
-                    label {
-                        display: block;
-                        font-size: 0.875rem;
-                        font-weight: 500;
-                        color: #374151;
-                        margin-bottom: 0.25rem;
-                    }
-
-                    select {
-                        width: 100%;
-                        padding: 0.5rem 0.75rem;
-                        border: 1px solid #d1d5db;
-                        border-radius: 0.375rem;
-                        background-color: white;
-
-                        &:focus {
-                            outline: none;
-                            border-color: #3b82f6;
-                            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
-                        }
-
-                        &:disabled {
-                            background-color: #f3f4f6;
-                            cursor: not-allowed;
-                        }
-                    }
-                }
-            }
-
-            .stats-panel {
-                background-color: #f9fafb;
-                border-radius: 0.5rem;
-                padding: 1rem;
-
-                .stat-item {
                     display: flex;
-                    justify-content: space-between;
-                    margin-bottom: 0.5rem;
-                    font-size: 0.875rem;
+                    flex-direction: column;
 
                     &:last-child {
                         margin-bottom: 0;
                     }
 
-                    span:last-child {
-                        font-weight: 500;
-                    }
-                }
-            }
-
-            .instructions-panel {
-                background-color: #eff6ff;
-                border-radius: 0.5rem;
-                padding: 1rem;
-
-                .player-x {
-                    color: #ef4444;
-                    font-weight: 700;
-                }
-
-                .player-o {
-                    color: #3b82f6;
-                    font-weight: 700;
-                }
-
-                p {
-                    margin-bottom: 0.5rem;
-                    font-size: 0.875rem;
-
-                    &:last-child {
-                        margin-bottom: 0;
-                    }
-                }
-            }
-
-            .ai-info-panel {
-                background-color: #ecfdf5;
-                border-radius: 0.5rem;
-                padding: 1rem;
-
-                p {
-                    margin-bottom: 0.5rem;
-                    font-size: 0.875rem;
-
-                    &:last-child {
-                        margin-bottom: 0;
+                    .group-label {
+                        font-size: 1.2rem;
+                        color: var(--cl-black-lighter)
                     }
                 }
             }

@@ -142,20 +142,24 @@
 .typing-game-container .typing-game-card .playing-screen .text-display .typing-text {
   font-size: 1.4rem;
   line-height: 1.75;
+  display: flex;
+  flex-wrap: wrap;
+  -moz-column-gap: 0.5rem;
+       column-gap: 0.5rem;
 }
-.typing-game-container .typing-game-card .playing-screen .text-display .typing-text .char.correct {
+.typing-game-container .typing-game-card .playing-screen .text-display .typing-text .word.correct {
   color: #10b981;
 }
-.typing-game-container .typing-game-card .playing-screen .text-display .typing-text .char.incorrect {
+.typing-game-container .typing-game-card .playing-screen .text-display .typing-text .word.incorrect {
   color: #ef4444;
   text-decoration: underline;
 }
-.typing-game-container .typing-game-card .playing-screen .text-display .typing-text .char.current {
+.typing-game-container .typing-game-card .playing-screen .text-display .typing-text .word.current {
   background-color: #dbeafe;
   color: #1e40af;
   font-weight: 700;
 }
-.typing-game-container .typing-game-card .playing-screen .text-display .typing-text .char.untyped {
+.typing-game-container .typing-game-card .playing-screen .text-display .typing-text .word.untyped {
   color: #6b7280;
 }
 .typing-game-container .typing-game-card .playing-screen .input-area {

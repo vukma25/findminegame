@@ -20,7 +20,7 @@ const addMarksAndArticle = (word) => {
     const marks = marksAndArticle.marks
     const article = marksAndArticle.article
     const mark = marks[Math.floor(Math.random() * marks.length)]
-    const art= article[Math.floor(Math.random() * article.length)]
+    const art = article[Math.floor(Math.random() * article.length)]
 
     if (addOrNot === 0) {
         newWord += mark
@@ -42,11 +42,18 @@ const capitalizeFirstLetter = (word) => {
     return newWord
 }
 
+const mapNumberOfWord = {
+    15: 30,
+    30: 60,
+    60: 100,
+    120: 150
+}
+
 export const renderParagraph = (options = null) => {
 
-    let paragraph = ''
+    let paragraph = []
 
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < mapNumberOfWord[options.duration]; i++) {
         const len = Math.floor(Math.random() * 5) + 4
         const num = Math.floor(Math.random() * WORDS[len].length)
         let word = WORDS[len][num]
@@ -60,37 +67,42 @@ export const renderParagraph = (options = null) => {
             if (options.useMarkAndArticle) {
                 word = addMarksAndArticle(word)
             }
-        } 
-
-        paragraph += word
-
-        if (i !== 99) {
-            paragraph += " "
         }
+
+        paragraph.push(word)
     }
 
     return paragraph
 }
 
-export const getWpmAndStat = (userInput, targetPara, startTime)  => {
+export const getWpmAndStat = (userInput, targetPara, startTime) => {
     let correct = 0;
     let incorrect = 0;
 
     for (let i = 0; i < userInput.length; i++) {
         if (i < targetPara.length) {
-            if (userInput[i] === targetPara[i]) {
-                correct++;
-            } else {
-                incorrect++;
+            const input = userInput[i].split('')
+            const output = targetPara[i].split('')
+
+            for (let j = 0; j < input.length; j++) {
+                if (j >= output.length || input[j] !== output?.[j]) {
+                    incorrect++;
+                } else {
+                    correct++;
+                }
+            }
+
+            if (output.length > input.length) {
+                incorrect += (output.length - input.length)
             }
         }
     }
 
     const timeElapsed = (Date.now() - startTime) / 1000 / 60;
-    const wordsTyped = correct / 5;
+    const wordsTyped = (correct / 5)
     const currentWpm = timeElapsed > 0 ? Math.round(wordsTyped / timeElapsed) : 0;
-    const currentAccuracy = userInput.length > 0 ? 
-        Math.round((correct / userInput.length) * 100) : 100;
+    const currentAccuracy = userInput.join('').length > 0 ?
+        Math.round((correct / userInput.join('').length) * 100) : 100;
 
     return [correct, incorrect, currentWpm, currentAccuracy]
 }

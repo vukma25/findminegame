@@ -3,6 +3,7 @@
 onmessage = async function(e) {
     const { size, difficulty, action } = e.data
     const module = await import("./CreateSudoku.js")
+
     const SudokuGame = module.default
 
     if (action === "generate_puzzle") {

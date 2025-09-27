@@ -162,8 +162,6 @@ function Piece({
                 'display': 'none'
             })
 
-            console.log(hoveringSquare)
-
             //an hien nuoc goi y cua quan duoc click vao
             if (pieceActive === square && 
                 !(hoveringSquare !== square)

@@ -1,4 +1,5 @@
 
+import Icon from '@mui/material/Icon'
 import { Link } from 'react-router'
 
 const formatTime = (clock) => {
@@ -6,24 +7,42 @@ const formatTime = (clock) => {
     return `${clock.minute.toString().padStart(2, '0')}:${clock.second.toString().padStart(2, '0')}`;
 }
 
-export default function InformBoard({ isWin, errors, timeFinish, setModal }) {
+export default function InformBoard({ isWin, errors, timeFinish, setModal, resetOrStartGame }) {
     return (
         // Bảng thông báo kết quả
         <div className="sudoku-modal">
             <div className="modal-content">
-                <span className="close" onClick={() => {setModal(false)}}>&times;</span>
-                <div className="result-icon"></div>
-                <h2 className="result-title">Kết Quả</h2>
-                <p className="result-message">
-                    {`${isWin ? "Bạn đã giải thành công câu đố" :
-                        "Bạn đã thất bại trong việc giải câu đố"
-                    }`}
-                </p>
-                <div className="result-stats">
-                    <p className="result-time">Thời gian: {formatTime(timeFinish)}</p>
-                    <p className="result-mistakes">Số lỗi: {errors}</p>
+                <div className="inform">
+                    <h1 className="inform-title">You {`${isWin ? "win" : "lose"}`}!</h1>
+                    <Icon
+                        className="inform-close"
+                        onClick={() => { setModal(false) }}
+                    >close</Icon>
                 </div>
-                <Link to="/" className="result-btn-go-home">Home</Link>
+                <div className="result-stats">
+                    <div className="result-stat flex-div">
+                        <div className="stat-name flex-div">
+                            <p>Thời gian</p>
+                            <Icon className="icon">timer</Icon>
+                        </div>
+                        <p className="stat-data highlight">{formatTime(timeFinish)}</p>
+                    </div>
+                    <div className="result-stat flex-div">
+                        <div className="stat-name flex-div">
+                            <p>Số lỗi</p>
+                            <Icon className="icon">error</Icon>
+                        </div>
+                        <p className="stat-data highlight">{errors} / 3</p>
+                    </div>
+                </div>
+                <Link to="/" className="result-btn">Home</Link>
+                <button 
+                    className="result-btn"
+                    onClick={() => { 
+                        resetOrStartGame() 
+                        setModal(false)
+                    }}
+                >New game</button>
             </div>
         </div>
     )

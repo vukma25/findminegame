@@ -3250,7 +3250,8 @@ export class ChessGame {
             const path = this.findAllSquareFromKingToCheck(color, attackers[0])
             for (let i = 0; i < this.pieces.length; i++) {
                 const { piece, square } = this.pieces[i]
-                if (piece[0] === color && piece[1] !== 'k') {
+                const pins = this.pins.map(({ square: sq }) => sq)
+                if (piece[0] === color && piece[1] !== 'k' && !pins.includes(square)) {
                     let moves = this.getAllMoveSquareOfPiece(piece, square)
                     let takes = this.getAllAttackSquareOfPiece(piece, square)
 

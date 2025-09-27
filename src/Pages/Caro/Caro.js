@@ -1,348 +1,285 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useReducer, useRef, useCallback } from 'react';
+import { initialState, reducer } from './Reducer';
+import {
+    setAiDifficulty,
+    setAIThinking,
+    setBoard,
+    setMode,
+    setNewGame,
+    setStatus,
+    setVariant
+} from './Action';
+import {
+    Icon,
+    FormControl,
+    FormControlLabel,
+    FormLabel,
+    Radio,
+    RadioGroup,
+    CircularProgress
+} from '@mui/material'
+import Logger from '../../Components/Logger/Logger'
 import './Caro.css'
 
 const Caro = () => {
-    const BOARD_SIZE = 15;
-    const EMPTY = 0;
-    const PLAYER_X = 1;
-    const PLAYER_O = 2;
+    const [caro, dispatch] = useReducer(reducer, initialState)
+    const [winningLine, setWinningLine] = useState(null)
+    const [playerSide, setPlayerSide] = useState(1)
+    const [winner, setWinner] = useState(null)
+    const [log, setLog] = useState({
+        type: "info",
+        message: ""
+    })
+    const refWebWorker = useRef(null)
+    const refHandleClickCell = useRef(null)
+    const refCheckWin = useRef(null)
 
-    const [board, setBoard] = useState(() =>
-        Array(BOARD_SIZE).fill().map(() => Array(BOARD_SIZE).fill(EMPTY))
-    );
-    const [currentPlayer, setCurrentPlayer] = useState(PLAYER_X);
-    const [gameStatus, setGameStatus] = useState('playing');
-    const [winningLine, setWinningLine] = useState([]);
-    const [gameMode, setGameMode] = useState('ai');
-    const [aiDifficulty, setAiDifficulty] = useState('medium');
-    const [moveCount, setMoveCount] = useState(0);
-    const [isAiThinking, setIsAiThinking] = useState(false);
+    const handleCellClick = useCallback((row, col, side) => {
+        if (caro.status !== "playing") return
+        if (caro.board[row][col] !== 0) return
+        if (caro.currentPlayer !== side) return
+        if (winningLine) return
 
-    const checkWin = useCallback((board, row, col, player) => {
-        const directions = [
-            [0, 1],   // ngang
-            [1, 0],   // dọc
-            [1, 1],   // chéo chính
-            [1, -1]   // chéo phụ
-        ];
+        const latestBoard = caro.board.map(row => [...row])
+        latestBoard[row][col] = side
+        dispatch(setBoard(latestBoard))
 
-        for (let [dx, dy] of directions) {
-            let count = 1;
-            let line = [{ row, col }];
+        const line = checkWin(row, col, side)
+        if (line) {
+            setWinningLine(line)
+            setWinner(side === 1 ? "X" : "O")
+            setLog(prev => ({
+                ...prev,
+                "message": `Player ${side === 1 ? "X" : "O"} win`
+            }))
+            return
+        }
 
-            // Kiểm tra về phía trước
-            for (let i = 1; i < 5; i++) {
+        if (caro.currentPlayer === playerSide && caro.mode === "AI") {
+            refWebWorker.current.postMessage({
+                action: "get_best_move",
+                data: {
+                    init: {
+                        size: caro.size,
+                        board: latestBoard,
+                        ai: playerSide === 1 ? 2 : 1,
+                        level: caro.aiDifficulty
+
+                    },
+                    currentBoard: latestBoard
+                }
+            })
+        }
+    }, [caro, playerSide, dispatch])
+
+    const handleChangeMode = (e) => {
+        dispatch(setMode(e.target.value))
+    }
+
+    const handleChangeAiDifficulty = (e) => {
+        dispatch(setAiDifficulty(e.target.value))
+    }
+
+    const handleChangeCaroVariant = (e) => {
+        const variants = {
+            "3": {
+                "name": "Tic Tac Toe",
+                "board": [[0, 0, 0], [0, 0, 0], [0, 0, 0]],
+                "size": 3
+            },
+            "15": {
+                "name": "Caro",
+                "board": Array.from({ length: 15 }, () => Array.from({ length: 15 }, () => 0)),
+                "size": 15
+            },
+            "25": {
+                "name": "Extra Caro",
+                "board": Array.from({ length: 25 }, () => Array.from({ length: 25 }, () => 0)),
+                "size": 25
+            }
+        }
+        dispatch(setVariant(variants[e.target.value]))
+    }
+
+    const handleChangeStatus = (status) => {
+        dispatch(setStatus(status))
+    }
+
+    const handleChangeSide = (e) => {
+        setPlayerSide(parseInt(e.target.value))
+    }
+
+    const handleControlBtn = useCallback(() => {
+        if (["playing"].includes(caro.status)) {
+            dispatch(setNewGame())
+            setWinningLine(null)
+        } else {
+            handleChangeStatus("playing")
+            if (playerSide === 2 && caro.mode === "AI") {
+                console.log("ok")
+                refWebWorker.current.postMessage({
+                    action: "get_best_move",
+                    data: {
+                        init: {
+                            size: caro.size,
+                            board: caro.board,
+                            ai: playerSide === 1 ? 2 : 1,
+                            level: caro.aiDifficulty
+
+                        },
+                        currentBoard: caro.board
+                    }
+                })
+            }
+        }
+    }, [caro, playerSide])
+
+    const checkWin = useCallback((row, col, side) => {
+
+        const directions = [[0, 1], [1, 0], [1, 1], [1, -1]];
+        const condition = caro.size >= 15 ? 5 : 3
+
+        for (const [dx, dy] of directions) {
+            let count = 1; // Đã có ô hiện tại
+            const line = [{ r: row, c: col }]
+
+            // Kiểm tra chiều thuận
+            for (let i = 1; i < condition; i++) {
                 const newRow = row + dx * i;
                 const newCol = col + dy * i;
-                if (newRow >= 0 && newRow < BOARD_SIZE &&
-                    newCol >= 0 && newCol < BOARD_SIZE &&
-                    board[newRow][newCol] === player) {
-                    count++;
-                    line.push({ row: newRow, col: newCol });
-                } else {
-                    break;
-                }
+
+                if (newRow < 0 || newRow >= caro.size || newCol < 0 || newCol >= caro.size) break;
+                if (caro.board[newRow][newCol] !== side) break;
+
+                count++;
+                line.push({ r: newRow, c: newCol })
             }
 
-            // Kiểm tra về phía sau
-            for (let i = 1; i < 5; i++) {
+            // Kiểm tra chiều nghịch
+            for (let i = 1; i < condition; i++) {
                 const newRow = row - dx * i;
                 const newCol = col - dy * i;
-                if (newRow >= 0 && newRow < BOARD_SIZE &&
-                    newCol >= 0 && newCol < BOARD_SIZE &&
-                    board[newRow][newCol] === player) {
-                    count++;
-                    line.unshift({ row: newRow, col: newCol });
-                } else {
-                    break;
-                }
+
+                if (newRow < 0 || newRow >= caro.size || newCol < 0 || newCol >= caro.size) break;
+                if (caro.board[newRow][newCol] !== side) break;
+
+                count++;
+                line.unshift({ r: newRow, c: newCol })
             }
 
-            if (count >= 5) {
-                return line.slice(0, 5); // Chỉ lấy 5 quân đầu tiên
+            if (count >= condition) {
+                return line;
             }
         }
 
         return null;
-    }, []);
-
-    // Đánh giá vị trí cho AI
-    const evaluatePosition = useCallback((board, row, col, player) => {
-        const directions = [
-            [0, 1], [1, 0], [1, 1], [1, -1]
-        ];
-        let score = 0;
-
-        for (let [dx, dy] of directions) {
-            let count = 1;
-            let blocked = 0;
-
-            // Kiểm tra về phía trước
-            for (let i = 1; i < 5; i++) {
-                const newRow = row + dx * i;
-                const newCol = col + dy * i;
-                if (newRow >= 0 && newRow < BOARD_SIZE && newCol >= 0 && newCol < BOARD_SIZE) {
-                    if (board[newRow][newCol] === player) {
-                        count++;
-                    } else if (board[newRow][newCol] !== EMPTY) {
-                        blocked++;
-                        break;
-                    } else {
-                        break;
-                    }
-                } else {
-                    blocked++;
-                    break;
-                }
-            }
-
-            // Kiểm tra về phía sau
-            for (let i = 1; i < 5; i++) {
-                const newRow = row - dx * i;
-                const newCol = col - dy * i;
-                if (newRow >= 0 && newRow < BOARD_SIZE && newCol >= 0 && newCol < BOARD_SIZE) {
-                    if (board[newRow][newCol] === player) {
-                        count++;
-                    } else if (board[newRow][newCol] !== EMPTY) {
-                        blocked++;
-                        break;
-                    } else {
-                        break;
-                    }
-                } else {
-                    blocked++;
-                    break;
-                }
-            }
-
-            // Tính điểm dựa trên số quân liên tiếp và bị chặn
-            if (blocked < 2) {
-                switch (count) {
-                    case 5: score += 100000; break;
-                    case 4: score += blocked === 0 ? 10000 : 1000; break;
-                    case 3: score += blocked === 0 ? 1000 : 100; break;
-                    case 2: score += blocked === 0 ? 100 : 10; break;
-                    default: score += 1;
-                }
-            }
-        }
-
-        return score;
-    }, []);
-
-    // AI thực hiện nước đi
-    const makeAiMove = useCallback((board) => {
-        const availableMoves = [];
-
-        // Tìm tất cả nước đi có thể
-        for (let row = 0; row < BOARD_SIZE; row++) {
-            for (let col = 0; col < BOARD_SIZE; col++) {
-                if (board[row][col] === EMPTY) {
-                    // Chỉ xem xét các ô gần quân cờ đã có
-                    let hasNeighbor = false;
-                    for (let dr = -2; dr <= 2; dr++) {
-                        for (let dc = -2; dc <= 2; dc++) {
-                            const nr = row + dr;
-                            const nc = col + dc;
-                            if (nr >= 0 && nr < BOARD_SIZE && nc >= 0 && nc < BOARD_SIZE) {
-                                if (board[nr][nc] !== EMPTY) {
-                                    hasNeighbor = true;
-                                    break;
-                                }
-                            }
-                        }
-                        if (hasNeighbor) break;
-                    }
-
-                    if (hasNeighbor || moveCount === 0) {
-                        availableMoves.push({ row, col });
-                    }
-                }
-            }
-        }
-
-        if (availableMoves.length === 0) return null;
-
-        let bestMove = availableMoves[0];
-        let bestScore = -Infinity;
-
-        for (let move of availableMoves) {
-            const { row, col } = move;
-
-            // Kiểm tra nước đi thắng ngay
-            const testBoard = board.map(r => [...r]);
-            testBoard[row][col] = PLAYER_O;
-            if (checkWin(testBoard, row, col, PLAYER_O)) {
-                return move;
-            }
-
-            // Kiểm tra nước đi chặn người chơi thắng
-            testBoard[row][col] = PLAYER_X;
-            if (checkWin(testBoard, row, col, PLAYER_X)) {
-                bestMove = move;
-                bestScore = Infinity;
-                continue;
-            }
-
-            // Đánh giá vị trí
-            let score = 0;
-            if (aiDifficulty !== 'easy') {
-                score += evaluatePosition(board, row, col, PLAYER_O);
-                score -= evaluatePosition(board, row, col, PLAYER_X) * 1.1; // Ưu tiên chặn
-            }
-
-            // Thêm yếu tố ngẫu nhiên cho AI dễ
-            if (aiDifficulty === 'easy') {
-                score = Math.random() * 100;
-            } else if (aiDifficulty === 'medium') {
-                score += Math.random() * 50;
-            }
-
-            if (score > bestScore) {
-                bestScore = score;
-                bestMove = move;
-            }
-        }
-
-        return bestMove;
-    }, [aiDifficulty, moveCount, checkWin, evaluatePosition]);
-
-    // Xử lý click ô cờ
-    const handleCellClick = (row, col) => {
-        if (gameStatus !== 'playing' || board[row][col] !== EMPTY) return;
-        if (gameMode === 'ai' && currentPlayer === PLAYER_O) return;
-
-        makeMove(row, col, currentPlayer);
-    };
-
-    // Thực hiện nước đi
-    const makeMove = (row, col, player) => {
-        const newBoard = board.map(r => [...r]);
-        newBoard[row][col] = player;
-        setBoard(newBoard);
-        setMoveCount(prev => prev + 1);
-
-        // Kiểm tra thắng
-        const winLine = checkWin(newBoard, row, col, player);
-        if (winLine) {
-            setWinningLine(winLine);
-            setGameStatus(player === PLAYER_X ? 'x-wins' : 'o-wins');
-            return;
-        }
-
-        // Kiểm tra hòa
-        if (moveCount + 1 >= BOARD_SIZE * BOARD_SIZE) {
-            setGameStatus('draw');
-            return;
-        }
-
-        // Đổi lượt
-        setCurrentPlayer(player === PLAYER_X ? PLAYER_O : PLAYER_X);
-    };
-
-    // AI tự động chơi
-    useEffect(() => {
-        if (gameMode === 'ai' && currentPlayer === PLAYER_O && gameStatus === 'playing') {
-            setIsAiThinking(true);
-            const timer = setTimeout(() => {
-                const aiMove = makeAiMove(board);
-                if (aiMove) {
-                    makeMove(aiMove.row, aiMove.col, PLAYER_O);
-                }
-                setIsAiThinking(false);
-            }, aiDifficulty === 'hard' ? 1000 : aiDifficulty === 'medium' ? 500 : 200);
-
-            return () => clearTimeout(timer);
-        }
-    }, [currentPlayer, gameMode, gameStatus, board, makeAiMove]);
-
-    const resetGame = () => {
-        setBoard(Array(BOARD_SIZE).fill().map(() => Array(BOARD_SIZE).fill(EMPTY)));
-        setCurrentPlayer(PLAYER_X);
-        setGameStatus('playing');
-        setWinningLine([]);
-        setMoveCount(0);
-        setIsAiThinking(false);
-    };
-
+    }, [caro])
 
     const getCellClass = (row, col) => {
         let baseClass = "caro-cell";
 
-        const isWinningCell = winningLine.some(pos => pos.row === row && pos.col === col);
-        if (isWinningCell) {
-            baseClass += " winning-cell winning-line ";
+        if (winningLine) {
+            const isWinningCell = winningLine.some(pos => pos.r === row && pos.c === col);
+            const [dy, dx] = [
+                winningLine[0].r - winningLine[1].r,
+                winningLine[0].c - winningLine[1].c,
+            ]
+
+            if (isWinningCell) {
+                baseClass += " winning-cell winning-line";
+
+                if (dy === dx) {
+                    baseClass += " line-cross-not-main"
+                } else if (dy === 0) {
+                    baseClass += " line-horizontal"
+                } else if (dx === 0) {
+                    baseClass += " line-vertical"
+                } else {
+                    baseClass += " line-cross-main"
+                }
+            }
         }
 
         return baseClass;
-    };
+    }
 
     const getCellContent = (value) => {
-        if (value === PLAYER_X) return <span className="player-x">✕</span>;
-        if (value === PLAYER_O) return <span className="player-o">○</span>;
+        if (value === 1) return <Icon
+            className="player-x"
+            sx={{ fontSize: `${caro.size >= 15 ? 1.5 : 8}rem` }}
+        >close</Icon>;
+        if (value === 2) return <Icon
+            className="player-o"
+            sx={{ fontSize: `${caro.size >= 15 ? 1.5 : 6}rem` }}
+        >circle</Icon>;
         return null;
-    };
+    }
+
+    useEffect(() => {
+        refHandleClickCell.current = handleCellClick
+        refCheckWin.current = checkWin
+    }, [handleCellClick, checkWin])
+
+    useEffect(() => {
+        refWebWorker.current = new Worker(new URL("./CaroWebWorker.js", import.meta.url))
+
+        refWebWorker.current.onmessage = (event) => {
+            const { type, payload } = event.data
+
+            switch (type) {
+                case "loading":
+                    dispatch(setAIThinking(payload))
+                    break
+                case "get_best_move_success":
+                    const { r, c } = payload
+                    const side = playerSide === 1 ? 2 : 1
+                    refHandleClickCell.current(r, c, side)
+                    break
+                case "get_best_move_failure":
+                    break;
+                default:
+                    throw new Error("Main thread get best move failure")
+            }
+
+        }
+
+        return () => {
+            if (refWebWorker.current) {
+                refWebWorker.current.terminate()
+                refWebWorker.current = null
+            }
+        }
+    }, [dispatch, playerSide])
 
     return (
         <div className="caro-container">
             <div className="caro-card">
                 {/* Header */}
                 <div className="caro-header">
-                    <h1>⚫ Cờ caro</h1>
-                    <p>Xếp 5 quân thành hàng để thắng</p>
+                    <h1>{caro.name}</h1>
                 </div>
 
                 <div className="caro-content">
                     {/* Game Board */}
                     <div className="caro-board-section flex-div">
-                        {/* Current Player */}
-                        <div className="current-player">
-                            {gameStatus === 'playing' ? (
-                                <>
-                                    Lượt: {currentPlayer === PLAYER_X ?
-                                        <span className="player-x">✕ (Bạn)</span> :
-                                        <span className="player-o">○ {gameMode === 'ai' ? '(AI)' : '(Người chơi 2)'}</span>
-                                    }
-                                    {isAiThinking && <span className="ai-thinking">- AI đang suy nghĩ...</span>}
-                                </>
-                            ) : (
-                                <span>Game kết thúc</span>
-                            )}
-                        </div>
-
-                        {/* Game Status */}
-                        {gameStatus === 'x-wins' && (
-                            <div className="game-status x-wins">
-                                🎉 {gameMode === 'ai' ? 'Bạn thắng!' : 'Người chơi ✕ thắng!'}
-                            </div>
-                        )}
-
-                        {gameStatus === 'o-wins' && (
-                            <div className="game-status o-wins">
-                                🎉 {gameMode === 'ai' ? 'AI thắng!' : 'Người chơi ○ thắng!'}
-                            </div>
-                        )}
-
-                        {gameStatus === 'draw' && (
-                            <div className="game-status draw">
-                                🤝 Hòa! Bàn cờ đã đầy
-                            </div>
-                        )}
-
                         {/* Caro Board */}
+                        {/* <div className="evaluate-bar">
+                            <div className="evaluate-x"></div>
+                            <div className="evaluate-o"></div>
+                        </div> */}
                         <div className="board-container">
                             <div
                                 className="caro-board"
-                                style={{ 
-                                    gridTemplateColumns: `repeat(${BOARD_SIZE}, 1fr)`
+                                style={{
+                                    gridTemplateColumns: `repeat(${caro.size}, 1fr)`
                                 }}
                             >
-                                {board.map((row, rowIndex) =>
+                                {caro.board.map((row, rowIndex) =>
                                     row.map((cell, colIndex) => (
                                         <div
                                             key={`${rowIndex}-${colIndex}`}
                                             className={getCellClass(rowIndex, colIndex)}
-                                            onClick={() => handleCellClick(rowIndex, colIndex)}
+                                            onClick={() => handleCellClick(rowIndex, colIndex, playerSide)}
                                         >
                                             {getCellContent(cell)}
                                         </div>
@@ -350,103 +287,125 @@ const Caro = () => {
                                 )}
                             </div>
                         </div>
-
-                        {/* Reset Button */}
-                        <div className="reset-section">
-                            <button
-                                onClick={resetGame}
-                                className="reset-button"
-                            >
-                                Ván mới
-                            </button>
-                        </div>
                     </div>
 
                     {/* Side Panel */}
                     <div className="side-panel">
+
+                        <div className="reset-section">
+                            <button
+                                onClick={handleControlBtn}
+                                className="reset-button"
+                            >
+                                {caro.status !== "waiting" ? "New game" : "Play"}
+                            </button>
+                        </div>
+                        <div className="statistics-match-panel">
+                            <h3>Statistics</h3>
+
+                            <div className="statistics-content">
+                                <div className="statistics-name">Turn</div>
+                                <div className="statistics-data">{caro.currentPlayer === 1 ? 
+                                    <Icon className="player-x">close</Icon> : 
+                                    <Icon className="player-o">circle</Icon> 
+                                }</div>
+                            </div>
+                            {caro.mode === "AI" && <div className="statistics-content">
+                                <div className="statistics-name">AI status</div>
+                                <div className="statistics-data">
+                                    <div className={`status ${caro.aiThinking ? "waiting" : "success"}`}>
+                                        <span>{`${caro.aiThinking ? "Thinking" : "Done"}`}</span>
+                                        {caro.aiThinking && <CircularProgress size={"1.5rem"}/>}
+                                    </div>
+                                </div>
+                            </div>}
+                            <div className="statistics-content">
+                                <div className="statistics-name">Winner</div>
+                                <div className="statistics-data">{winner ? `Player ${winner}` : "Undetermined"}</div>
+                            </div>
+                        </div>
+
                         {/* Game Settings */}
                         <div className="settings-panel">
-                            <h3>Cài đặt game</h3>
+                            <h3>Settings</h3>
 
                             <div className="settings-content">
                                 <div className="setting-group">
-                                    <label>
-                                        Chế độ chơi:
-                                    </label>
-                                    <select
-                                        value={gameMode}
-                                        onChange={(e) => setGameMode(e.target.value)}
-                                        disabled={gameStatus === 'playing' && moveCount > 0}
-                                    >
-                                        <option value="ai">Chơi với AI</option>
-                                        <option value="human">2 người chơi</option>
-                                    </select>
-                                </div>
-
-                                {gameMode === 'ai' && (
-                                    <div className="setting-group">
-                                        <label>
-                                            Độ khó AI:
-                                        </label>
-                                        <select
-                                            value={aiDifficulty}
-                                            onChange={(e) => setAiDifficulty(e.target.value)}
-                                            disabled={gameStatus === 'playing' && moveCount > 0}
+                                    <FormControl>
+                                        <FormLabel
+                                            className="group-label" 
+                                            id="setting-variants">Variants</FormLabel>
+                                        <RadioGroup
+                                            row
+                                            aria-labelledby="setting-variants"
+                                            value={caro.size}
+                                            onChange={handleChangeCaroVariant}
+                                            name="variants"
                                         >
-                                            <option value="easy">Dễ</option>
-                                            <option value="medium">Trung bình</option>
-                                            <option value="hard">Khó</option>
-                                        </select>
+                                            <FormControlLabel value={3} control={<Radio disabled={caro.status === "playing"} />} label="3 x 3" />
+                                            <FormControlLabel value={15} control={<Radio disabled={caro.status === "playing"} />} label="15 x 15" />
+                                            <FormControlLabel value={25} control={<Radio disabled={caro.status === "playing"} />} label="25 x 25" />
+                                        </RadioGroup>
+                                    </FormControl>
+                                    <FormControl>
+                                        <FormLabel
+                                            className="group-label" 
+                                            id="setting-modes">Modes</FormLabel>
+                                        <RadioGroup
+                                            row
+                                            aria-labelledby="setting-modes"
+                                            value={caro.mode}
+                                            onChange={handleChangeMode}
+                                            name="mode"
+                                        >
+                                            <FormControlLabel value={"AI"} control={<Radio disabled={caro.status === "playing"} />} label="AI" />
+                                            <FormControlLabel value={"PLAYER"} control={<Radio disabled={caro.status === "playing"} />} label="Player" />
+                                        </RadioGroup>
+                                    </FormControl>
+                                </div>
+
+                                {caro.mode === 'AI' && <>
+                                    <div className="setting-group">
+                                        <FormControl>
+                                            <FormLabel
+                                                className="group-label" 
+                                                id="setting-difficulties">Difficulties</FormLabel>
+                                            <RadioGroup
+                                            row
+                                                aria-labelledby="setting-difficulties"
+                                                value={caro.aiDifficulty}
+                                                onChange={handleChangeAiDifficulty}
+                                                name="difficulties"
+                                            >
+                                                <FormControlLabel value={"easy"} control={<Radio disabled={caro.status === "playing"} />} label="Easy" />
+                                                <FormControlLabel value={"medium"} control={<Radio disabled={caro.status === "playing"} />} label="Medium" />
+                                                <FormControlLabel value={"hard"} control={<Radio disabled={caro.status === "playing"} />} label="Hard" />
+                                            </RadioGroup>
+                                        </FormControl>
+                                        <FormControl>
+                                            <FormLabel
+                                                className="group-label" 
+                                                id="setting-sides">Side</FormLabel>
+                                            <RadioGroup
+                                                row
+                                                aria-labelledby="setting-sides"
+                                                value={playerSide}
+                                                onChange={handleChangeSide}
+                                                name="sides"
+                                            >
+                                                <FormControlLabel value={1} control={<Radio disabled={caro.status === "playing"} />} label="X" />
+                                                <FormControlLabel value={2} control={<Radio disabled={caro.status === "playing"} />} label="O" />
+                                            </RadioGroup>
+                                        </FormControl>
                                     </div>
-                                )}
+                                </>
+                                }
                             </div>
                         </div>
-
-                        {/* Game Stats */}
-                        <div className="stats-panel">
-                            <h3>Thống kê</h3>
-                            <div className="stats-content">
-                                <div className="stat-item">
-                                    <span>Số nước đã đi:</span>
-                                    <span>{moveCount}</span>
-                                </div>
-                                <div className="stat-item">
-                                    <span>Kích thước bàn:</span>
-                                    <span>{BOARD_SIZE}×{BOARD_SIZE}</span>
-                                </div>
-                                <div className="stat-item">
-                                    <span>Điều kiện thắng:</span>
-                                    <span>5 quân liên tiếp</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        {/* Instructions */}
-                        <div className="instructions-panel">
-                            <h3>Hướng dẫn</h3>
-                            <div className="instructions-content">
-                                <p>• <span className="player-x">✕</span> - Người chơi 1 (Đỏ)</p>
-                                <p>• <span className="player-o">○</span> - {gameMode === 'ai' ? 'AI' : 'Người chơi 2'} (Xanh)</p>
-                                <p>• Nhấp vào ô trống để đặt quân</p>
-                                <p>• Xếp 5 quân thành hàng để thắng</p>
-                                <p>• Có thể thắng theo hàng ngang, dọc, hoặc chéo</p>
-                            </div>
-                        </div>
-
-                        {/* AI Info */}
-                        {gameMode === 'ai' && (
-                            <div className="ai-info-panel">
-                                <h3>Thông tin AI</h3>
-                                <div className="ai-info-content">
-                                    <p><strong>Dễ:</strong> AI chơi ngẫu nhiên</p>
-                                    <p><strong>Trung bình:</strong> AI có chiến thuật cơ bản</p>
-                                    <p><strong>Khó:</strong> AI thông minh, khó thắng</p>
-                                </div>
-                            </div>
-                        )}
                     </div>
                 </div>
             </div>
+            <Logger log={log} setLog={setLog} />
         </div>
     );
 };

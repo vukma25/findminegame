@@ -23,9 +23,9 @@
   margin-bottom: 1rem;
 }
 .wordle-container .wordle-card .wordle-stats .wordle-btn-new-game {
-  background-color: #10b981;
+  background-color: var(--cl-green);
   border: none;
-  padding: 1rem 2rem;
+  padding: 1.5rem 2rem;
   border-radius: 0.5rem;
   font-size: 1.4rem;
   color: var(--cl-white-pure);
@@ -178,6 +178,85 @@
 }
 .wordle-container .wordle-card .instructions .color-sample.absent {
   background-color: #6b7280;
+}
+.wordle-container .wordle-modal {
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
+  -webkit-backdrop-filter: saturate(160%) blur(8px);
+          backdrop-filter: saturate(160%) blur(8px);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.65));
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10;
+}
+.wordle-container .wordle-modal .modal-content {
+  width: 30%;
+  min-width: 40rem;
+  height: auto;
+  background-color: var(--cl-white-pure);
+  box-shadow: 0 0 0.5rem var(--ink-300);
+  border-radius: 1rem;
+  text-align: center;
+}
+.wordle-container .wordle-modal .modal-content .inform {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem 0;
+  position: relative;
+  border-bottom: 0.1rem solid var(--ink-300);
+}
+.wordle-container .wordle-modal .modal-content .inform .inform-title {
+  text-align: center;
+}
+.wordle-container .wordle-modal .modal-content .inform .inform-close {
+  position: absolute;
+  right: 1rem;
+  font-size: 2rem;
+}
+.wordle-container .wordle-modal .modal-content .result {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: auto;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+.wordle-container .wordle-modal .modal-content .result .result-title {
+  font-size: 1.4rem;
+  color: var(--ink-500);
+}
+.wordle-container .wordle-modal .modal-content .result .result-content {
+  display: inline;
+  height: auto;
+  padding: 1rem 1.5rem;
+  border: 0.1rem dashed var(--ink-400);
+}
+.wordle-container .wordle-modal .modal-content .result .result-content .char {
+  margin: 0 0.2rem;
+  font-size: 1.4rem;
+}
+.wordle-container .wordle-modal .modal-content .links .links-title {
+  font-size: 1.4rem;
+}
+.wordle-container .wordle-modal .modal-content .links a {
+  display: block;
+  font-size: 1.2rem;
+  color: var(--cl-black);
+}
+.wordle-container .wordle-modal .modal-content .links a:hover, .wordle-container .wordle-modal .modal-content .links a:focus, .wordle-container .wordle-modal .modal-content .links a:active {
+  color: var(--brand-500);
+}
+.wordle-container .wordle-modal .modal-content .reset-btn {
+  border: none;
+  border-radius: 0.5rem;
+  padding: 1rem;
+  width: 40%;
+  margin: 2rem 0 1rem 0;
+  font-size: 1.4rem;
+  background-color: var(--cl-green);
 }
 
 @keyframes flip {

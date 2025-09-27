@@ -3,10 +3,9 @@ import { ACTIONS } from "./Action"
 
 export const initialState = {
     'state': 'waiting',
-    'targetParagraph': '',
-    'userInput': '',
+    'targetParagraph': [],
+    'userInput': [],
     'currentIndex': 0,
-    'duration': 60,
     'startTime': null,
     'wpm': 0,
     'accuracy': 100,
@@ -14,6 +13,7 @@ export const initialState = {
     'correctChars': 0,
     'totalChars': 0,
     'options': {
+        'duration': 60,
         'useUpper': false,
         'useMarkAndArticle': false
     }
@@ -26,7 +26,7 @@ export const reducer = (state, action) => {
             return {
                 ...state,
                 "targetParagraph": action.payload,
-                'userInput': '',
+                'userInput': [],
                 'currentIndex': 0,
                 'startTime': Date.now(),
                 'wpm': 0,
@@ -45,7 +45,7 @@ export const reducer = (state, action) => {
         case ACTIONS.CHANGE_USER_INPUT:
 
             const {
-                value,
+                buffer,
                 newIndex,
                 correct,
                 incorrect,
@@ -55,13 +55,13 @@ export const reducer = (state, action) => {
 
             return {
                 ...state,
-                "userInput": value,
+                "userInput": [...state.userInput, buffer],
                 "currentIndex": newIndex,
                 "wpm": wpm,
                 "accuracy": accuracy,
                 "incorrectChars": incorrect,
                 "correctChars": correct,
-                "totalChars": value.length,
+                "totalChars": state.totalChars + buffer.length,
             }
 
         case ACTIONS.CHANGE_OPTIONS:
@@ -73,18 +73,12 @@ export const reducer = (state, action) => {
                 }
             }
 
-        case ACTIONS.CHANGE_TIME:
-            return {
-                ...state,
-                'duration': action.payload
-            }
-
         case ACTIONS.QUIT_GAME:
             return {
                 ...state,
                 'state': 'waiting',
-                'targetParagraph': '',
-                'userInput': '',
+                'targetParagraph': [],
+                'userInput': [],
                 'currentIndex': 0,
                 'startTime': null,
                 'wpm': 0,

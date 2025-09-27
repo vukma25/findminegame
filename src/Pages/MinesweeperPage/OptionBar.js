@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, createContext } from 'react';
 import Icon from '@mui/material/Icon';
 import Select from '@mui/material/Select'
 import MenuItem from '@mui/material/MenuItem'
@@ -27,16 +27,21 @@ const BootstrapInput = styled(InputBase)(() => ({
 }
 ));
 
+export const ClockContext = createContext()
+
 function OptionsBar({ setTimeFinish, settings, dispatch }) {
     const [semaphore, setSemaphore] = useState(false)
 
-    function handleAssignSemaphore () {
+    function handleAssignSemaphore() {
         if (settings.gameOver) {
             setSemaphore(true)
         }
         else if (settings.level === 4 && !settings.isInGame) {
             setSemaphore(true)
-        } 
+        }
+        else if (!settings.setTime.isTime) {
+            setSemaphore(true)
+        }
         else {
             setSemaphore(false)
         }
@@ -44,7 +49,7 @@ function OptionsBar({ setTimeFinish, settings, dispatch }) {
 
     useEffect(() => {
         handleAssignSemaphore()
-    }, [settings.level, settings.gameOver, settings.isInGame])
+    }, [settings.level, settings.gameOver, settings.isInGame, settings.setTime.isTime])
 
     return (
         <div className="minesweeper-settings flex-div">
@@ -96,16 +101,18 @@ function OptionsBar({ setTimeFinish, settings, dispatch }) {
                 }}>flag</Icon>
                 <p>{settings.flag}</p>
             </div>
+            <ClockBase
+                type={"countdown"}
+                duration={settings.setTime.duration}
+                semaphore={semaphore}
+                setTimeFinish={setTimeFinish}
+            >
+                <ClockContext.Provider value={{ settings, dispatch }}>
+                    <Clock useTime={settings.setTime.isTime}/>
+                </ClockContext.Provider>
+            </ClockBase>
             {
-                settings.setTime.isTime ?
-                    <ClockBase 
-                        type={"countdown"}
-                        duration={settings.setTime.duration}
-                        semaphore={semaphore}
-                        setTimeFinish={setTimeFinish}
-                    >
-                        <Clock level={settings.level} dispatch={dispatch}/>
-                    </ClockBase> :
+                !settings.setTime.isTime &&
                     <Icon
                         sx={{
                             fontSize: '3rem',

@@ -6,8 +6,8 @@ export default function ChessSettings({ settings, setSettings, setDisplaySetting
     const tempSettings = useRef(settings)
     
     const [change, setChange] = useState(settings)
-    const [selectedLightColor, setSelectedLightColor] = useState('#FFFFFF')
-    const [selectedDarkColor, setSelectedDarkColor] = useState('#5309B3')
+    const [selectedLightColor, setSelectedLightColor] = useState(settings.lightSquareColor || '#FFFFFF')
+    const [selectedDarkColor, setSelectedDarkColor] = useState(settings.darkSquareColor || '#5309B3')
 
     const lightColors = [
         { color: '#F0D9B5', title: 'Vàng cổ điển' },
