@@ -148,10 +148,10 @@ const Snake = () => {
                             <div className="stats-container">
                                 <div className="stats-group">
                                     <div className="stat score">
-                                        ⭐ Điểm: {score}
+                                        Điểm: {score}
                                     </div>
                                     <div className="stat highscore">
-                                        🏆 Kỷ lục: {highScore}
+                                        Kỷ lục: {highScore}
                                     </div>
                                 </div>
                                 <div className="action-buttons">
@@ -205,25 +205,6 @@ const Snake = () => {
                                     )}
                                 </div>
                             </div>
-
-                            {/* Controls helper */}
-                            <div className="controls-helper">
-                                <div className="helper-card">
-                                    <div className="helper-title">Điều khiển</div>
-                                    <div>• Mũi tên hoặc WASD</div>
-                                    <div>• Space: Tạm dừng/Tiếp tục</div>
-                                </div>
-                                <div className="helper-card">
-                                    <div className="helper-title">Mục tiêu</div>
-                                    <div>• Ăn táo để tăng điểm</div>
-                                    <div>• Tránh tường và chạm vào thân</div>
-                                </div>
-                                <div className="helper-card">
-                                    <div className="helper-title">Mẹo</div>
-                                    <div>• Ăn 5 táo sẽ tăng tốc một chút</div>
-                                    <div>• Tùy chỉnh kích thước và tốc độ</div>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
@@ -270,28 +251,10 @@ const Snake = () => {
                                     onClick={resetGame}
                                     className="btn full-width reset"
                                 >
-                                    🔄 Khởi động lại
+                                    Khởi động lại
                                 </button>
                             </div>
                         </div>
-
-                        <div className="tips-panel">
-                            <div className="panel-title">Mẹo nhanh</div>
-                            <p>Giữ rắn đi theo vòng an toàn quanh rìa để kiểm soát hướng tốt hơn trước khi lao vào lấy táo ở giữa.</p>
-                        </div>
-
-                        {gameOver && (
-                            <div className="game-over-panel">
-                                <div className="panel-title">💥 Thua rồi!</div>
-                                <p className="game-over-message">Bạn đã đạt {score} điểm. Thử lại để phá kỷ lục {highScore} nhé!</p>
-                                <button
-                                    onClick={resetGame}
-                                    className="btn full-width game-over"
-                                >
-                                    Chơi lại ngay
-                                </button>
-                            </div>
-                        )}
                     </div>
                 </div>
             </div>

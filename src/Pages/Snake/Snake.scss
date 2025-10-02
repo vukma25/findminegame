@@ -3,7 +3,6 @@
     align-items: center;
     justify-content: center;
     padding: 1rem;
-    background: linear-gradient(to bottom right, #e0e7ff, #e0f2fe, #cffafe);
     color: #1e293b;
 
     .game-container {
@@ -156,27 +155,6 @@
                         }
                     }
                 }
-
-                .controls-helper {
-                    display: grid;
-                    grid-template-columns: repeat(3, 1fr);
-                    gap: 0.5rem;
-                    margin-top: 1rem;
-                    font-size: 0.875rem;
-                    color: #475569;
-
-                    .helper-card {
-                        background-color: #f8fafc;
-                        border-radius: 0.5rem;
-                        padding: 0.75rem;
-
-                        .helper-title {
-                            font-weight: 600;
-                            color: #1e293b;
-                            margin-bottom: 0.25rem;
-                        }
-                    }
-                }
             }
         }
 
@@ -239,46 +217,6 @@
                                 background-color: #4338ca;
                             }
                         }
-                    }
-                }
-            }
-
-            .tips-panel {
-                background-color: #4f46e5;
-                color: white;
-                border-radius: 1rem;
-                box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
-                padding: 1.25rem;
-
-                p {
-                    opacity: 0.9;
-                    font-size: 0.875rem;
-                }
-            }
-
-            .game-over-panel {
-                background-color: #fff1f2;
-                border: 1px solid #ffe4e6;
-                border-radius: 1rem;
-                padding: 1.25rem;
-                color: #b91c1c;
-
-                .game-over-message {
-                    margin-bottom: 1rem;
-                    font-size: 0.875rem;
-                }
-
-                .btn.full-width.game-over {
-                    width: 100%;
-                    padding: 0.75rem;
-                    border-radius: 0.75rem;
-                    font-weight: 700;
-                    background-color: #dc2626;
-                    color: white;
-                    transition: background-color 0.2s;
-
-                    &:hover {
-                        background-color: #b91c1c;
                     }
                 }
             }

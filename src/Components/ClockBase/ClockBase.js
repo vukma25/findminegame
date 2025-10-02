@@ -7,11 +7,11 @@ export default function ClockBase({ type, duration, semaphore, children, setTime
     const [clock, setClock] = useState({
         minute: 0,
         second: 0,
-        remain: 0
-    });
+        remain: duration
+    })
 
-    const intervalRef = useRef(null);
-    const initTimeRef = useRef(Date.now()); // Dùng cho chế độ đếm tăng
+    const intervalRef = useRef(null)
+    const initTimeRef = useRef(Date.now()) // Dùng cho chế độ đếm tăng
 
     function countdown() {
         const endTime = Date.now() + (duration + 1) * 1000;
@@ -32,6 +32,11 @@ export default function ClockBase({ type, duration, semaphore, children, setTime
             if (remain <= 0) {
                 clearInterval(intervalRef.current);
                 setClock(prevState => ({ ...prevState, remain: 0 }));
+                setTimeFinish({
+                    minute: 0,
+                    second: 0,
+                    remain: 0
+                })
             }
         }, 1000);
     }
@@ -77,7 +82,7 @@ export default function ClockBase({ type, duration, semaphore, children, setTime
         }
 
         return () => clearInterval(intervalRef.current);
-    }, [type, duration, semaphore]);
+    }, [type, duration, semaphore])
 
     return (
         <UseClock.Provider value={clock}>
