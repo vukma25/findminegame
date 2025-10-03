@@ -1,209 +1,346 @@
-import { useState, useEffect, useRef, useMemo } from 'react';
+import { useReducer, useEffect, useRef, useMemo, useState } from 'react';
+import { defaultState, reducer } from './Reducer';
+import { preHandleAction } from './Actions';
+import { direction, isMobileDevice, maps } from './Static';
+import {
+    Button,
+    ButtonGroup,
+    IconButton,
+    Tooltip,
+    Slider,
+    FormControl,
+    InputLabel,
+    Select,
+    MenuItem,
+    RadioGroup,
+    FormControlLabel,
+    FormLabel,
+    Radio,
+} from '@mui/material';
+import {
+    PauseCircle,
+    PlayCircle,
+    ArrowBack,
+    ArrowForward,
+    ArrowUpward,
+    ArrowDownward,
+    Grass,
+} from '@mui/icons-material';
 import './Snake.css';
 
-const randInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
-
 const Snake = () => {
-    const [rows, setRows] = useState(15);
-    const [cols, setCols] = useState(15);
-    const [speed, setSpeed] = useState(140);
-    const [running, setRunning] = useState(true);
-    const [direction, setDirection] = useState('RIGHT');
-    const [snake, setSnake] = useState(() => [[7, 5], [7, 4], [7, 3]]);
-    const [food, setFood] = useState([7, 10]);
-    const [score, setScore] = useState(0);
-    const [highScore, setHighScore] = useState(
-        Number(localStorage.getItem('snake_highscore') || 0)
-    );
-    const [gameOver, setGameOver] = useState(false);
-    const [paused, setPaused] = useState(false);
-    const boardRef = useRef(null);
-    const dirRef = useRef(direction);
-    const runningRef = useRef(running);
 
-    const cellSize = useMemo(() => 28, []);
+    const [game, dispatch] = useReducer(reducer, defaultState)
+    const [highestScore, setHighestScore] = useState(() => {
+        const highest = localStorage.getItem("highest_score_snake_game")
 
-    const spawnFood = (snakeArr, r = rows, c = cols) => {
-        let fr, fc, bad = true;
-        while (bad) {
-            fr = randInt(0, r - 1);
-            fc = randInt(0, c - 1);
-            bad = snakeArr.some(([sr, sc]) => sr === fr && sc === fc);
-        }
-        return [fr, fc];
-    };
+        if (!highest) return 0
+        return JSON.parse(highest)
+    })
+    const refDir = useRef(null)
+    const directionQueue = useRef([])
 
-    useEffect(() => { dirRef.current = direction; }, [direction]);
-    useEffect(() => { runningRef.current = running && !paused; }, [running, paused]);
+    const cellSize = useMemo(() => {
+        if (isMobileDevice()) return 15
+        return 20
+    })
 
-    useEffect(() => {
-        const onKey = (e) => {
-            if (e.key === ' ') {
-                e.preventDefault();
-                if (gameOver) return;
-                setPaused(p => !p);
-                return;
+    const spawnFood = (snake) => {
+        let fr, fc, invalid = true
+        while (invalid) {
+            fr = Math.floor(Math.random() * game.size)
+            fc = Math.floor(Math.random() * game.size)
+            invalid = snake.some(([r, c]) => r === fr && c === fc)
+
+            if (game.mode === "map") {
+                const diff_con = maps[game.map].area.some(([r, c]) => r === fr && c === fc)
+                invalid = (invalid || diff_con)
             }
-            const k = e.key.toLowerCase();
-            const map = {
-                arrowup: 'UP', w: 'UP',
-                arrowdown: 'DOWN', s: 'DOWN',
-                arrowleft: 'LEFT', a: 'LEFT',
-                arrowright: 'RIGHT', d: 'RIGHT'
-            };
-            const next = map[k];
-            if (!next) return;
+        }
 
-            const cur = dirRef.current;
-            const invalid =
-                (cur === 'UP' && next === 'DOWN') ||
-                (cur === 'DOWN' && next === 'UP') ||
-                (cur === 'LEFT' && next === 'RIGHT') ||
-                (cur === 'RIGHT' && next === 'LEFT');
-            if (!invalid) setDirection(next);
-        };
-        window.addEventListener('keydown', onKey);
-        return () => window.removeEventListener('keydown', onKey);
-    }, [gameOver]);
+        return [fr, fc]
+    }
 
-    useEffect(() => {
-        if (!running || paused || gameOver) return;
-        const id = setInterval(() => {
-            setSnake(prev => {
-                const head = prev[0];
-                const dir = dirRef.current;
-                let [hr, hc] = head;
-                if (dir === 'UP') hr -= 1;
-                if (dir === 'DOWN') hr += 1;
-                if (dir === 'LEFT') hc -= 1;
-                if (dir === 'RIGHT') hc += 1;
+    const isHead = (snake, r, c) => {
+        return snake[0] === r && snake[1] === c
+    }
 
-                if (hr < 0 || hr >= rows || hc < 0 || hc >= cols) {
-                    endGame();
-                    return prev;
-                }
-                if (prev.some(([r, c], idx) => idx !== 0 && r === hr && c === hc)) {
-                    endGame();
-                    return prev;
-                }
+    const isOnSnake = (snake, r, c) => {
+        return snake.some(([row, col]) => row === r && col === c)
+    }
 
-                const newHead = [hr, hc];
-                const ateFood = (hr === food[0] && hc === food[1]);
+    const handleStartGame = () => {
+        dispatch(preHandleAction.handleListenStatus("playing"))
+    }
 
-                const newSnake = [newHead, ...prev];
-                if (!ateFood) {
-                    newSnake.pop();
-                } else {
-                    setScore(s => {
-                        const ns = s + 1;
-                        if (ns > highScore) {
-                            setHighScore(ns);
-                            localStorage.setItem('snake_highscore', ns);
-                        }
-                        return ns;
-                    });
-                    if ((score + 1) % 5 === 0 && speed > 70) {
-                        setSpeed(sp => Math.max(70, sp - 10));
-                    }
-                    const nf = spawnFood(newSnake, rows, cols);
-                    setFood(nf);
-                }
-                return newSnake;
-            });
-        }, speed);
-        return () => clearInterval(id);
-    }, [running, paused, gameOver, rows, cols, speed, food, score, highScore]);
+    const handlePauseGame = () => {
+        dispatch(preHandleAction.handleSetPause())
+    }
 
-    const endGame = () => {
-        setRunning(false);
-        setGameOver(true);
-    };
+    const handleChangeSize = (e) => {
+        const size = Number(e.target.value)
+        const line = Math.floor(size / 2)
+        const snake = [[line, 4], [line, 3], [line, 2]]
+        const food = spawnFood(snake)
+        dispatch(preHandleAction.handleSettingSize({ sk: snake, fd: food, size }))
+    }
 
-    const resetGame = () => {
-        const startSnake = [[Math.floor(rows / 2), 5], [Math.floor(rows / 2), 4], [Math.floor(rows / 2), 3]];
-        setSnake(startSnake);
-        setFood(spawnFood(startSnake, rows, cols));
-        setDirection('RIGHT');
-        setRunning(true);
-        setPaused(false);
-        setGameOver(false);
-        setScore(0);
-    };
+    const handleChangeSpeed = (e) => {
+        dispatch(preHandleAction.handleSetSpeed(Number(e.target.value)))
+    }
+
+    const handleSetDirection = (next) => {
+        const current = refDir.current
+
+        if (!next) return
+
+        if (
+            (current === "RIGHT" && next === "LEFT") ||
+            (current === "LEFT" && next === "RIGHT") ||
+            (current === "DOWN" && next === "UP") ||
+            (current === "UP" && next === "DOWN")
+        ) return
+
+        if (directionQueue.current.length < 1) {
+            directionQueue.current.push(next);
+        }
+    }
+
+    const handleSetMode = (e) => {
+        dispatch(preHandleAction.handleSettingMode(e.target.value))
+    }
+
+    const handleSetMap = (e) => {
+        dispatch(preHandleAction.handleSelectMap(Number(e.target.value)))
+    }
+
+    const newGame = () => {
+        if (game.mode !== "map") {
+            const line = Math.floor(game.size / 2)
+            const snake = [[line, 4], [line, 3], [line, 2]]
+            const food = spawnFood(snake)
+
+            dispatch(preHandleAction.handleSetNewGame({ snake, food, direction: "RIGHT" }))
+        } else {
+            const { snake, food, direction } = maps[game.map]
+            dispatch(preHandleAction.handleSetNewGame({ snake, food, direction }))
+        }
+    }
+
+    useEffect(() => { refDir.current = game.direction }, [game.direction])
 
     useEffect(() => {
-        resetGame();
-    }, [rows, cols]);
+        if (game.status !== "playing") return
 
-    const isSnakeCell = (r, c) => snake.some(([sr, sc]) => sr === r && sc === c);
-    const isHead = (r, c) => snake.length && snake[0][0] === r && snake[0][1] === c;
+        const control = (e) => {
+            e.preventDefault()
+
+            if (e.key === ' ') {
+                dispatch(preHandleAction.handleSetPause())
+            } else {
+                const dir = e.key.toUpperCase()
+                const next = direction[dir]
+
+                if (!next) return
+
+                handleSetDirection(next)
+
+            }
+        }
+
+        window.addEventListener("keydown", control)
+
+        return () => window.removeEventListener("keydown", control)
+
+    }, [game.status, dispatch])
+
+
+    useEffect(() => {
+        if (game.status !== "playing" || game.pause) return
+        const loop = setInterval(() => {
+            let snake = game.snake.map(part => ([...part]))
+            const head = snake[0]
+            let [hr, hc] = head
+
+            if (directionQueue.current.length > 0) {
+                const nextDirection = directionQueue.current.shift();
+                dispatch(preHandleAction.handleChangeDirect(nextDirection));
+                refDir.current = nextDirection;
+            }
+
+            const currentDirection = refDir.current;
+
+            if (currentDirection === "RIGHT") { hc += 1 }
+            else if (currentDirection === "LEFT") { hc -= 1 }
+            else if (currentDirection === "UP") { hr -= 1 }
+            else if (currentDirection === "DOWN") { hr += 1 }
+
+            if (game.mode === "limit") {
+                if (hr < 0 || hr >= game.size || hc < 0 || hc >= game.size) {
+                    dispatch(preHandleAction.handleListenStatus("game_over"))
+                    return
+                }
+            }
+
+            hr = hr >= 0 ? hr % game.size : (hr + game.size)
+            hc = hc >= 0 ? hc % game.size : (hc + game.size)
+
+            if (game.mode === "map") {
+                if (maps[game.map].area.some(([row, col]) => row === hr && col === hc)) {
+                    dispatch(preHandleAction.handleListenStatus("game_over"))
+                    return
+                }
+            }
+
+            if (snake.some(([r, c]) => r === hr && c === hc)) {
+                dispatch(preHandleAction.handleListenStatus("game_over"))
+                return
+            }
+
+            const newHead = [hr, hc]
+            snake = [newHead, ...snake]
+
+
+            const ateFood = (game.food[0] === hr && game.food[1] === hc)
+
+            if (!ateFood) {
+                snake.pop()
+            } else {
+                const expectScore = game.score + 10
+                dispatch(preHandleAction.handleSnakeAte(10))
+
+                if ((expectScore % 200) === 0 && game.speed > 70) {
+                    dispatch(preHandleAction.handleSetSpeed(game.speed - 10))
+                }
+
+                const food = spawnFood(snake)
+                dispatch(preHandleAction.handleSpawnFood(food))
+            }
+
+            dispatch(preHandleAction.handleSnakeState(snake))
+
+        }, game.speed)
+
+        return () => clearInterval(loop)
+
+    }, [game.status, game.food, game.pause, game.score, game.snake, game.mode])
+
+    useEffect(() => {
+       if (game.status === "game_over") {
+        const highest = localStorage.getItem("highest_score_snake_game")
+        if (!highest) {
+            localStorage.setItem("highest_score_snake_game", JSON.stringify(game.score))
+            setHighestScore(game.score)
+        } else {
+            const max = JSON.parse(highest)
+            if (max >= game.score) return
+
+            localStorage.setItem("highest_score_snake_game", JSON.stringify(game.score))
+            setHighestScore(game.score)
+        }
+       } 
+    }, [game.status, game.score])
 
     return (
         <div className="snake-game">
             <div className="game-container">
                 <div className="game-layout">
-                    {/* Game panel */}
                     <div className="game-board">
                         <div className="board-card">
-                            {/* Stats */}
                             <div className="stats-container">
                                 <div className="stats-group">
                                     <div className="stat score">
-                                        Điểm: {score}
+                                        Score: {game.score}
                                     </div>
                                     <div className="stat highscore">
-                                        Kỷ lục: {highScore}
+                                        Highest score: {highestScore}
                                     </div>
                                 </div>
+
                                 <div className="action-buttons">
-                                    <span className={`status-badge ${paused ? 'paused' : running ? 'running' : 'game-over'}`}>
-                                        {gameOver ? 'Kết thúc' : paused ? 'Tạm dừng' : 'Đang chạy'}
-                                    </span>
-                                    <button
-                                        onClick={() => setPaused(p => !p)}
-                                        disabled={gameOver}
-                                        className="btn pause"
-                                    >
-                                        {paused ? 'Tiếp tục' : 'Tạm dừng'}
-                                    </button>
-                                    <button
-                                        onClick={resetGame}
+                                    {game.status === "playing" && <Tooltip title={`${!game.pause ? "Pause" : "Play"}`}>
+                                        <IconButton size="small" onClick={() => { handlePauseGame() }}>
+                                            {!game.pause ? <PauseCircle fontSize="large" /> :
+                                                <PlayCircle fontSize="large" />}
+                                        </IconButton>
+                                    </Tooltip>}
+                                    <Button
+                                        variant="contained"
+                                        onClick={() => { handleStartGame() }}
                                         className="btn reset"
+                                        disabled={game.status !== "waiting"}
                                     >
-                                        Chơi lại
-                                    </button>
+                                        Play
+                                    </Button>
                                 </div>
                             </div>
 
                             {/* Board */}
                             <div className="board-wrapper">
                                 <div
-                                    ref={boardRef}
                                     className="snake-board"
                                     style={{
-                                        gridTemplateColumns: `repeat(${cols}, ${cellSize}px)`,
-                                        gridTemplateRows: `repeat(${rows}, ${cellSize}px)`,
-                                        width: `calc(${cols} * ${cellSize}px + 1rem)`,
+                                        gridTemplateColumns: `repeat(${game.size}, ${cellSize}px)`,
+                                        gridTemplateRows: `repeat(${game.size}, ${cellSize}px)`,
+                                        width: `calc(${game.size} * ${cellSize}px + 1rem)`,
+                                        border: `${game.mode === "limit" ? ".2rem solid" : "none"}`
                                     }}
                                     aria-label="Bàn chơi rắn săn mồi"
                                 >
-                                    {Array.from({ length: rows }).map((_, r) =>
-                                        Array.from({ length: cols }).map((_, c) => {
-                                            const head = isHead(r, c);
-                                            const onSnake = isSnakeCell(r, c);
-                                            const onFood = (food[0] === r && food[1] === c);
-                                            const cellClass = `cell ${onFood ? 'food' : head ? 'head' : onSnake ? 'body' : ''} ${head ? 'pulse-glow' : ''}`;
+                                    {Array.from({ length: game.size }).map((_, r) =>
+                                        Array.from({ length: game.size }).map((_, c) => {
+                                            const head = isHead(game.snake[0], r, c);
+                                            const onSnake = isOnSnake(game.snake, r, c);
+                                            const onFood = (game.food[0] === r && game.food[1] === c);
+                                            const isFence = (game.map !== null ? maps[game.map].area : []).some(([row, col]) => row === r && col === c)
+                                            const cellClass = `cell ${onFood ? 'food' : head ?
+                                                `head ${game.direction.toLowerCase()}` : onSnake ?
+                                                    'body' : isFence ? "fence" : ""}`;
 
                                             return (
                                                 <div
                                                     key={`${r}-${c}`}
                                                     className={cellClass}
                                                     role="presentation"
-                                                    title={onFood ? '🍎' : ''}
-                                                ></div>
+                                                    title={onFood ? 'Food' : ''}
+                                                >
+                                                    {isFence ? "" :
+                                                        !(head || onSnake || onFood) ? <Grass sx={{ color: "green" }} /> : ""
+                                                    }
+                                                </div>
                                             );
                                         })
                                     )}
                                 </div>
+                                {isMobileDevice() && <ButtonGroup variant='outlined' aria-label="button control" className="btn-group">
+                                    <Button
+                                        size="small"
+                                        startIcon={<ArrowBack />}
+                                        onClick={() => { handleSetDirection("LEFT") }}
+                                    >Left</Button>
+                                    <Button
+                                        size="small"
+                                        endIcon={<ArrowForward />}
+                                        onClick={() => { handleSetDirection("RIGHT") }}
+                                    >Right</Button>
+                                    <Button size="small" endIcon={
+                                        !game.pause ? <PauseCircle /> : <PlayCircle />
+                                    }
+                                        onClick={() => { handlePauseGame() }}
+                                    >
+                                        {!game.pause ? "Pause" : "Play"}
+                                    </Button>
+                                    <Button
+                                        size="small"
+                                        startIcon={<ArrowUpward />}
+                                        onClick={() => { handleSetDirection("UP") }}
+                                    >Up</Button>▐
+                                    <Button
+                                        size="small"
+                                        endIcon={<ArrowDownward />}
+                                        onClick={() => { handleSetDirection("DOWN") }}
+                                    >Down</Button>▐
+                                </ButtonGroup>}
                             </div>
                         </div>
                     </div>
@@ -211,48 +348,124 @@ const Snake = () => {
                     {/* Side panel */}
                     <div className="side-panel">
                         <div className="settings-panel">
-                            <div className="panel-title">Cài đặt</div>
+                            <div className="panel-title">Setting</div>
                             <div className="settings-content">
                                 <div className="setting-group">
-                                    <label>Số hàng</label>
-                                    <input
-                                        type="range"
-                                        min="10"
-                                        max="25"
-                                        value={rows}
-                                        onChange={(e) => setRows(Number(e.target.value))}
-                                    />
-                                    <div className="setting-value">Hiện tại: {rows}</div>
+                                    <FormControl fullWidth>
+                                        <InputLabel id="select-mode">Mode</InputLabel>
+                                        <Select
+                                            labelId="select-mode"
+                                            id="modes"
+                                            value={game.mode}
+                                            label="Mode"
+                                            onChange={handleSetMode}
+                                            disabled={game.status === "playing"}
+                                        >
+                                            <MenuItem value={"no_limit"}>No border</MenuItem>
+                                            <MenuItem value={"limit"}>Border</MenuItem>
+                                            <MenuItem value={"map"}>Map</MenuItem>
+                                        </Select>
+                                    </FormControl>
                                 </div>
+                                {game.mode === "map" &&
+                                    <FormControl>
+                                        <FormLabel id="type-of-map">Select map</FormLabel>
+                                        <RadioGroup
+                                            aria-labelledby="type-of-map"
+                                            defaultValue={0}
+                                            name="radio-buttons-group"
+                                            onChange={handleSetMap}
+                                        >
+                                            {maps.map(({ name }, index) => {
+                                                return <FormControlLabel value={index} control={<Radio />} label={name} />
+                                            })}
+
+                                        </RadioGroup>
+                                    </FormControl>
+                                }
+
+                                {game.mode !== "map" &&
+                                    <div className="setting-group">
+                                        <label>Size</label>
+                                        <Slider
+                                            size='small'
+                                            min={10}
+                                            max={24}
+                                            value={game.size}
+                                            valueLabelDisplay='auto'
+                                            onChange={handleChangeSize}
+                                            disabled={game.status === "playing"}
+                                        />
+                                        <div className="setting-value">Current size: {game.size}</div>
+                                    </div>}
                                 <div className="setting-group">
-                                    <label>Số cột</label>
-                                    <input
-                                        type="range"
-                                        min="10"
-                                        max="25"
-                                        value={cols}
-                                        onChange={(e) => setCols(Number(e.target.value))}
+                                    <label>Speed (ms/tick)</label>
+                                    <Slider
+                                        size='small'
+                                        min={70}
+                                        max={300}
+                                        step={10}
+                                        marks
+                                        value={game.speed}
+                                        valueLabelDisplay='auto'
+                                        onChange={handleChangeSpeed}
+                                        disabled={game.status === "playing"}
                                     />
-                                    <div className="setting-value">Hiện tại: {cols}</div>
+                                    <div className="setting-value">Current speed: {game.speed} ms</div>
                                 </div>
-                                <div className="setting-group">
-                                    <label>Tốc độ (ms/tick)</label>
-                                    <input
-                                        type="range"
-                                        min="70"
-                                        max="300"
-                                        step="10"
-                                        value={speed}
-                                        onChange={(e) => setSpeed(Number(e.target.value))}
-                                    />
-                                    <div className="setting-value">Hiện tại: {speed} ms</div>
-                                </div>
-                                <button
-                                    onClick={resetGame}
-                                    className="btn full-width reset"
+                                <Button
+                                    variant='contained'
+                                    onClick={() => { newGame() }}
+                                    className="reset"
+                                    disabled={game.status !== "game_over"}
                                 >
-                                    Khởi động lại
-                                </button>
+                                    New game
+                                </Button>
+                            </div>
+                        </div>
+                        <div className="instruction-general">
+                            <div className="title">Quick instruction</div>
+                            <p className="overall"><strong>Note:</strong> Each 200 point, speed will be automatically decrease</p>
+                            <div className="instruction-block">
+                                <h2 className="title">For PC</h2>
+                                <div className="control-key">
+                                    <div className="keys">
+                                        <kbd className="kdb">W</kbd>
+                                        <p>or</p>
+                                        <kbd className="kdb">ARROW UP</kbd>
+                                    </div>
+                                    <p className="control">Turn up</p>
+                                </div>
+                                <div className="control-key">
+                                    <div className="keys">
+                                        <kbd className="kdb">A</kbd>
+                                        <p>or</p>
+                                        <kbd className="kdb">ARROW LEFT</kbd>
+                                    </div>
+                                    <p className="control">Turn left</p>
+                                </div>
+                                <div className="control-key">
+                                    <div className="keys">
+                                        <kbd className="kdb">S</kbd>
+                                        <p>or</p>
+                                        <kbd className="kdb">ARROW DOWN</kbd>
+                                    </div>
+                                    <p className="control">Turn down</p>
+                                </div>
+                                <div className="control-key">
+                                    <div className="keys">
+                                        <kbd className="kdb">D</kbd>
+                                        <p>or</p>
+                                        <kbd className="kdb">ARROW RIGHT</kbd>
+                                    </div>
+                                    <p className="control">Turn right</p>
+                                </div>
+                            </div>
+                            <div className="instruction-block">
+                                <h2 className="title">For mobile</h2>
+                                <p className="description">
+                                    If you use mobile phone, you can see some buttons under board snake. Let click on them to control snake
+                                </p>
                             </div>
                         </div>
                     </div>

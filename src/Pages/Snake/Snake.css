@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 1rem;
+  padding: 1rem 0;
   color: #1e293b;
 }
 .snake-game .game-container {
@@ -25,6 +25,8 @@
   box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
   border: 1px solid #f1f5f9;
   padding: 1.5rem;
+  width: 100%;
+  min-width: 40rem;
 }
 .snake-game .game-container .game-board .board-card .stats-container {
   display: flex;
@@ -40,10 +42,10 @@
   flex-wrap: wrap;
 }
 .snake-game .game-container .game-board .board-card .stats-container .stats-group .stat {
-  padding: 0.5rem 1rem;
+  padding: 1rem 1.2rem;
   border-radius: 0.75rem;
-  font-weight: 700;
-  font-size: 0.875rem;
+  font-weight: 600;
+  font-size: 1rem;
 }
 .snake-game .game-container .game-board .board-card .stats-container .stats-group .stat.score {
   background-color: #e0e7ff;
@@ -58,40 +60,12 @@
   align-items: center;
   gap: 0.5rem;
 }
-.snake-game .game-container .game-board .board-card .stats-container .action-buttons .status-badge {
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 700;
-}
-.snake-game .game-container .game-board .board-card .stats-container .action-buttons .status-badge.running {
-  background-color: #d1fae5;
-  color: #065f46;
-}
-.snake-game .game-container .game-board .board-card .stats-container .action-buttons .status-badge.paused {
-  background-color: #fef3c7;
-  color: #b45309;
-}
-.snake-game .game-container .game-board .board-card .stats-container .action-buttons .status-badge.game-over {
-  background-color: #fee2e2;
-  color: #b91c1c;
-}
 .snake-game .game-container .game-board .board-card .stats-container .action-buttons .btn {
-  padding: 0.5rem 1rem;
   border-radius: 0.5rem;
+  font-size: 1.2rem;
   font-weight: 600;
   transition: all 0.2s;
-}
-.snake-game .game-container .game-board .board-card .stats-container .action-buttons .btn.pause {
-  background-color: #1e293b;
-  color: white;
-}
-.snake-game .game-container .game-board .board-card .stats-container .action-buttons .btn.pause:hover {
-  background-color: #0f172a;
-}
-.snake-game .game-container .game-board .board-card .stats-container .action-buttons .btn.pause:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+  width: 10rem;
 }
 .snake-game .game-container .game-board .board-card .stats-container .action-buttons .btn.reset {
   background-color: #4f46e5;
@@ -100,37 +74,164 @@
 .snake-game .game-container .game-board .board-card .stats-container .action-buttons .btn.reset:hover {
   background-color: #4338ca;
 }
+.snake-game .game-container .game-board .board-card .stats-container .action-buttons .btn.reset:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.snake-game .game-container .game-board .board-card .stats-container .action-buttons .pause {
+  background-color: #1e293b;
+  color: white;
+}
+.snake-game .game-container .game-board .board-card .stats-container .action-buttons .pause:hover {
+  background-color: #0f172a;
+}
+.snake-game .game-container .game-board .board-card .stats-container .action-buttons .pause:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
 .snake-game .game-container .game-board .board-card .board-wrapper {
   width: 100%;
-  overflow: auto;
+  height: auto;
 }
-.snake-game .game-container .game-board .board-card .snake-board {
+.snake-game .game-container .game-board .board-card .board-wrapper .snake-board {
   display: grid;
-  gap: 0.25rem;
-  background: linear-gradient(to bottom right, #e0e7ff, white);
+  background-color: var(--cl-white-pure);
+  box-shadow: 0 0 0.3rem var(--ink-300);
   border-radius: 0.75rem;
   padding: 0.5rem;
   margin: 0 auto;
+  overscroll-behavior-y: none;
 }
-.snake-game .game-container .game-board .board-card .snake-board .cell {
-  border-radius: 0.25rem;
+.snake-game .game-container .game-board .board-card .board-wrapper .snake-board .cell {
   transition: background-color 0.08s ease, transform 0.08s ease;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.snake-game .game-container .game-board .board-card .snake-board .cell.food {
+.snake-game .game-container .game-board .board-card .board-wrapper .snake-board .cell.food {
   background-color: #ef4444;
-  border: 2px solid #dc2626;
+  border-radius: 50%;
+  animation: zoomInOut 1s ease-in-out infinite alternate;
 }
-.snake-game .game-container .game-board .board-card .snake-board .cell.head {
+.snake-game .game-container .game-board .board-card .board-wrapper .snake-board .cell.head {
   background-color: #059669;
-  border: 2px solid #047857;
+  transform: scale(1.2);
+  position: relative;
 }
-.snake-game .game-container .game-board .board-card .snake-board .cell.body {
+.snake-game .game-container .game-board .board-card .board-wrapper .snake-board .cell.head.up {
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+.snake-game .game-container .game-board .board-card .board-wrapper .snake-board .cell.head.up::before {
+  content: "";
+  position: absolute;
+  display: block;
+  border-radius: 50%;
+  background-color: var(--cl-white-pure);
+  width: 0.5rem;
+  top: 0.3rem;
+  left: 0.2rem;
+  aspect-ratio: 1;
+}
+.snake-game .game-container .game-board .board-card .board-wrapper .snake-board .cell.head.up::after {
+  content: "";
+  display: block;
+  position: absolute;
+  border-radius: 50%;
+  background-color: var(--cl-white-pure);
+  width: 0.5rem;
+  top: 0.3rem;
+  right: 0.2rem;
+  aspect-ratio: 1;
+}
+.snake-game .game-container .game-board .board-card .board-wrapper .snake-board .cell.head.down {
+  border-radius: 0 0 0.5rem 0.5rem;
+}
+.snake-game .game-container .game-board .board-card .board-wrapper .snake-board .cell.head.down::before {
+  content: "";
+  position: absolute;
+  display: block;
+  border-radius: 50%;
+  background-color: var(--cl-white-pure);
+  width: 0.5rem;
+  bottom: 0.3rem;
+  left: 0.2rem;
+  aspect-ratio: 1;
+}
+.snake-game .game-container .game-board .board-card .board-wrapper .snake-board .cell.head.down::after {
+  content: "";
+  display: block;
+  position: absolute;
+  border-radius: 50%;
+  background-color: var(--cl-white-pure);
+  width: 0.5rem;
+  bottom: 0.3rem;
+  right: 0.2rem;
+  aspect-ratio: 1;
+}
+.snake-game .game-container .game-board .board-card .board-wrapper .snake-board .cell.head.right {
+  border-radius: 0 0.5rem 0.5rem 0;
+}
+.snake-game .game-container .game-board .board-card .board-wrapper .snake-board .cell.head.right::before {
+  content: "";
+  position: absolute;
+  display: block;
+  border-radius: 50%;
+  background-color: var(--cl-white-pure);
+  width: 0.5rem;
+  top: 0.2rem;
+  right: 0.3rem;
+  aspect-ratio: 1;
+}
+.snake-game .game-container .game-board .board-card .board-wrapper .snake-board .cell.head.right::after {
+  content: "";
+  display: block;
+  position: absolute;
+  border-radius: 50%;
+  background-color: var(--cl-white-pure);
+  width: 0.5rem;
+  bottom: 0.2rem;
+  right: 0.3rem;
+  aspect-ratio: 1;
+}
+.snake-game .game-container .game-board .board-card .board-wrapper .snake-board .cell.head.left {
+  border-radius: 0.5rem 0 0 0.5rem;
+}
+.snake-game .game-container .game-board .board-card .board-wrapper .snake-board .cell.head.left::before {
+  content: "";
+  position: absolute;
+  display: block;
+  border-radius: 50%;
+  background-color: var(--cl-white-pure);
+  width: 0.5rem;
+  top: 0.2rem;
+  left: 0.3rem;
+  aspect-ratio: 1;
+}
+.snake-game .game-container .game-board .board-card .board-wrapper .snake-board .cell.head.left::after {
+  content: "";
+  display: block;
+  position: absolute;
+  border-radius: 50%;
+  background-color: var(--cl-white-pure);
+  width: 0.5rem;
+  bottom: 0.2rem;
+  left: 0.3rem;
+  aspect-ratio: 1;
+}
+.snake-game .game-container .game-board .board-card .board-wrapper .snake-board .cell.body {
   background-color: #10b981;
-  border: 1px solid #059669;
 }
-.snake-game .game-container .game-board .board-card .snake-board .cell:not(.food):not(.head):not(.body) {
+.snake-game .game-container .game-board .board-card .board-wrapper .snake-board .cell.fence {
+  background-color: var(--ink-300);
+  border: 0.1rem solid var(--ink-500);
+}
+.snake-game .game-container .game-board .board-card .board-wrapper .snake-board .cell:not(.food):not(.head):not(.body):not(.fence) {
   background-color: white;
-  border: 1px solid #e2e8f0;
+}
+.snake-game .game-container .game-board .board-card .board-wrapper .btn-group {
+  width: 100%;
+  justify-content: center;
+  margin-top: 1.5rem;
 }
 .snake-game .game-container .side-panel {
   display: flex;
@@ -138,10 +239,10 @@
   gap: 1rem;
 }
 .snake-game .game-container .side-panel .panel-title {
-  font-size: 1.25rem;
-  font-weight: 800;
+  font-size: 1.4rem;
+  font-weight: 600;
   margin-bottom: 0.75rem;
-  color: #1e293b;
+  color: var(--cl-black-light);
 }
 .snake-game .game-container .side-panel .settings-panel {
   background-color: white;
@@ -157,7 +258,7 @@
 }
 .snake-game .game-container .side-panel .settings-panel .settings-content .setting-group label {
   display: block;
-  font-size: 0.875rem;
+  font-size: 1.2rem;
   font-weight: 600;
   color: #334155;
   margin-bottom: 0.25rem;
@@ -167,22 +268,71 @@
   margin-bottom: 0.25rem;
 }
 .snake-game .game-container .side-panel .settings-panel .settings-content .setting-group .setting-value {
-  font-size: 0.875rem;
-  color: #64748b;
+  font-size: 1rem;
+  color: var(--ink-500);
 }
-.snake-game .game-container .side-panel .settings-panel .settings-content .btn.full-width {
-  width: 100%;
-  padding: 0.75rem;
-  border-radius: 0.75rem;
-  font-weight: 700;
-  transition: all 0.2s;
-}
-.snake-game .game-container .side-panel .settings-panel .settings-content .btn.full-width.reset {
+.snake-game .game-container .side-panel .settings-panel .settings-content .reset {
+  font-size: 1.2rem;
+  font-weight: 600;
+  padding: 0.8rem;
   background-color: #4f46e5;
   color: white;
 }
-.snake-game .game-container .side-panel .settings-panel .settings-content .btn.full-width.reset:hover {
+.snake-game .game-container .side-panel .settings-panel .settings-content .reset:hover {
   background-color: #4338ca;
+}
+.snake-game .game-container .side-panel .settings-panel .settings-content .reset:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.snake-game .game-container .side-panel .instruction-general {
+  background-color: white;
+  border-radius: 1rem;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+  border: 1px solid #f1f5f9;
+  padding: 1.25rem;
+}
+.snake-game .game-container .side-panel .instruction-general .title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  margin-bottom: 0.75rem;
+  color: var(--cl-black-light);
+}
+.snake-game .game-container .side-panel .instruction-general .overall {
+  margin-bottom: 1rem;
+  font-size: 1.2rem;
+}
+.snake-game .game-container .side-panel .instruction-general .overall strong {
+  color: var(--cl-red-flag);
+}
+.snake-game .game-container .side-panel .instruction-general .instruction-block {
+  margin-bottom: 1.5rem;
+}
+.snake-game .game-container .side-panel .instruction-general .instruction-block .title {
+  font-size: 1rem;
+  font-weight: 600;
+}
+.snake-game .game-container .side-panel .instruction-general .instruction-block .control-key {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 0.85rem;
+}
+.snake-game .game-container .side-panel .instruction-general .instruction-block .control-key .keys {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.snake-game .game-container .side-panel .instruction-general .instruction-block .control-key .keys .kdb {
+  background-color: var(--ink-200);
+  padding: 0.5rem 1.25rem;
+  border-radius: 0.5rem;
+}
+.snake-game .game-container .side-panel .instruction-general .instruction-block .control-key .control {
+  text-transform: uppercase;
+}
+.snake-game .game-container .side-panel .instruction-general .instruction-block .description {
+  text-align: justify;
 }
 
 /* Animations */
@@ -199,23 +349,18 @@
     transform: scale(1);
   }
 }
-@keyframes pulse {
+@keyframes zoomInOut {
   0% {
-    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5);
-  }
-  70% {
-    box-shadow: 0 0 0 14px rgba(16, 185, 129, 0);
+    transform: scale(0.8);
+    opacity: 0.8;
   }
   100% {
-    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+    transform: scale(1);
+    opacity: 1;
   }
 }
 .score-pop {
   animation: pop 0.4s ease;
-}
-
-.pulse-glow {
-  animation: pulse 1.6s infinite;
 }
 
 .btn {
