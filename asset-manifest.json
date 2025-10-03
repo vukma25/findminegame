@@ -1,7 +1,7 @@
 {
   "files": {
-    "main.css": "/findminegame/static/css/main.83543530.css",
-    "main.js": "/findminegame/static/js/main.70377361.js",
+    "main.css": "/findminegame/static/css/main.32fc4d52.css",
+    "main.js": "/findminegame/static/js/main.33e4c43a.js",
     "static/js/453.2ad1b043.chunk.js": "/findminegame/static/js/453.2ad1b043.chunk.js",
     "static/js/802.aa00d60d.chunk.js": "/findminegame/static/js/802.aa00d60d.chunk.js",
     "static/js/322.a4823205.chunk.js": "/findminegame/static/js/322.a4823205.chunk.js",
@@ -24,8 +24,8 @@
     "static/media/notify.mp3": "/findminegame/static/media/notify.d27dbe284ccc3ce8d907.mp3",
     "static/media/move-self.mp3": "/findminegame/static/media/move-self.f4280e96965e14433c3b.mp3",
     "index.html": "/findminegame/index.html",
-    "main.83543530.css.map": "/findminegame/static/css/main.83543530.css.map",
-    "main.70377361.js.map": "/findminegame/static/js/main.70377361.js.map",
+    "main.32fc4d52.css.map": "/findminegame/static/css/main.32fc4d52.css.map",
+    "main.33e4c43a.js.map": "/findminegame/static/js/main.33e4c43a.js.map",
     "453.2ad1b043.chunk.js.map": "/findminegame/static/js/453.2ad1b043.chunk.js.map",
     "802.aa00d60d.chunk.js.map": "/findminegame/static/js/802.aa00d60d.chunk.js.map",
     "322.a4823205.chunk.js.map": "/findminegame/static/js/322.a4823205.chunk.js.map",
@@ -33,7 +33,7 @@
     "241.13605963.chunk.js.map": "/findminegame/static/js/241.13605963.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.83543530.css",
-    "static/js/main.70377361.js"
+    "static/css/main.32fc4d52.css",
+    "static/js/main.33e4c43a.js"
   ]
 }
