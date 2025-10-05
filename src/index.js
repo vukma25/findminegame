@@ -78,7 +78,9 @@ const router = createBrowserRouter([
       },
     ]
   }
-])
+], {
+  basename: "/theworldgame"
+})
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));

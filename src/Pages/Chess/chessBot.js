@@ -25,7 +25,7 @@ function ChessBot({ chess, chessBot, setChess, setAIThinking }) {
         if (chess.turn === 'w') return
 
         setAIThinking(true)
-        const sf = new Worker('/stockfish.js')
+        const sf = new Worker('/theworldgame/stockfish.js')
         const chessClone = chess.getState()
         sfRef.current = sf
         sf.onmessage = (event) => {
