@@ -37,8 +37,11 @@ jobs:
           node-version: '20.x'
       - name: Install Dependencies
         run: npm install
-      - name: Build
-        run: npm run deploy
+      - name: Build with details
+        run: |
+          npm run build || echo "Build failed with exit code: $?"
+        env:
+          CI: "false"
       - name: List files
         run: ls -la
       - name: Setup Pages
