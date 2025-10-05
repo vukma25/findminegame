@@ -16,7 +16,7 @@ function ChessBot({ chess, chessBot, setChess, setAIThinking }) {
         sf.postMessage(`setoption name UCI_Elo value ${elo}`)
         sf.postMessage(`setoption name Skill Level value ${skillLevel}`);
         sf.postMessage(`position fen ${fen}`);
-        sf.postMessage("go depth 12");
+        sf.postMessage("go movetime 500 depth 12");
     }
 
     useEffect(() => {
@@ -25,7 +25,7 @@ function ChessBot({ chess, chessBot, setChess, setAIThinking }) {
         if (chess.turn === 'w') return
 
         setAIThinking(true)
-        const sf = new Worker('/findminegame/stockfish.js')
+        const sf = new Worker('/stockfish.js')
         const chessClone = chess.getState()
         sfRef.current = sf
         sf.onmessage = (event) => {

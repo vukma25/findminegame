@@ -78,9 +78,7 @@ const router = createBrowserRouter([
       },
     ]
   }
-], {
-  basename: "/findminegame"
-})
+])
 
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
