@@ -2,7 +2,7 @@
 import Card from '../../Components/Card/Card'
 import GoTopBtn from '../../Components/GoTopBtn/GoTopBtn'
 import { games } from './data'
-import './Home.css';
+import '../../assets/styles/Home.css';
 
 function Home () {
 

@@ -24,9 +24,8 @@ import {
     ArrowForward,
     ArrowUpward,
     ArrowDownward,
-    Grass,
 } from '@mui/icons-material';
-import './Snake.css';
+import '../../assets/styles/Snake.css';
 
 const Snake = () => {
 
@@ -282,7 +281,7 @@ const Snake = () => {
                                     style={{
                                         gridTemplateColumns: `repeat(${game.size}, ${cellSize}px)`,
                                         gridTemplateRows: `repeat(${game.size}, ${cellSize}px)`,
-                                        width: `calc(${game.size} * ${cellSize}px + 1rem)`,
+                                        width: `fit-content`,
                                         border: `${game.mode === "limit" ? ".2rem solid" : "none"}`
                                     }}
                                     aria-label="Bàn chơi rắn săn mồi"
@@ -304,9 +303,6 @@ const Snake = () => {
                                                     role="presentation"
                                                     title={onFood ? 'Food' : ''}
                                                 >
-                                                    {isFence ? "" :
-                                                        !(head || onSnake || onFood) ? <Grass sx={{ color: "green" }} /> : ""
-                                                    }
                                                 </div>
                                             );
                                         })

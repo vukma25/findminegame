@@ -9,7 +9,7 @@ import {
 import VirtualKeyBoard from './VirtualKeyBoard'
 import Logger from '../../Components/Logger/Logger'
 import Modal from './Modal';
-import './Wordle.css'
+import '../../assets/styles/Wordle.css'
 
 const Wordle = () => {
     const [lengthWord, setLengthWord] = useState(4)

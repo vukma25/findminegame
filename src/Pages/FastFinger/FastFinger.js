@@ -8,7 +8,7 @@ import {
 } from './Action'
 import { initialState, reducer } from './Reducer';
 import { renderParagraph, getWpmAndStat, getProgress } from './Functions'
-import './FastFinger.css'
+import '../../assets/styles/FastFinger.css'
 
 const FastFinger = () => {
     

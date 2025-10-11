@@ -13,7 +13,7 @@ import {
     Switch,
     Slider
 } from '@mui/material'
-import './Memory.css'
+import '../../assets/styles/Memory.css'
 
 const Memory = () => {
     const [game, dispatch] = useReducer(reducer, defaultState)
@@ -126,7 +126,10 @@ const Memory = () => {
 
         dispatch(SETTER.handleSetCard(cards))
         dispatch(SETTER.handleListenStatus("playing"))
-        setSemaphore(false)
+
+        if (game.useTime) {
+            setSemaphore(false)
+        }
     }
 
     const resetGame = () => initGame()

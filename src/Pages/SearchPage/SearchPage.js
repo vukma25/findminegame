@@ -4,7 +4,7 @@ import { CircularProgress } from '@mui/material'
 import Card from '../../Components/Card/Card'
 import GoTopBtn from '../../Components/GoTopBtn/GoTopBtn'
 import { games } from './data'
-import './SearchPage.css';
+import '../../assets/styles/SearchPage.css';
 
 function Search() {
 

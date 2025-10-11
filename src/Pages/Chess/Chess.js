@@ -7,7 +7,7 @@ import ChessModeSelector from './ChessModeSelector'
 import GoTopBtn from '../../Components/GoTopBtn/GoTopBtn'
 import Logger from '../../Components/Logger/Logger'
 import ChessBot from './chessBot'
-import './Chess.css'
+import '../../assets/styles/Chess.css'
 import ChessSettings from './ChessSettings'
 import PlayerInfoPanel from './PlayerInfoPanel'
 

@@ -5,6 +5,9 @@
 /.pnp
 .pnp.js
 
+# sever
+/server
+
 # testing
 /coverage
 
@@ -19,8 +22,8 @@
 .env.production.local
 
 # sass map
-*.css.map
-*.scss
+src/assets/styles/*.scss
+src/assets/styles/*.css.map
 
 
 npm-debug.log*

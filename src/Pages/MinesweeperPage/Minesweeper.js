@@ -13,7 +13,7 @@ import {
     isMobileDevice,
     isWin
 } from './Functions';
-import "./Minesweeper.css";
+import "../../assets/styles/Minesweeper.css";
 
 
 function Minesweeper() {

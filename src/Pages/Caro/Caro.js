@@ -19,7 +19,7 @@ import {
     CircularProgress
 } from '@mui/material'
 import Logger from '../../Components/Logger/Logger'
-import './Caro.css'
+import '../../assets/styles/Caro.css'
 
 const Caro = () => {
     const [caro, dispatch] = useReducer(reducer, initialState)

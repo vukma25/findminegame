@@ -1,4 +1,4 @@
-import { useRef, useMemo } from 'react'
+import { useRef, useMemo, useEffect } from 'react'
 import { Icon, CircularProgress } from '@mui/material'
 import wp from '../../assets/image/wp.png'
 import wq from '../../assets/image/wq.png'
@@ -23,7 +23,7 @@ export default function PlayerInfoPanel({
     const pieces = useRef(null);
     pieces.current = chess.pieces;
 
-    const capturePiece = useMemo(() => {
+    let capturePiece = useMemo(() => {
         const fullForce = {
             'wr': [5, 5],
             'wb': [3, 3],
@@ -69,11 +69,9 @@ export default function PlayerInfoPanel({
 
     }, [chess.turn])
 
-    const point = useMemo(() => {
-        console.log(capturePiece)
+    let point = useMemo(() => {
         const white = capturePiece.w.map(({ val }) => val).reduce((total, val) => total + val, 0)
         const black = capturePiece.b.map(({ val }) => val).reduce((total, val) => total + val, 0)
-        console.log(white, black)
 
         if (white > black) {
             return { type: "w", difference: white - black }
@@ -83,6 +81,11 @@ export default function PlayerInfoPanel({
             return { type: "", difference: 0 }
         }
     }, [capturePiece])
+
+    useEffect(() => {
+        capturePiece = {'w': [], 'b': []}
+        point = { type: "", difference: 0 }
+    }, [mode])
 
     return (
         <>

@@ -1,6 +1,6 @@
 
 import { useRouteError, Link } from 'react-router';
-import './NotFound.css'
+import '../../assets/styles/NotFound.css'
 
 function NotFound() {
     const error = useRouteError();

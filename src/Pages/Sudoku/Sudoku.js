@@ -24,7 +24,7 @@ import Clock from './Clock'
 import Logger from '../../Components/Logger/Logger'
 import InformBoard from './InformBoard'
 import SUDOKU_VARIANTS from './Variant'
-import './Sudoku.css';
+import '../../assets/styles/Sudoku.css';
 
 function Sudoku() {
     const [sudoku, dispatch] = useReducer(reducer, initialState)
